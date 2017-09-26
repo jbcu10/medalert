@@ -5,11 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.ProgressBar;
-
 import jbcu10.dev.medalert.R;
-
-
-public class SplashscreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity {
     ProgressBar progressbar;
     Intent intent;
     @Override
@@ -18,14 +15,11 @@ public class SplashscreenActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splashscreen);
 
         progressbar = (ProgressBar) findViewById(R.id.progressBar2);
-
-
-        int time=3; //second
         final Handler handler = new Handler();
         Runnable r = new Runnable() {
             public void run() {
 
-                intent = new Intent(SplashscreenActivity.this, MainActivity.class);
+                intent = new Intent(SplashScreenActivity.this, MainActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 finish();

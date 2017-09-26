@@ -9,6 +9,7 @@
         <item name="android:windowBackground">@color/antiquewhite</item>
         <item name="android:textColor">@color/silver</item>
         <item name="android:textColorPrimary">@color/dimgray</item>
+
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="colorPrimary">@color/aquamarine</item>
