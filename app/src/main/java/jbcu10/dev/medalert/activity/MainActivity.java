@@ -8,6 +8,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -16,6 +18,10 @@ import jbcu10.dev.medalert.R;
 
 public class MainActivity extends BaseActivity {
     @BindView(R.id.fab) FloatingActionButton fab;
+    @BindView(R.id.textView2)
+    TextView textView2;
+    @BindView(R.id.textView1)
+    TextView textView1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +55,22 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.fab)
     public void onClickFAB(View view) {
+
+        Intent  intent = new Intent(MainActivity.this, NewMedicineActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+    }
+
+    @OnClick(R.id.textView2)
+    public void onClickLL2(View view) {
+
+        Intent  intent = new Intent(MainActivity.this, MedicineActivity.class);
+        startActivity(intent);
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+    }@OnClick(R.id.textView1)
+    public void onClickLL1(View view) {
 
         Intent  intent = new Intent(MainActivity.this, MedicineActivity.class);
         startActivity(intent);

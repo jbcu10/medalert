@@ -1,40 +1,18 @@
 package jbcu10.dev.medalert.activity;
 
-import android.content.Intent;
-import android.support.design.widget.TextInputLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.EditText;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.fourmob.datetimepicker.date.DatePickerDialog;
-import com.sleepbot.datetimepicker.time.RadialPickerLayout;
-import com.sleepbot.datetimepicker.time.TimePickerDialog;
-
-import java.util.Calendar;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import butterknife.OnTouch;
 import jbcu10.dev.medalert.R;
 
-public class MedicineActivity  extends BaseActivity  implements  TimePickerDialog.OnTimeSetListener,DatePickerDialog.OnDateSetListener{
-    @BindView(R.id.editExpiration) EditText editExpiration;
-    @BindView(R.id.editType) EditText editType;
-     Calendar calendar;
-    public static final String DATEPICKER_TAG = "Date Picker";
+public class MedicineActivity extends BaseActivity {
 
-    DatePickerDialog datePickerDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine);
-        ButterKnife.bind(this);
-        calendar = Calendar.getInstance();
-        datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH),false);
-
     }
 
     @Override
@@ -43,47 +21,26 @@ public class MedicineActivity  extends BaseActivity  implements  TimePickerDialo
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
     }
-    @OnClick(R.id.editExpiration)
-    public void onClickEditExpiration(View view) {
-
-        datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
-
-
-    }
-    @OnClick(R.id.editType)
-    public void onClickEditType(View view) {
-
-        new MaterialDialog.Builder(this)
-                .title("Select Type")
-                .items(R.array.type)
-                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        editType.setText(text);
-                        return true;
-                    }
-                })
-                .positiveText("Submit")
-                .show();
-
-    }
 
     @Override
-    public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        month = month+1;
-        String smonth = month+"";
-        String sday = day+"";
-        if (month < 10) {
-            smonth = "0" + month;
-        }
-        if (day < 10) {
-            sday = "0" + day;
-        }
-        editExpiration.setText(sday + "-" + smonth+"-"+year);
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_main, menu);
+        return true;
     }
-
     @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
 
+            case R.id.edit_medicine:
+
+                return true;
+            case R.id.delete_medicine:
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
