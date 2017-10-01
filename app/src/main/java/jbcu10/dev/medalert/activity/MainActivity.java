@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,12 +12,19 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.UUID;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.db.DatabaseHandler;
+import jbcu10.dev.medalert.model.Medicine;
 
 public class MainActivity extends BaseActivity {
+    private static final String TAG = MainActivity.class.getSimpleName();
+    public DatabaseHandler db;
+
     @BindView(R.id.fab) FloatingActionButton fab;
     @BindView(R.id.textView2)
     TextView textView2;
@@ -27,8 +35,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        db = new DatabaseHandler(MainActivity.this);
+        db.createMedicine(new Medicine(UUID.randomUUID().toString(),"biogesic","paracetamol","flu","Lorem ipsum dolorsit amit",10,10,null));
 
-
+        Log.d(TAG,"medicine total: "+String.valueOf(db.getAllMedicine()!=null ? db.getAllMedicine().size():404 ));
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
