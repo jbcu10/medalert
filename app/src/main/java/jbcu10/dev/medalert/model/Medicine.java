@@ -16,9 +16,10 @@ public class Medicine {
     private String description;
     private long expiration;
     private int total ;
+    private String type ;
     private Doctor doctor;
 
-    public Medicine( String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor) {
+    public Medicine( String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor,String type) {
         this.uuid = uuid;
         this.name = name;
         this.genericName = genericName;
@@ -27,11 +28,13 @@ public class Medicine {
         this.expiration = expiration;
         this.total = total;
         this.doctor = doctor;
+        this.type = type;
     }
 
     public Medicine() {
 
     }
+
 
     public int getId() {
         return id;
@@ -103,5 +106,28 @@ public class Medicine {
 
     public void setTotal(int total) {
         this.total = total;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Medicine{" +
+                "id=" + id +
+                ", uuid='" + uuid + '\'' +
+                ", name='" + name + '\'' +
+                ", genericName='" + genericName + '\'' +
+                ", diagnosis='" + diagnosis + '\'' +
+                ", description='" + description + '\'' +
+                ", expiration=" + expiration +
+                ", total=" + total +
+                ", type='" + type + '\'' +
+                '}';
     }
 }
