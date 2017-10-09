@@ -3,6 +3,7 @@
     package="jbcu10.dev.medalert">
 
     <application
+        android:name=".config.AppController"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -28,13 +29,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
-        <activity android:name=".activity.MedicineActivity"
+        <activity
+            android:name=".activity.MedicineActivity"
             android:label="Medicine">
-
-        <meta-data
+            <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
+        <activity android:name=".activity.EditMedicineActivity"></activity>
     </application>
 
 </manifest>

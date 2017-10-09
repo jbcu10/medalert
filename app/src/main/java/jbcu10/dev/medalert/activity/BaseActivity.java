@@ -1,7 +1,10 @@
 package jbcu10.dev.medalert.activity;
 
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Button;
+import android.widget.EditText;
 
+import butterknife.BindView;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.db.DatabaseHandler;
 
@@ -10,6 +13,7 @@ import jbcu10.dev.medalert.db.DatabaseHandler;
  */
 
 public class BaseActivity extends AppCompatActivity {
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

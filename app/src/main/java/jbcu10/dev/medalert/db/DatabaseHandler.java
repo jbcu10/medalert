@@ -199,12 +199,62 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             values.put(KEY_TOTAL, medicine.getTotal());
             long id = db.update(TABLE_MEDICINE, values, KEY_ID + "= '" + medicine.getId() + "'", null);
             db.close();
-            Log.d(TAG, "NEW MEDICINE IS CREATED W/ AN ID: " + id);
+            Log.d(TAG, " MEDICINE IS UPDATED WITH AN ID: " + id);
             return id > 0;
         } catch (Exception e) {
             Log.d(TAG, ERROR + e.getMessage());
             return false;
         }
     }
+
+    public Medicine getMedicine(int medicineId) {
+        try{
+            Medicine medicine = new Medicine();
+            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " where id = '"+medicineId+"' ;";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.d("size in cursor", cursor.getCount() + "");
+            if (cursor.moveToFirst())
+            {
+                medicine.setId(cursor.getInt(0));
+                medicine.setUuid(cursor.getString(1));
+                medicine.setName(cursor.getString(2));
+                medicine.setGenericName(cursor.getString(3));
+                medicine.setDiagnosis(cursor.getString(4));
+                medicine.setDescription(cursor.getString(5));
+                // getDoctor    medicine.setDoctor(cursor.getString(6));
+                medicine.setExpiration(cursor.getLong(7));
+                medicine.setType(cursor.getString(8));
+                medicine.setTotal(cursor.getInt(9));
+
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching Medicine: " + medicine.getName());
+            if(medicine.getId()>0) {
+                return medicine;
+            }
+            return null;
+        }
+        catch (Exception e){
+            Log.d(TAG,ERROR + e.getMessage());
+            return null;
+        }
+    }
+
+    public boolean deleteMedicine(int medicineId) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            long id = db.delete(TABLE_MEDICINE, KEY_ID +"= '"+medicineId+"'",null );
+            db.close();
+            Log.d(TAG, "Medicine is deleted: " + id);
+            return id > 0;
+        }
+        catch (Exception e){
+            Log.d(TAG,ERROR + e.getMessage());
+            return false;
+        }
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package jbcu10.dev.medalert.model;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by dev on 10/1/17.
@@ -18,8 +19,20 @@ public class Medicine {
     private int total ;
     private String type ;
     private Doctor doctor;
+    private List<Alarm> alarms;
 
     public Medicine( String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor,String type) {
+        this.uuid = uuid;
+        this.name = name;
+        this.genericName = genericName;
+        this.diagnosis = diagnosis;
+        this.description = description;
+        this.expiration = expiration;
+        this.total = total;
+        this.doctor = doctor;
+        this.type = type;
+    }public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor,String type) {
+        this.id = id;
         this.uuid = uuid;
         this.name = name;
         this.genericName = genericName;
@@ -114,6 +127,14 @@ public class Medicine {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public List<Alarm> getAlarms() {
+        return alarms;
+    }
+
+    public void setAlarms(List<Alarm> alarms) {
+        this.alarms = alarms;
     }
 
     @Override

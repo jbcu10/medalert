@@ -46,37 +46,15 @@ public class MainActivity extends BaseActivity implements AbsListView.OnScrollLi
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         db = new DatabaseHandler(MainActivity.this);
-     //   db.createMedicine(new Medicine(UUID.randomUUID().toString(),"Rubitocine","paracetamol","flu","Lorem ipsum dolorsit amit",10,10,null,"Syrup"));
         pDialog = new ProgressDialog(this);
 
         List<Medicine> medicines = db.getAllMedicine();
         initializeGridView();
-        onLoadMoreItems(medicines);
-
-    }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-
-            case R.id.edit_medicine:
-
-                return true;
-            case R.id.delete_medicine:
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if(medicines!=null) {
+            onLoadMoreItems(medicines);
         }
     }
-
-
+    
     @OnClick(R.id.fab)
     public void onClickFAB(View view) {
         Intent  intent = new Intent(MainActivity.this, NewMedicineActivity.class);
