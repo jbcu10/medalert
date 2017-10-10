@@ -11,6 +11,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import jbcu10.dev.medalert.model.Medicine;
+import jbcu10.dev.medalert.model.Person;
+import jbcu10.dev.medalert.model.Relative;
 
 
 /**
@@ -100,7 +102,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         try {
 
             Log.d(TAG, "CREATING TABLE_RELATIVES...");
-            String createMedicinesTable = "CREATE TABLE " +
+            String createRelativeTable = "CREATE TABLE " +
                     TABLE_RELATIVE + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_UUID + TEXT
@@ -109,9 +111,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     + KEY_LAST_NAME + TEXT
                     + KEY_CONTACT_NUMBER + TEXT
                     + KEY_EMAIL + TEXT
-                    + KEY_RELATIONSHIP + TEXT
-                    + KEY_TYPE +  " TEXT" + ")";
-            db.execSQL(createMedicinesTable);
+                    + KEY_RELATIONSHIP +  " TEXT" + ")";
+            db.execSQL(createRelativeTable);
             Log.d(TAG, "TABLE_MEDICINE IS CREATED ...");
 
         } catch (Exception e) {
@@ -174,6 +175,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             long id = db.insert(TABLE_MEDICINE, null, values);
             db.close();
             Log.d(TAG, "NEW MEDICINE IS CREATED W/ AN ID: " + id);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
+            return false;
+        }
+    } public boolean createRelative(Relative relative) {
+        try {
+            Log.d(TAG, relative.toString());
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_UUID, relative.getUuid());
+            values.put(KEY_FIRST_NAME, relative.getFirstName());
+            values.put(KEY_MIDDLE_NAME, relative.getMiddleName());
+            values.put(KEY_LAST_NAME, relative.getLastName());
+            values.put(KEY_CONTACT_NUMBER, relative.getContactNumber());
+            values.put(KEY_EMAIL, relative.getEmail());
+            values.put(KEY_RELATIONSHIP, relative.getRelationship());
+
+            long id = db.insert(TABLE_RELATIVE, null, values);
+            db.close();
+            Log.d(TAG, "NEW RELATIVE IS CREATED W/ AN ID: " + id);
             return id > 0;
         } catch (Exception e) {
             Log.d(TAG, ERROR + e);
@@ -254,6 +276,39 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Log.d(TAG,ERROR + e.getMessage());
             return false;
         }
+    }
+
+
+    public List<Relative> getAllRelative() {
+        try {
+            List<Relative> relatives = new LinkedList<>();
+            String selectQuery = "SELECT  * FROM " + TABLE_RELATIVE + " order by " + KEY_ID + " desc";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Relative relative = new Relative();
+                    relative.setId(cursor.getInt(0));
+                    relative.setUuid(cursor.getString(1));
+                    relative.setFirstName(cursor.getString(2));
+                    relative.setMiddleName(cursor.getString(3));
+                    relative.setLastName(cursor.getString(4));
+                    relative.setContactNumber(cursor.getString(5));
+                    relative.setEmail(cursor.getString(6));
+                    relative.setRelationship(cursor.getString(7));
+                    relatives.add(relative);
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching relatives from database: " + relatives.get(0).getLastName());
+            return relatives;
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+            return null;
+        }
+
     }
 
 

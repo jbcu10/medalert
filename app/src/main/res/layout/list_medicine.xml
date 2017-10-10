@@ -90,8 +90,8 @@
                 android:text="Flu "
                 android:textAlignment="center"
                 android:textAllCaps="true"
-                android:textColor="@color/dimgray"
-                android:textSize="14sp"
+                android:textColor="@color/orange"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
             <TextView

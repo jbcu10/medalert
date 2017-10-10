@@ -4,14 +4,19 @@ package jbcu10.dev.medalert.model;
  * Created by dev on 10/1/17.
  */
 
-public class Person {
-    private int id;
-    private String uuid;
-    private String firstName;
-    private String middleName;
-    private String lastName;
-    private String contactNumber;
-    private String email;
+public abstract class Person {
+    protected int id;
+    protected String uuid;
+    protected String firstName;
+    protected String middleName;
+    protected String lastName;
+    protected String contactNumber;
+    protected String email;
+
+
+
+    protected Person() {
+    }
 
     public int getId() {
         return id;

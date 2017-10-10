@@ -3,6 +3,7 @@ package jbcu10.dev.medalert.config;
 import android.app.Application;
 
 import jbcu10.dev.medalert.model.Medicine;
+import jbcu10.dev.medalert.model.Relative;
 
 
 public class AppController extends Application {
@@ -10,7 +11,9 @@ public class AppController extends Application {
     public static final String TAG = AppController.class.getSimpleName();
 
     private Medicine medicine;
+    private Relative relative;
     private int medicineId;
+    private int relativeId;
 
 
     private static AppController mInstance;
@@ -47,5 +50,21 @@ public class AppController extends Application {
 
     public void setMedicineId(int medicineId) {
         this.medicineId = medicineId;
+    }
+
+    public Relative getRelative() {
+        return relative;
+    }
+
+    public void setRelative(Relative relative) {
+        this.relative = relative;
+    }
+
+    public int getRelativeId() {
+        return relativeId;
+    }
+
+    public void setRelativeId(int relativeId) {
+        this.relativeId = relativeId;
     }
 }

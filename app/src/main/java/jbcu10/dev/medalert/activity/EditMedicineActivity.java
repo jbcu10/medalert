@@ -179,4 +179,11 @@ public class EditMedicineActivity extends BaseActivity implements  TimePickerDia
                 }).show();
 
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+    }
 }

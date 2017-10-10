@@ -1,18 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="dev.gd.plottree.activities.MainActivity">
+    tools:context=".activity.MainActivity">
 
     <item
-        android:id="@+id/edit_medicine"
-        android:icon="@drawable/ic_edit"
-        android:title="Edit Medicine"
+        android:id="@+id/people"
+        android:icon="@drawable/ic_people"
+        android:title="Relatives"
         app:showAsAction="ifRoom"/>
-
-    <item
-        android:id="@+id/delete_medicine"
-        android:icon="@drawable/ic_delete"
-        android:title="Delete Medicine"
-        app:showAsAction="ifRoom"/>
-
 </menu>

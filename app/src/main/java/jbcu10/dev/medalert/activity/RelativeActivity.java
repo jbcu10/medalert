@@ -4,9 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -20,62 +18,48 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.adapter.MedicineAdapter;
+import jbcu10.dev.medalert.adapter.RelativeAdapter;
 import jbcu10.dev.medalert.db.DatabaseHandler;
 import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Relative;
 
-public class MainActivity extends BaseActivity implements AbsListView.OnScrollListener,
+public class RelativeActivity extends BaseActivity implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     private static final String TAG = MainActivity.class.getSimpleName();
     public DatabaseHandler db;
-    private static final String LOADING_PLOTS = "Loading Medicines...";
+    private static final String LOADING_PLOTS = "Loading Relatives...";
     private static final String ERROR = "Error:";
     ProgressDialog pDialog;
     private StaggeredGridView mGridView;
     private boolean mHasRequestedMore;
-    private MedicineAdapter mAdapter;
-    @BindView(R.id.fab) FloatingActionButton fab;
-
+    private RelativeAdapter mAdapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_relative);
         ButterKnife.bind(this);
-        db = new DatabaseHandler(MainActivity.this);
+        db = new DatabaseHandler(RelativeActivity.this);
         pDialog = new ProgressDialog(this);
 
-        List<Medicine> medicines = db.getAllMedicine();
+        List<Relative> relatives = db.getAllRelative();
         initializeGridView();
-        if(medicines!=null) {
-            onLoadMoreItems(medicines);
+        Log.d("relative total",relatives.size()+"");
+        if(relatives!=null) {
+            onLoadMoreItems(relatives);
         }
+
     }
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
-        return true;
+    public void onPause() {
+        super.onPause();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-
-            case R.id.people:
-                Intent  intent = new Intent(MainActivity.this, RelativeActivity.class);
-                startActivity(intent);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
 
     @OnClick(R.id.fab)
     public void onClickFAB(View view) {
-        Intent  intent = new Intent(MainActivity.this, NewMedicineActivity.class);
+        Intent intent = new Intent(RelativeActivity.this, NewRelativeActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
@@ -112,20 +96,19 @@ public class MainActivity extends BaseActivity implements AbsListView.OnScrollLi
     }
 
     public void initializeGridView() {
-        mGridView = (StaggeredGridView) findViewById(R.id.grid_view);
-        mAdapter = new MedicineAdapter(this, R.id.txt_name, R.id.imageView);
+        mGridView = findViewById(R.id.grid_view);
+        mAdapter = new RelativeAdapter(this, R.id.txt_name, R.id.image_relation);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnScrollListener(this);
         mGridView.setOnItemClickListener(this);
         mGridView.setOnItemLongClickListener(this);
     }
-    private void onLoadMoreItems(List<Medicine> medicines) {
-        for (Medicine data : medicines) {
+    private void onLoadMoreItems(List<Relative> relatives) {
+        for (Relative data : relatives) {
             mAdapter.add(data);
         }
         mAdapter.notifyDataSetChanged();
         mHasRequestedMore = false;
         hideDialog();
     }
-
 }

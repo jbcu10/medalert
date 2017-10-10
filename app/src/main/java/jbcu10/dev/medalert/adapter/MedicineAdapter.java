@@ -29,7 +29,7 @@ import jbcu10.dev.medalert.model.Medicine;
 
 public class MedicineAdapter extends ArrayAdapter<Medicine> {
 
-    private static final String TAG = "HouseAdapter";
+    private static final String TAG = "Medicine Adapter";
 
     static class ViewHolder {
         TextView txt_name,txt_genric_name,txt_diagnosis,txt_description,txt_expiration,txt_doctor_name;

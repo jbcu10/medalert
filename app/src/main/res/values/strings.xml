@@ -4,4 +4,13 @@
         <item>Syrup</item>
         <item>Tablet</item>
     </array>
+
+    <array name="relation">
+        <item>Father</item>
+        <item>Mother</item>
+        <item>Sister</item>
+        <item>Brother</item>
+        <item>Grand Father</item>
+        <item>Grand Mother</item>
+    </array>
 </resources>
