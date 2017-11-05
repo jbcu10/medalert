@@ -23,6 +23,7 @@ import java.util.Random;
 
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.MedicineActivity;
+import jbcu10.dev.medalert.activity.RelativeActivity;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Relative;
@@ -75,15 +76,14 @@ public class RelativeAdapter extends ArrayAdapter<Relative> {
         viewHolder.txt_email.setText(relative.getEmail());
         viewHolder.txt_relation.setText(relative.getRelationship());
 
-        viewHolder.image_relation.setOnClickListener(new View.OnClickListener() {
+        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
-                    Log.d("id","medicine "+relative.getId());
 
                     AppController appController = AppController.getInstance();
                     appController.setRelativeId(relative.getId());
-                    Intent intent = new Intent(getContext(), MedicineActivity.class);
+                    Intent intent = new Intent(getContext(), RelativeActivity.class);
                     getContext().startActivity(intent);
 
                     Activity activity = (Activity) getContext();

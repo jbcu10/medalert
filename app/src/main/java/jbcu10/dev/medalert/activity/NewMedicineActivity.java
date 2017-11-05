@@ -36,6 +36,7 @@ public class NewMedicineActivity extends BaseActivity  implements  TimePickerDia
     @BindView(R.id.edit_generic_name) EditText edit_generic_name;
     @BindView(R.id.edit_description) EditText edit_description;
     @BindView(R.id.edit_diagnosis) EditText edit_diagnosis;
+    @BindView(R.id.edit_total) EditText edit_total;
     @BindView(R.id.button_submit)
     Button button_submit;
      Calendar calendar;
@@ -118,10 +119,10 @@ public class NewMedicineActivity extends BaseActivity  implements  TimePickerDia
 
 
                         try{
-                            boolean isCreated = db.createMedicine(new Medicine(UUID.randomUUID().toString(),edit_name.getText().toString(),edit_generic_name.getText().toString(),edit_diagnosis.getText().toString(),edit_description.getText().toString(),milliseconds,10,null,edit_type.getText().toString()));
+                            boolean isCreated = db.createMedicine(new Medicine(UUID.randomUUID().toString(),edit_name.getText().toString(),edit_generic_name.getText().toString(),edit_diagnosis.getText().toString(),edit_description.getText().toString(),milliseconds,Integer.parseInt(edit_total.getText().toString()),null,edit_type.getText().toString()));
 
                             if(isCreated){
-                                Intent intent = new Intent(NewMedicineActivity.this, MainActivity.class);
+                                Intent intent = new Intent(NewMedicineActivity.this, HomeActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                             }if(!isCreated){
@@ -170,6 +171,7 @@ public class NewMedicineActivity extends BaseActivity  implements  TimePickerDia
         edit_generic_name = findViewById(R.id.edit_generic_name);
         edit_description = findViewById(R.id.edit_description);
         edit_diagnosis = findViewById(R.id.edit_diagnosis);
+        edit_total = findViewById(R.id.edit_total);
 
     }
 }

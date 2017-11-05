@@ -11,12 +11,19 @@
         <item name="android:textColorPrimary">@color/dimgray</item>
 
     </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="colorPrimary">@color/aquamarine</item>
         <item name="colorPrimaryDark">@color/teal</item>
-        <item name="colorAccent">@color/teal</item>
+        <item name="colorAccent">@color/skyblue</item>
+        <item name="android:windowBackground">@color/antiquewhite</item>
+        <item name="android:textColor">@color/silver</item>
+        <item name="android:textColorPrimary">@color/dimgray</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
-        <item name="android:windowBackground">@color/skyblue</item>
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

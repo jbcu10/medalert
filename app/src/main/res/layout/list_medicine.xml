@@ -79,29 +79,58 @@
                 android:fontFamily="sans-serif"
                 android:text="\tAllergy shots and immunotherapy conjunctivitis contact lenses depressant fluoride glycemic index icu immune system lymph melanin nervous system occupational therapy rhinovirus sebaceous glands tinnitus. "
                 android:textColor="@color/dimgray"
-                android:textSize="14sp" />
+                android:textSize="18sp" />
 
-            <TextView
-                android:id="@+id/txt_diagnosis"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="monospace"
-                android:text="Flu "
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/orange"
-                android:textSize="24sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:weightSum="4">
 
-            <TextView
-                android:id="@+id/txt_doctor_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Dr. Juan Dela Cruz"
-                android:textColor="@color/mediumaquamarine"
-                android:textSize="14sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_diagnosis"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:fontFamily="monospace"
+                        android:text="Flu "
+                        android:textAlignment="viewStart"
+                        android:textAllCaps="true"
+                        android:textColor="@color/red"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txt_doctor_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="5dp"
+                        android:text="Dr. Juan Dela Cruz"
+                        android:textColor="@color/mediumaquamarine"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/txt_total"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="3"
+                    android:elevation="1dp"
+                    android:gravity="center"
+                    android:padding="5dp"
+                    android:text="1"
+                    android:textColor="@color/teal"
+                    android:textSize="36sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

@@ -1,54 +1,42 @@
 package jbcu10.dev.medalert.activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.etsy.android.grid.StaggeredGridView;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 
-import java.util.List;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.adapter.MedicineAdapter;
-import jbcu10.dev.medalert.adapter.RelativeAdapter;
+import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.DatabaseHandler;
-import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Relative;
 
-public class RelativeActivity extends BaseActivity implements AbsListView.OnScrollListener,
-        AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class RelativeActivity extends BaseActivity  {
+
+    private static final String TAG = RelativeActivity.class.getSimpleName();
     public DatabaseHandler db;
-    private static final String LOADING_PLOTS = "Loading Relatives...";
-    private static final String ERROR = "Error:";
-    ProgressDialog pDialog;
-    private StaggeredGridView mGridView;
-    private boolean mHasRequestedMore;
-    private RelativeAdapter mAdapter;
+    TextView txt_name,txt_relation,txt_contact_number,txt_email;
+    ImageView image_relation;
+    Relative relative;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relative);
         ButterKnife.bind(this);
         db = new DatabaseHandler(RelativeActivity.this);
-        pDialog = new ProgressDialog(this);
-
-        List<Relative> relatives = db.getAllRelative();
-        initializeGridView();
-        Log.d("relative total",relatives.size()+"");
-        if(relatives!=null) {
-            onLoadMoreItems(relatives);
-        }
+        AppController appController = AppController.getInstance();
+        relative =  db.getRelative(appController.getRelativeId());
+        initializeView();
 
     }
     @Override
@@ -57,58 +45,116 @@ public class RelativeActivity extends BaseActivity implements AbsListView.OnScro
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    @OnClick(R.id.fab)
-    public void onClickFAB(View view) {
-        Intent intent = new Intent(RelativeActivity.this, NewRelativeActivity.class);
+
+    private void initializeView(){
+       txt_name = findViewById(R.id.txt_name);
+       txt_relation = findViewById(R.id.txt_relation);
+       txt_contact_number = findViewById(R.id.txt_contact_number);
+       txt_email = findViewById(R.id.txt_email);
+       image_relation = findViewById(R.id.image_relation);
+        txt_name.setText(relative.getFirstName()+" "+relative.getMiddleName()+" "+relative.getLastName());
+        txt_contact_number.setText(relative.getContactNumber());
+        txt_email.setText(relative.getEmail());
+        txt_relation.setText(relative.getRelationship());
+        image_relation.setImageDrawable(this.getImageRelation(relative)!=null? this.getImageRelation(relative): getResources().getDrawable(R.drawable.relative));
+
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_medicine, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+
+            case R.id.edit_medicine:
+                this.editRelative();
+                return true;
+            case R.id.delete_medicine:
+                this.deleteRelative();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+    private Drawable getImageRelation(Relative relative){
+        try {
+            if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("mother")){
+                return getResources().getDrawable(R.drawable.mother);
+            }if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("father")){
+                return getResources().getDrawable(R.drawable.father);
+            }if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("grand father")){
+                return getResources().getDrawable(R.drawable.grandfather);
+            }if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("grand mother")){
+                return getResources().getDrawable(R.drawable.grandmother);
+            }
+            if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("sister")){
+                return getResources().getDrawable(R.drawable.daughter);
+            }
+            if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("brother")){
+                return getResources().getDrawable(R.drawable.boy);
+            }
+            return getResources().getDrawable(R.drawable.relative);
+
+        }
+        catch (Exception e){
+            Log.d("Error",e.getMessage());
+            return null;
+        }
+    }
+
+    private void deleteRelative(){
+        new MaterialDialog.Builder(RelativeActivity.this)
+                .title("Delete Relative?")
+                .content("Are you sure you want delete this items?")
+                .positiveText("Delete")
+                .negativeText("Cancel")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        try{
+                            boolean isDeleted =         db.deleteRelative(relative.getId());
+                            if(isDeleted){
+                                Snackbar.make(findViewById(android.R.id.content), "Successfully Deleted Medicine!", Snackbar.LENGTH_LONG).show();
+                                Intent intent = new Intent(RelativeActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+                            }if(!isDeleted){
+                                Snackbar.make(findViewById(android.R.id.content), "Failed to Delete Medicine!", Snackbar.LENGTH_LONG).show();
+                            }
+
+                        }
+                        catch (Exception e){
+                            Log.d("Error",e.getMessage());
+                        }
+
+
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                    }
+                }).show();
+
+
+
+    }
+    private void editRelative(){
+        AppController appController = AppController.getInstance();
+        appController.setRelative(relative);
+        Intent intent = new Intent(RelativeActivity.this, EditRelativeActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
     }
 
-    @Override
-    public void onScrollStateChanged(AbsListView absListView, int i) {
-
-    }
-
-    @Override
-    public void onScroll(AbsListView absListView, int i, int i1, int i2) {
-
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-        return false;
-    }
-
-    private void showDialog() {
-        if (!pDialog.isShowing()) pDialog.show();
-    }
-
-
-    private void hideDialog() {
-        if (pDialog.isShowing())
-            pDialog.dismiss();
-    }
-
-    public void initializeGridView() {
-        mGridView = findViewById(R.id.grid_view);
-        mAdapter = new RelativeAdapter(this, R.id.txt_name, R.id.image_relation);
-        mGridView.setAdapter(mAdapter);
-        mGridView.setOnScrollListener(this);
-        mGridView.setOnItemClickListener(this);
-        mGridView.setOnItemLongClickListener(this);
-    }
-    private void onLoadMoreItems(List<Relative> relatives) {
-        for (Relative data : relatives) {
-            mAdapter.add(data);
-        }
-        mAdapter.notifyDataSetChanged();
-        mHasRequestedMore = false;
-        hideDialog();
-    }
 }

@@ -3,6 +3,7 @@ package jbcu10.dev.medalert.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -11,6 +12,8 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.etsy.android.grid.StaggeredGridView;
 
 import java.util.List;
@@ -112,7 +115,7 @@ public class MainActivity extends BaseActivity implements AbsListView.OnScrollLi
     }
 
     public void initializeGridView() {
-        mGridView = (StaggeredGridView) findViewById(R.id.grid_view);
+        //mGridView = (StaggeredGridView) findViewById(R.id.grid_view);
         mAdapter = new MedicineAdapter(this, R.id.txt_name, R.id.imageView);
         mGridView.setAdapter(mAdapter);
         mGridView.setOnScrollListener(this);
@@ -127,5 +130,7 @@ public class MainActivity extends BaseActivity implements AbsListView.OnScrollLi
         mHasRequestedMore = false;
         hideDialog();
     }
+
+
 
 }

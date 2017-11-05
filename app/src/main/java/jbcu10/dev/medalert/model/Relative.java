@@ -7,7 +7,16 @@ package jbcu10.dev.medalert.model;
 public class Relative extends Person {
     private String relationship;
     public Relative( String uuid, String firstName, String middleName, String lastName, String contactNumber, String email,String relationship) {
-
+        this.uuid = uuid;
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+        this.contactNumber = contactNumber;
+        this.email = email;
+        this.relationship = relationship;
+    }
+    public Relative(int id, String uuid, String firstName, String middleName, String lastName, String contactNumber, String email,String relationship) {
+        this.id = id;
         this.uuid = uuid;
         this.firstName = firstName;
         this.middleName = middleName;

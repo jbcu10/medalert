@@ -109,7 +109,7 @@ public class MedicineActivity extends BaseActivity {
                             boolean isDeleted =         db.deleteMedicine(medicine.getId());
                             if(isDeleted){
                                 Snackbar.make(findViewById(android.R.id.content), "Successfully Deleted Medicine!", Snackbar.LENGTH_LONG).show();
-                                Intent intent = new Intent(MedicineActivity.this, MainActivity.class);
+                                Intent intent = new Intent(MedicineActivity.this, HomeActivity.class);
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 

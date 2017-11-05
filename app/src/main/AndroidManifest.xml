@@ -36,28 +36,38 @@
             android:label="Medicine">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+                android:value=".activity.HomeActivity" />
         </activity>
         <activity
             android:name=".activity.EditMedicineActivity"
             android:label="Edit Medicine">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MedicineActivity" />
+                android:value=".activity.HomeActivity" />
         </activity>
         <activity
             android:name=".activity.RelativeActivity"
             android:label="Relatives">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+                android:value=".activity.HomeActivity" />
         </activity>
-        <activity android:name=".activity.NewRelativeActivity"
+        <activity
+            android:name=".activity.NewRelativeActivity"
             android:label="New Relative">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".activity.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activity.EditRelativeActivity"
+            android:label="Edit Relative">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.RelativeActivity" />
-
         </activity>
     </application>
 
