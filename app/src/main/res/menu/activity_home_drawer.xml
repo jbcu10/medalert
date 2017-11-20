@@ -14,11 +14,11 @@
         <item
             android:id="@+id/alarm"
             android:icon="@drawable/ic_alert"
-            android:title="Alarm" />
+            android:title="Reminders" />
         <item
             android:id="@+id/firstaid"
             android:icon="@drawable/ic_hospital"
-            android:title="First Aid" />
+            android:title="First Aids" />
 
     </group>
 

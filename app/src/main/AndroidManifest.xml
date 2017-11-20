@@ -62,13 +62,15 @@
         <activity
             android:name=".activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".activity.EditRelativeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.EditRelativeActivity"
             android:label="Edit Relative">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.RelativeActivity" />
         </activity>
+        <activity android:name=".activity.FirstAidActivity"></activity>
     </application>
 
 </manifest>

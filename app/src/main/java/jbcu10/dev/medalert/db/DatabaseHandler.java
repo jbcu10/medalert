@@ -34,6 +34,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     //all
     private static final String KEY_ID = "id";
     private static final String KEY_FIRST_AID_UUID = "firstAidUuid";
+    private static final String KEY_INSTRUCTION = "instruction";
     private static final String KEY_UUID = "uuid";
     private static final String ERROR = "ERROR: ";
     private static final String TEXT = " TEXT,";
@@ -133,8 +134,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     TABLE_INSTRUCTIONS + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_FIRST_AID_UUID + TEXT
-                    + KEY_NAME + TEXT
-                    + KEY_DESCRIPTION +  " TEXT" + ")";
+                    + KEY_UUID + TEXT
+                    + KEY_INSTRUCTION +  " TEXT" + ")";
             db.execSQL(createInstructionTable);
             Log.d(TAG, "TABLE_INSTRUCTIONS IS CREATED ...");
 
@@ -214,7 +215,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                     firstAid.setUuid(cursor.getString(1));
                     firstAid.setName(cursor.getString(2));
                     firstAid.setDescription(cursor.getString(3));
-                    firstAid.setInstructionsList(getInstrutions(firstAid.getUuid()));
                     firstAids.add(firstAid);
                     cursor.moveToNext();
                 }
@@ -232,15 +232,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public List<Instructions> getInstrutions(String firstAidUuid) {
         try {
             List<Instructions> instructionsList = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_INSTRUCTIONS + "where "+KEY_FIRST_AID_UUID+"='"+firstAidUuid+"' order by " + KEY_ID + " desc";
+            String selectQuery = "SELECT  * FROM " + TABLE_INSTRUCTIONS + " where "+KEY_FIRST_AID_UUID+"='"+firstAidUuid+"' order by " + KEY_ID + " asc";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     Instructions instructions = new Instructions();
                     instructions.setId(cursor.getInt(0));
-                    instructions.setUuid(cursor.getString(1));
-                    instructions.setInstruction(cursor.getString(2));
+                    instructions.setUuid(cursor.getString(2));
+                    instructions.setInstruction(cursor.getString(3));
                     instructionsList.add(instructions);
                     cursor.moveToNext();
                 }
@@ -305,7 +305,45 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             Log.d(TAG, ERROR + e);
             return false;
         }
-    }public boolean updateRelative(Relative relative) {
+    }
+
+    public boolean createFirstAid(FirstAid firstAid) {
+        try {
+            Log.d(TAG, firstAid.toString());
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_UUID, firstAid.getUuid());
+            values.put(KEY_NAME, firstAid.getName());
+            values.put(KEY_DESCRIPTION, firstAid.getDescription());
+            long id = db.insert(TABLE_FIRST_AID, null, values);
+            db.close();
+            Log.d(TAG, "NEW RELATIVE IS CREATED W/ AN ID: " + id);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
+            return false;
+        }
+    }
+    public boolean createInstrution(String firstAidUuid, Instructions instructions) {
+        try {
+            Log.d(TAG, instructions.toString());
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_UUID, instructions.getUuid());
+            values.put(KEY_INSTRUCTION, instructions.getInstruction());
+            values.put(KEY_FIRST_AID_UUID, firstAidUuid);
+            long id = db.insert(TABLE_INSTRUCTIONS, null, values);
+            db.close();
+            Log.d(TAG, "NEW INSTRUCTION IS CREATED W/ AN ID: " + id);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
+            return false;
+        }
+    }
+
+
+    public boolean updateRelative(Relative relative) {
         try {
             Log.d(TAG, relative.toString());
             SQLiteDatabase db = this.getWritableDatabase();
@@ -351,6 +389,36 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         } catch (Exception e) {
             Log.d(TAG, ERROR + e.getMessage());
             return false;
+        }
+    }
+    public FirstAid getFirstAid(int firstAidId){
+        try{
+            FirstAid firstAid = new FirstAid();
+            String selectQuery = "SELECT  * FROM " + TABLE_FIRST_AID + " where id = '"+firstAidId+"' ;";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.d("size in cursor", cursor.getCount() + "");
+            if (cursor.moveToFirst())
+            {
+                firstAid.setId(cursor.getInt(0));
+                String uuid = cursor.getString(1);
+                firstAid.setUuid(uuid);
+                firstAid.setName(cursor.getString(2));
+                firstAid.setDescription(cursor.getString(3));
+                firstAid.setInstructionsList(getInstrutions(uuid));
+
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching first aid: " + firstAid.getName());
+            if(firstAid.getId()>0) {
+                return firstAid;
+            }
+            return null;
+        }
+        catch (Exception e){
+            Log.d(TAG,ERROR + e.getMessage());
+            return null;
         }
     }
 

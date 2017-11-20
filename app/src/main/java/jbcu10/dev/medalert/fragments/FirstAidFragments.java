@@ -21,10 +21,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
-import jbcu10.dev.medalert.activity.NewRelativeActivity;
-import jbcu10.dev.medalert.adapter.RelativeAdapter;
+import jbcu10.dev.medalert.adapter.FirstAidAdapter;
 import jbcu10.dev.medalert.db.DatabaseHandler;
-import jbcu10.dev.medalert.model.Relative;
+import jbcu10.dev.medalert.model.FirstAid;
 
 /**
  * Created by dev on 10/12/17.
@@ -34,12 +33,12 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
         AbsListView.OnItemClickListener, OnItemLongClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
     public DatabaseHandler db;
-    private static final String LOADING_PLOTS = "Loading Relatives...";
+    private static final String LOADING_PLOTS = "Loading First Aid...";
     private static final String ERROR = "Error:";
     ProgressDialog pDialog;
     private StaggeredGridView mGridView;
     private boolean mHasRequestedMore;
-    private RelativeAdapter mAdapter;
+    private FirstAidAdapter mAdapter;
     @BindView(R.id.fab)
     FloatingActionButton fab;
     public FirstAidFragments() {
@@ -55,7 +54,7 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
         pDialog = new ProgressDialog(getActivity());
 
         getActivity().setTitle("First Aid");
-        List<Relative> relatives = db.getAllRelative();
+        List<FirstAid> relatives = db.getAllFirstAid();
         initializeGridView();
         if(relatives!=null) {
             onLoadMoreItems(relatives);
@@ -83,13 +82,7 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
         return false;
     }
 
-    @OnClick(R.id.fab)
-    public void onClickFAB(View view) {
-        Intent intent = new Intent(getActivity(), NewRelativeActivity.class);
-        startActivity(intent);
-        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-    }
+    
 
 
     private void hideDialog() {
@@ -98,7 +91,7 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
     }
 
     public void initializeGridView() {
-        mAdapter = new RelativeAdapter(getActivity(), R.id.txt_name, R.id.imageView);
+        mAdapter = new FirstAidAdapter(getActivity(), R.id.txt_name, R.id.imageView);
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
                 setListAdapter(mAdapter);
@@ -106,8 +99,8 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
 
         });
     }
-    private void onLoadMoreItems(List<Relative> relatives) {
-        for (Relative data : relatives) {
+    private void onLoadMoreItems(List<FirstAid> relatives) {
+        for (FirstAid data : relatives) {
             mAdapter.add(data);
         }
         mAdapter.notifyDataSetChanged();

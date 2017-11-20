@@ -13,6 +13,7 @@ public class AppController extends Application {
     private Medicine medicine;
     private Relative relative;
     private int medicineId;
+    private int firstAidId;
     private int relativeId;
 
 
@@ -66,5 +67,13 @@ public class AppController extends Application {
 
     public void setRelativeId(int relativeId) {
         this.relativeId = relativeId;
+    }
+
+    public int getFirstAidId() {
+        return firstAidId;
+    }
+
+    public void setFirstAidId(int firstAidId) {
+        this.firstAidId = firstAidId;
     }
 }

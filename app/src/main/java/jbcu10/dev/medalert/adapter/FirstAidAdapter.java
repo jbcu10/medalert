@@ -13,17 +13,13 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Random;
 
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.activity.MedicineActivity;
+import jbcu10.dev.medalert.activity.FirstAidActivity;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.model.FirstAid;
-import jbcu10.dev.medalert.model.Medicine;
 
 /**
  * Created by dev on 10/14/17.
@@ -33,9 +29,7 @@ public class FirstAidAdapter extends ArrayAdapter<FirstAid> {
     private static final String TAG = "First Aid Adapter";
 
     static class ViewHolder {
-        TextView txt_name,txt_genric_name,txt_diagnosis,txt_description,txt_expiration,txt_doctor_name;
-        Button btnGo;
-        ImageView image_type;
+        TextView txt_name ,txt_description ;
 
     }
     private final LayoutInflater mLayoutInflater;
@@ -48,49 +42,36 @@ public class FirstAidAdapter extends ArrayAdapter<FirstAid> {
         mBackgroundColors = new ArrayList<Integer>();
     }
     private static final SparseArray<Double> sPositionHeightRatios = new SparseArray<Double>();
-/*
+
 
     @Override
     public View getView(final int position, View convertView, final ViewGroup parent) {
 
         FirstAidAdapter.ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = mLayoutInflater.inflate(R.layout.list_medicine, parent, false);
+            convertView = mLayoutInflater.inflate(R.layout.list_firstaid, parent, false);
             viewHolder = new FirstAidAdapter.ViewHolder();
-            viewHolder.txt_name = (TextView) convertView.findViewById(R.id.txt_name);
-            viewHolder.txt_description = (TextView) convertView.findViewById(R.id.txt_description);
-            viewHolder.txt_doctor_name = (TextView) convertView.findViewById(R.id.txt_doctor_name);
-            viewHolder.txt_genric_name = (TextView) convertView.findViewById(R.id.txt_generic_name);
-            viewHolder.txt_diagnosis = (TextView) convertView.findViewById(R.id.txt_diagnosis);
-            viewHolder.txt_expiration = (TextView) convertView.findViewById(R.id.txt_expiration);
-            viewHolder.image_type = (ImageView) convertView.findViewById(R.id.image_type);
+            viewHolder.txt_name = convertView.findViewById(R.id.txt_name);
+            viewHolder.txt_description = convertView.findViewById(R.id.txt_description);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (FirstAidAdapter.ViewHolder) convertView.getTag();
         }
         final FirstAid firstAid = getItem(position);
-        if(medicine.getType()!=null&&medicine.getType().equals("Tablet")){
-            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.pill));
-        }
-        viewHolder.txt_name.setText(medicine.getName());
-        viewHolder.txt_diagnosis.setText(medicine.getDiagnosis());
-        viewHolder.txt_genric_name.setText(medicine.getGenericName());
-        viewHolder.txt_description.setText(medicine.getDescription());
 
-        Date date = new Date(medicine.getExpiration());
-        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+        viewHolder.txt_name.setText(firstAid.getName());
+        viewHolder.txt_description.setText(firstAid.getDescription());
 
-        viewHolder.txt_expiration.setText(df.format(date));
-        viewHolder.txt_doctor_name.setText(medicine.getDoctor()!=null ?medicine.getDoctor().getFirstName()+" "+medicine.getDoctor().getLastName():"Not Available");
-        convertView.setOnClickListener(new View.OnClickListener() {
+      convertView.setOnClickListener(new View.OnClickListener() {
                                            @Override
                                            public void onClick(View view) {
                                                try {
-                                                   Log.d("id","medicine "+medicine.getId());
+                                                  Log.d("id","first aid "+firstAid.getId());
 
                                                    AppController appController = AppController.getInstance();
-                                                   appController.setMedicineId(medicine.getId());
-                                                   Intent intent = new Intent(getContext(), MedicineActivity.class);
+                                                   appController.setFirstAidId(firstAid.getId());
+                                                   Intent intent = new Intent(getContext(), FirstAidActivity.class);
                                                    getContext().startActivity(intent);
 
                                                    Activity activity = (Activity) getContext();
@@ -106,7 +87,7 @@ public class FirstAidAdapter extends ArrayAdapter<FirstAid> {
 
         return convertView;
     }
-*/
+
 
     private double getPositionRatio(final int position) {
         double ratio = sPositionHeightRatios.get(position, 0.0);
