@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import java.util.LinkedList;
@@ -13,7 +12,6 @@ import java.util.List;
 import jbcu10.dev.medalert.model.FirstAid;
 import jbcu10.dev.medalert.model.Instructions;
 import jbcu10.dev.medalert.model.Medicine;
-import jbcu10.dev.medalert.model.Person;
 import jbcu10.dev.medalert.model.Relative;
 
 
@@ -21,150 +19,10 @@ import jbcu10.dev.medalert.model.Relative;
  * Created by dev on 10/1/17.
  */
 
-public class DatabaseHandler extends SQLiteOpenHelper {
-    private static final String TAG = DatabaseHandler.class.getSimpleName();
-    private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = "med_alert";
+public class DatabaseCRUDHandler extends SQLiteBaseHandler {
 
-    //tables
-    private static final String TABLE_MEDICINE = "medicine";
-    private static final String TABLE_RELATIVE = "relative";
-    private static final String TABLE_FIRST_AID = "firstAid";
-    private static final String TABLE_INSTRUCTIONS = "instruction";
-    //all
-    private static final String KEY_ID = "id";
-    private static final String KEY_FIRST_AID_UUID = "firstAidUuid";
-    private static final String KEY_INSTRUCTION = "instruction";
-    private static final String KEY_UUID = "uuid";
-    private static final String ERROR = "ERROR: ";
-    private static final String TEXT = " TEXT,";
-
-    //medicine
-    private static final String KEY_NAME = "name";
-    private static final String KEY_GENERIC_NAME = "genericName";
-    private static final String KEY_DIAGNOSIS = "diagnosis";
-    private static final String KEY_DESCRIPTION = "description";
-    private static final String KEY_DOCTOR_ID = "doctor_id";
-    private static final String KEY_TOTAL = "total";
-    private static final String KEY_EXPIRATION = "expiration";
-    private static final String KEY_TYPE = "type";
-
-    //person
-    private final String KEY_FIRST_NAME= "firstName";
-    private final String KEY_MIDDLE_NAME= "middleName";
-    private final String KEY_LAST_NAME= "lastName";
-    private final String KEY_CONTACT_NUMBER= "contactNumber";
-    private final String KEY_EMAIL= "email";
-    private final String KEY_RELATIONSHIP = "relationship";
-
-    @Override
-    public void onCreate(SQLiteDatabase db) {
-        this.createMedicineTable(db);
-        this.createRelativeTable(db);
-        this.createFirstAidTable(db);
-        this.createInstructionsTable(db);
-
-    }
-
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEDICINE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_RELATIVE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_FIRST_AID);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTRUCTIONS);
-        Log.d(TAG, "Database tables deleted");
-        onCreate(db);
-    }
-
-    public DatabaseHandler(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
-
-    // Table Medicine Handler
-    private void createMedicineTable(SQLiteDatabase db) {
-        try {
-
-            Log.d(TAG, "CREATING TABLE_MEDICINE...");
-            String createMedicinesTable = "CREATE TABLE " +
-                    TABLE_MEDICINE + "("
-                    + KEY_ID + " INTEGER PRIMARY KEY,"
-                    + KEY_UUID + TEXT
-                    + KEY_NAME + TEXT
-                    + KEY_GENERIC_NAME + TEXT
-                    + KEY_DIAGNOSIS + TEXT
-                    + KEY_DESCRIPTION + TEXT
-                    + KEY_DOCTOR_ID + TEXT
-                    + KEY_EXPIRATION + TEXT
-                    + KEY_TYPE + " INTEGER,"
-
-                    + KEY_TOTAL + " INTEGER" + ")";
-            db.execSQL(createMedicinesTable);
-            Log.d(TAG, "TABLE_MEDICINE IS CREATED ...");
-
-        } catch (Exception e) {
-            Log.d(TAG, "ERROR --------------- " + e.getMessage());
-        }
-    }
-
-    // Table First Aid Handler
-    private void createFirstAidTable(SQLiteDatabase db) {
-        try {
-
-            Log.d(TAG, "CREATING TABLE_FIRST_AID...");
-            String createFirstAidTable = "CREATE TABLE " +
-                    TABLE_FIRST_AID + "("
-                    + KEY_ID + " INTEGER PRIMARY KEY,"
-                    + KEY_UUID + TEXT
-                    + KEY_NAME + TEXT
-                    + KEY_DESCRIPTION +  " TEXT" + ")";
-            db.execSQL(createFirstAidTable);
-            Log.d(TAG, "TABLE_FIRST_AID IS CREATED ...");
-
-        } catch (Exception e) {
-            Log.d(TAG, "ERROR --------------- " + e.getMessage());
-        }
-    }
-    // Table First Aid Handler
-    private void createInstructionsTable(SQLiteDatabase db) {
-        try {
-
-            Log.d(TAG, "CREATING TABLE_INSTRUCTIONS...");
-            String createInstructionTable = "CREATE TABLE " +
-                    TABLE_INSTRUCTIONS + "("
-                    + KEY_ID + " INTEGER PRIMARY KEY,"
-                    + KEY_FIRST_AID_UUID + TEXT
-                    + KEY_UUID + TEXT
-                    + KEY_INSTRUCTION +  " TEXT" + ")";
-            db.execSQL(createInstructionTable);
-            Log.d(TAG, "TABLE_INSTRUCTIONS IS CREATED ...");
-
-        } catch (Exception e) {
-            Log.d(TAG, "ERROR --------------- " + e.getMessage());
-        }
-    }
-
-    // Table Person Handler
-    private void createRelativeTable(SQLiteDatabase db) {
-        try {
-
-            Log.d(TAG, "CREATING TABLE_RELATIVES...");
-            String createRelativeTable = "CREATE TABLE " +
-                    TABLE_RELATIVE + "("
-                    + KEY_ID + " INTEGER PRIMARY KEY,"
-                    + KEY_UUID + TEXT
-                    + KEY_FIRST_NAME + TEXT
-                    + KEY_MIDDLE_NAME + TEXT
-                    + KEY_LAST_NAME + TEXT
-                    + KEY_CONTACT_NUMBER + TEXT
-                    + KEY_EMAIL + TEXT
-                    + KEY_RELATIONSHIP +  " TEXT" + ")";
-            db.execSQL(createRelativeTable);
-            Log.d(TAG, "TABLE_MEDICINE IS CREATED ...");
-
-        } catch (Exception e) {
-            Log.d(TAG, "ERROR --------------- " + e.getMessage());
-        }
+    public DatabaseCRUDHandler(Context context) {
+        super(context);
     }
 
     public List<Medicine> getAllMedicine() {
@@ -229,7 +87,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
 
     }
-    public List<Instructions> getInstrutions(String firstAidUuid) {
+    private List<Instructions> getInstructions(String firstAidUuid) {
         try {
             List<Instructions> instructionsList = new LinkedList<>();
             String selectQuery = "SELECT  * FROM " + TABLE_INSTRUCTIONS + " where "+KEY_FIRST_AID_UUID+"='"+firstAidUuid+"' order by " + KEY_ID + " asc";
@@ -324,7 +182,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             return false;
         }
     }
-    public boolean createInstrution(String firstAidUuid, Instructions instructions) {
+    public boolean createInstruction(String firstAidUuid, Instructions instructions) {
         try {
             Log.d(TAG, instructions.toString());
             SQLiteDatabase db = this.getWritableDatabase();
@@ -405,7 +263,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 firstAid.setUuid(uuid);
                 firstAid.setName(cursor.getString(2));
                 firstAid.setDescription(cursor.getString(3));
-                firstAid.setInstructionsList(getInstrutions(uuid));
+                firstAid.setInstructionsList(getInstructions(uuid));
 
             }
             cursor.close();

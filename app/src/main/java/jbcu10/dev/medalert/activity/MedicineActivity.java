@@ -19,19 +19,19 @@ import java.util.Date;
 
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseHandler;
+import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Medicine;
 
 public class MedicineActivity extends BaseActivity {
     TextView txt_name,txt_genric_name,txt_description,txt_diagnosis,txt_expiration,txt_doctor_name;
-    public DatabaseHandler db;
+    public DatabaseCRUDHandler db;
     Medicine medicine = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine);
         initialize();
-        db = new DatabaseHandler(MedicineActivity.this);
+        db = new DatabaseCRUDHandler(MedicineActivity.this);
 
         AppController appController = AppController.getInstance();
          medicine = db.getMedicine(appController.getMedicineId());

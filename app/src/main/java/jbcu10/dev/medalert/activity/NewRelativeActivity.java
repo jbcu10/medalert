@@ -12,19 +12,13 @@ import android.widget.EditText;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.activity.BaseActivity;
-import jbcu10.dev.medalert.db.DatabaseHandler;
-import jbcu10.dev.medalert.model.Medicine;
+import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Relative;
 
 public class NewRelativeActivity extends BaseActivity {
@@ -35,7 +29,7 @@ public class NewRelativeActivity extends BaseActivity {
     @BindView(R.id.edit_email) EditText edit_email;
     @BindView(R.id.edit_relationship) EditText edit_relationship;
     @BindView(R.id.button_submit) Button button_submit;
-    public DatabaseHandler db;
+    public DatabaseCRUDHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +37,7 @@ public class NewRelativeActivity extends BaseActivity {
         setContentView(R.layout.activity_new_relative);
         ButterKnife.bind(this);
         initializedViews();
-        db = new DatabaseHandler(NewRelativeActivity.this);
+        db = new DatabaseCRUDHandler(NewRelativeActivity.this);
 
     }
     @Override

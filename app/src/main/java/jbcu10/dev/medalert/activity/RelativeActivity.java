@@ -18,13 +18,13 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import butterknife.ButterKnife;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseHandler;
+import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Relative;
 
 public class RelativeActivity extends BaseActivity  {
 
     private static final String TAG = RelativeActivity.class.getSimpleName();
-    public DatabaseHandler db;
+    public DatabaseCRUDHandler db;
     TextView txt_name,txt_relation,txt_contact_number,txt_email;
     ImageView image_relation;
     Relative relative;
@@ -33,7 +33,7 @@ public class RelativeActivity extends BaseActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relative);
         ButterKnife.bind(this);
-        db = new DatabaseHandler(RelativeActivity.this);
+        db = new DatabaseCRUDHandler(RelativeActivity.this);
         AppController appController = AppController.getInstance();
         relative =  db.getRelative(appController.getRelativeId());
         initializeView();

@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import com.etsy.android.grid.StaggeredGridView;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,7 +23,7 @@ import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
 import jbcu10.dev.medalert.activity.NewMedicineActivity;
 import jbcu10.dev.medalert.adapter.MedicineAdapter;
-import jbcu10.dev.medalert.db.DatabaseHandler;
+import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Medicine;
 
 /**
@@ -34,7 +33,7 @@ import jbcu10.dev.medalert.model.Medicine;
 public class MedicineFragments extends ListFragment implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
-    public DatabaseHandler db;
+    public DatabaseCRUDHandler db;
     private static final String LOADING_PLOTS = "Loading Medicines...";
     private static final String ERROR = "Error:";
     ProgressDialog pDialog;
@@ -54,7 +53,7 @@ public class MedicineFragments extends ListFragment implements AbsListView.OnScr
 
         rootView = inflater.inflate(R.layout.fragment_medicines, null, false);
         ButterKnife.bind(this,rootView);
-        db = new DatabaseHandler(getActivity());
+        db = new DatabaseCRUDHandler(getActivity());
         pDialog = new ProgressDialog(getActivity());
         getActivity().setTitle("Medicines");
 

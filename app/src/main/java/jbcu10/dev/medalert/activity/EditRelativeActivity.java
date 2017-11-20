@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseHandler;
+import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Relative;
 
 public class EditRelativeActivity extends AppCompatActivity {
@@ -34,7 +34,7 @@ public class EditRelativeActivity extends AppCompatActivity {
     @BindView(R.id.edit_relationship) EditText edit_relationship;
     @BindView(R.id.button_submit)
     Button button_submit;
-    public DatabaseHandler db;
+    public DatabaseCRUDHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +42,7 @@ public class EditRelativeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_relative);
 
         ButterKnife.bind(this);
-        db = new DatabaseHandler(EditRelativeActivity.this);
+        db = new DatabaseCRUDHandler(EditRelativeActivity.this);
 
 
         AppController appController = AppController.getInstance();

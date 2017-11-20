@@ -4,15 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
-import butterknife.BindView;
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.db.DatabaseHandler;
 
 /**
  * Created by jb on 25/09/2017.

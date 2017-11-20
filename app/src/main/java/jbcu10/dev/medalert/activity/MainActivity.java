@@ -3,7 +3,6 @@ package jbcu10.dev.medalert.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -12,8 +11,6 @@ import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
 import com.etsy.android.grid.StaggeredGridView;
 
 import java.util.List;
@@ -23,14 +20,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.adapter.MedicineAdapter;
-import jbcu10.dev.medalert.db.DatabaseHandler;
+import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Medicine;
-import jbcu10.dev.medalert.model.Relative;
 
 public class MainActivity extends BaseActivity implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
-    public DatabaseHandler db;
+    public DatabaseCRUDHandler db;
     private static final String LOADING_PLOTS = "Loading Medicines...";
     private static final String ERROR = "Error:";
     ProgressDialog pDialog;
@@ -44,7 +40,7 @@ public class MainActivity extends BaseActivity implements AbsListView.OnScrollLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        db = new DatabaseHandler(MainActivity.this);
+        db = new DatabaseCRUDHandler(MainActivity.this);
         pDialog = new ProgressDialog(this);
 
         List<Medicine> medicines = db.getAllMedicine();

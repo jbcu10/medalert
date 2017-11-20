@@ -15,6 +15,7 @@ import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.fragments.FirstAidFragments;
 import jbcu10.dev.medalert.fragments.MedicineFragments;
 import jbcu10.dev.medalert.fragments.RelativeFragments;
+import jbcu10.dev.medalert.fragments.ReminderFragments;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -96,7 +97,10 @@ public class HomeActivity extends BaseActivity
             ft.replace(R.id.container_new, fragment);
             ft.commit();
         } else if (id == R.id.alarm) {
-
+            fragment = new ReminderFragments();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_new, fragment);
+            ft.commit();
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_exit) {

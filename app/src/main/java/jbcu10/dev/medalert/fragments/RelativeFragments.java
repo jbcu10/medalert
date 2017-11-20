@@ -23,7 +23,7 @@ import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
 import jbcu10.dev.medalert.activity.NewRelativeActivity;
 import jbcu10.dev.medalert.adapter.RelativeAdapter;
-import jbcu10.dev.medalert.db.DatabaseHandler;
+import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Relative;
 
 /**
@@ -33,7 +33,7 @@ import jbcu10.dev.medalert.model.Relative;
 public class RelativeFragments extends ListFragment implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, OnItemLongClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
-    public DatabaseHandler db;
+    public DatabaseCRUDHandler db;
     private static final String LOADING_PLOTS = "Loading Relatives...";
     private static final String ERROR = "Error:";
     ProgressDialog pDialog;
@@ -51,7 +51,7 @@ public class RelativeFragments extends ListFragment implements AbsListView.OnScr
 
         rootView = inflater.inflate(R.layout.fragment_relative, null, false);
         ButterKnife.bind(this,rootView);
-        db = new DatabaseHandler(getActivity());
+        db = new DatabaseCRUDHandler(getActivity());
         pDialog = new ProgressDialog(getActivity());
 
         getActivity().setTitle("Relatives");

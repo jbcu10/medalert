@@ -9,21 +9,21 @@ import android.widget.ProgressBar;
 import java.util.UUID;
 
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.db.DatabaseHandler;
+import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.FirstAid;
 import jbcu10.dev.medalert.model.Instructions;
 
 public class SplashScreenActivity extends AppCompatActivity {
     ProgressBar progressbar;
     Intent intent;
-    public DatabaseHandler db;
+    public DatabaseCRUDHandler db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
-        db = new DatabaseHandler(SplashScreenActivity.this);
+        db = new DatabaseCRUDHandler(SplashScreenActivity.this);
 
         if(db.getAllFirstAid()==null){
             for(int a=0 ; a<10;a++){
@@ -36,7 +36,7 @@ public class SplashScreenActivity extends AppCompatActivity {
                     Instructions instructions = new Instructions();
                     instructions.setInstruction((b+1)+". Lorem Ipsum Dolorsit amit.");
                     instructions.setUuid(UUID.randomUUID().toString());
-                    db.createInstrution(firstAidUuid,instructions);
+                    db.createInstruction(firstAidUuid,instructions);
                 }
                 db.createFirstAid(firstAid);
             }

@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseHandler;
+import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Medicine;
 
 public class EditMedicineActivity extends BaseActivity implements  TimePickerDialog.OnTimeSetListener,DatePickerDialog.OnDateSetListener{
@@ -44,7 +44,7 @@ public class EditMedicineActivity extends BaseActivity implements  TimePickerDia
     Button button_submit;
     Calendar calendar;
     private static final String TAG = EditMedicineActivity.class.getSimpleName();
-    public DatabaseHandler db;
+    public DatabaseCRUDHandler db;
     public static final String DATEPICKER_TAG = "Date Picker";
     DatePickerDialog datePickerDialog;
     Medicine medicine = null ;
@@ -54,7 +54,7 @@ public class EditMedicineActivity extends BaseActivity implements  TimePickerDia
         setContentView(R.layout.activity_edit_medicine);
         ButterKnife.bind(this);
         initializedViews();
-        db = new DatabaseHandler(EditMedicineActivity.this);
+        db = new DatabaseCRUDHandler(EditMedicineActivity.this);
         AppController appController =AppController.getInstance();
 
         medicine =appController.getMedicine();
