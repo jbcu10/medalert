@@ -51,7 +51,7 @@ public class MedicineFragments extends ListFragment implements AbsListView.OnScr
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_medicines, null, false);
+        rootView = inflater.inflate(R.layout.fragment_medicines, container, false);
         ButterKnife.bind(this,rootView);
         db = new DatabaseCRUDHandler(getActivity());
         pDialog = new ProgressDialog(getActivity());

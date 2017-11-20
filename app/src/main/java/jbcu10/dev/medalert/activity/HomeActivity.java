@@ -35,7 +35,7 @@ public class HomeActivity extends BaseActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragment = new MedicineFragments();
+        fragment = new ReminderFragments();
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.container_new, fragment);
         ft.commit();

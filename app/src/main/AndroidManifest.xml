@@ -70,7 +70,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.RelativeActivity" />
         </activity>
-        <activity android:name=".activity.FirstAidActivity"></activity>
+        <activity android:name=".activity.FirstAidActivity" />
+        <activity android:name=".activity.NewRemindersActivity"
+            android:label="Create Reminders">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

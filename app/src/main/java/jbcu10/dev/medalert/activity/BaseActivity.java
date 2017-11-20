@@ -45,6 +45,31 @@ public class BaseActivity extends AppCompatActivity {
                 })
                 .show();
     }
+    public void addMedicine(final Activity activity){
+        new MaterialDialog.Builder(activity)
+                .title("Add Medicine")
+                .content("It seems that you don't have any medicine. Create a medicine to continue.")
+                .positiveText("Create")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Intent intent = new Intent(activity, NewMedicineActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+                    }
+                }).negativeText("Cancel")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        Intent intent = new Intent(activity, HomeActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
+                })
+                .cancelable(false)
+                .show();
+    }
 
 
 }

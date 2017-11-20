@@ -117,7 +117,6 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
     public boolean createMedicine(Medicine medicine) {
         try {
             Log.d(TAG, medicine.toString());
-
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(KEY_UUID, medicine.getUuid());
@@ -264,7 +263,6 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
                 firstAid.setName(cursor.getString(2));
                 firstAid.setDescription(cursor.getString(3));
                 firstAid.setInstructionsList(getInstructions(uuid));
-
             }
             cursor.close();
             db.close();
@@ -284,6 +282,40 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
         try{
             Medicine medicine = new Medicine();
             String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " where id = '"+medicineId+"' ;";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.d("size in cursor", cursor.getCount() + "");
+            if (cursor.moveToFirst())
+            {
+                medicine.setId(cursor.getInt(0));
+                medicine.setUuid(cursor.getString(1));
+                medicine.setName(cursor.getString(2));
+                medicine.setGenericName(cursor.getString(3));
+                medicine.setDiagnosis(cursor.getString(4));
+                medicine.setDescription(cursor.getString(5));
+                // getDoctor    medicine.setDoctor(cursor.getString(6));
+                medicine.setExpiration(cursor.getLong(7));
+                medicine.setType(cursor.getString(8));
+                medicine.setTotal(cursor.getInt(9));
+
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching Medicine: " + medicine.getName());
+            if(medicine.getId()>0) {
+                return medicine;
+            }
+            return null;
+        }
+        catch (Exception e){
+            Log.d(TAG,ERROR + e.getMessage());
+            return null;
+        }
+    }
+    public Medicine getMedicineByUuid(String uuid) {
+        try{
+            Medicine medicine = new Medicine();
+            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " where uuid = '"+uuid+"' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
@@ -393,7 +425,37 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
                 relative.setContactNumber(cursor.getString(5));
                 relative.setEmail(cursor.getString(6));
                 relative.setRelationship(cursor.getString(7));
-
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching Medicine: " + relative.getFirstName());
+            if(relative.getId()>0) {
+                return relative;
+            }
+            return null;
+        }
+        catch (Exception e){
+            Log.d(TAG,ERROR + e.getMessage());
+            return null;
+        }
+    }
+    public Relative getRelativeByUuid(String uuid) {
+        try{
+            Relative relative = new Relative();
+            String selectQuery = "SELECT  * FROM " + TABLE_RELATIVE + " where uuid = '"+uuid+"' ;";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.d("size in cursor", cursor.getCount() + "");
+            if (cursor.moveToFirst())
+            {
+                relative.setId(cursor.getInt(0));
+                relative.setUuid(cursor.getString(1));
+                relative.setFirstName(cursor.getString(2));
+                relative.setMiddleName(cursor.getString(3));
+                relative.setLastName(cursor.getString(4));
+                relative.setContactNumber(cursor.getString(5));
+                relative.setEmail(cursor.getString(6));
+                relative.setRelationship(cursor.getString(7));
             }
             cursor.close();
             db.close();

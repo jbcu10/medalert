@@ -26,10 +26,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Medicine;
 
-public class NewMedicineActivity extends BaseActivity  implements  TimePickerDialog.OnTimeSetListener,DatePickerDialog.OnDateSetListener{
+public class NewMedicineActivity extends BaseActivity  implements  DatePickerDialog.OnDateSetListener{
     @BindView(R.id.edit_expiration) EditText edit_expiration;
     @BindView(R.id.edit_type) EditText edit_type;
     @BindView(R.id.edit_name) EditText edit_name;
@@ -119,10 +120,13 @@ public class NewMedicineActivity extends BaseActivity  implements  TimePickerDia
 
 
                         try{
-                            boolean isCreated = db.createMedicine(new Medicine(UUID.randomUUID().toString(),edit_name.getText().toString(),edit_generic_name.getText().toString(),edit_diagnosis.getText().toString(),edit_description.getText().toString(),milliseconds,Integer.parseInt(edit_total.getText().toString()),null,edit_type.getText().toString()));
+                            String uuid =UUID.randomUUID().toString();
+                            boolean isCreated = db.createMedicine(new Medicine(uuid,edit_name.getText().toString(),edit_generic_name.getText().toString(),edit_diagnosis.getText().toString(),edit_description.getText().toString(),milliseconds,Integer.parseInt(edit_total.getText().toString()),null,edit_type.getText().toString()));
 
                             if(isCreated){
-                                Intent intent = new Intent(NewMedicineActivity.this, HomeActivity.class);
+                                Intent intent = new Intent(NewMedicineActivity.this, MedicineActivity.class);
+                                AppController appController= AppController.getInstance();
+                                appController.setMedicineId(db.getMedicineByUuid(uuid).getId());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                             }if(!isCreated){
@@ -159,10 +163,6 @@ public class NewMedicineActivity extends BaseActivity  implements  TimePickerDia
         edit_expiration.setText(sday + "-" + smonth+"-"+year);
     }
 
-    @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
-
-    }
 
     public void initializedViews(){
         edit_expiration = findViewById(R.id.edit_expiration);

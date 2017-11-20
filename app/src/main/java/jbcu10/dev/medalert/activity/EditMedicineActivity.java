@@ -30,7 +30,7 @@ import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Medicine;
 
-public class EditMedicineActivity extends BaseActivity implements  TimePickerDialog.OnTimeSetListener,DatePickerDialog.OnDateSetListener{
+public class EditMedicineActivity extends BaseActivity implements  DatePickerDialog.OnDateSetListener{
 
     @BindView(R.id.edit_expiration) EditText edit_expiration;
     @BindView(R.id.edit_type) EditText edit_type;
@@ -115,10 +115,6 @@ public class EditMedicineActivity extends BaseActivity implements  TimePickerDia
         edit_expiration.setText(sday + "-" + smonth+"-"+year);
     }
 
-    @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
-
-    }
 
     public void initializedViews(){
         edit_expiration = findViewById(R.id.edit_expiration);

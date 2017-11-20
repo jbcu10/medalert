@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
 import jbcu10.dev.medalert.model.Relative;
 
@@ -86,13 +87,16 @@ public class NewRelativeActivity extends BaseActivity {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         try{
-                            boolean isCreated = db.createRelative(new Relative(UUID.randomUUID().toString(),
+                            String uuid =UUID.randomUUID().toString();
+                            boolean isCreated = db.createRelative(new Relative(uuid,
                                     edit_first_name.getText().toString(),edit_middle_name.getText().toString()
                                     ,edit_last_name.getText().toString(),edit_contact_number.getText().toString()
                                     , edit_email.getText().toString(),edit_relationship.getText().toString()));
 
                             if(isCreated){
-                                Intent intent = new Intent(NewRelativeActivity.this, HomeActivity.class);
+                                Intent intent = new Intent(NewRelativeActivity.this, RelativeActivity.class);
+                                AppController appController= AppController.getInstance();
+                                appController.setRelativeId(db.getRelativeByUuid(uuid).getId());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                             }if(!isCreated){

@@ -2,6 +2,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/alarm"
+            android:icon="@drawable/ic_alert"
+            android:title="Reminders" />
+
         <item
             android:id="@+id/medicines"
             android:icon="@drawable/drugs"
@@ -11,10 +17,7 @@
             android:id="@+id/relatives"
             android:icon="@drawable/ic_people"
             android:title="Relatives" />
-        <item
-            android:id="@+id/alarm"
-            android:icon="@drawable/ic_alert"
-            android:title="Reminders" />
+
         <item
             android:id="@+id/firstaid"
             android:icon="@drawable/ic_hospital"
