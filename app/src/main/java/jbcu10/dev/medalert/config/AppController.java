@@ -15,6 +15,7 @@ public class AppController extends Application {
     private int medicineId;
     private int firstAidId;
     private int relativeId;
+    private int reminderId;
 
 
     private static AppController mInstance;
@@ -75,5 +76,13 @@ public class AppController extends Application {
 
     public void setFirstAidId(int firstAidId) {
         this.firstAidId = firstAidId;
+    }
+
+    public int getReminderId() {
+        return reminderId;
+    }
+
+    public void setReminderId(int reminderId) {
+        this.reminderId = reminderId;
     }
 }

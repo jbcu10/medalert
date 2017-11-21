@@ -13,6 +13,7 @@ import jbcu10.dev.medalert.model.FirstAid;
 import jbcu10.dev.medalert.model.Instructions;
 import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Relative;
+import jbcu10.dev.medalert.model.Reminder;
 
 
 /**
@@ -60,6 +61,32 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
 
     }
 
+    public List<Reminder> getAllReminders() {
+        try {
+            List<Reminder> reminders = new LinkedList<>();
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER + " order by " + KEY_ID + " desc";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Reminder reminder = new Reminder();
+                    reminder.setId(cursor.getInt(0));
+                    reminder.setUuid(cursor.getString(1));
+                    reminder.setDescription(cursor.getString(2));
+                    reminders.add(reminder);
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching reminders from database: " + reminders.get(0).getDescription());
+            return reminders;
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+            return null;
+        }
+
+    }
     public List<FirstAid> getAllFirstAid() {
         try {
             List<FirstAid> firstAids = new LinkedList<>();
@@ -192,6 +219,22 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
             long id = db.insert(TABLE_INSTRUCTIONS, null, values);
             db.close();
             Log.d(TAG, "NEW INSTRUCTION IS CREATED W/ AN ID: " + id);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
+            return false;
+        }
+    }public boolean createReminder(Reminder reminder) {
+        try {
+            Log.d(TAG, reminder.toString());
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_UUID, reminder.getUuid());
+            values.put(KEY_DESCRIPTION, reminder.getDescription());
+
+            long id = db.insert(TABLE_REMINDER, null, values);
+            db.close();
+            Log.d(TAG, "NEW REMINDER IS CREATED W/ AN ID: " + id);
             return id > 0;
         } catch (Exception e) {
             Log.d(TAG, ERROR + e);

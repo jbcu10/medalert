@@ -52,6 +52,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
 
     //reminders
     protected static final String KEY_MEDICINE_UUID = "medicine_uuid";
+    protected static final String KEY_REMINDER_UUID = "reminder_uuid";
     protected static final String KEY_TIME = "time";
 
 
@@ -63,6 +64,8 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
         this.createFirstAidTable(db);
         this.createInstructionsTable(db);
         this.createReminderTable(db);
+        this.createReminderMedicineTable(db);
+        this.createReminderTimeTable(db);
 
     }
 
@@ -73,6 +76,8 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_FIRST_AID);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_INSTRUCTIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REMINDER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REMINDER_MEDICINE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REMINDER_TIME);
         Log.d(TAG, "Database tables deleted");
         onCreate(db);
     }
@@ -139,6 +144,39 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_DESCRIPTION +  " TEXT" + ")";
             db.execSQL(createReminderTable);
             Log.d(TAG, "TABLE_REMINDER IS CREATED ...");
+
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+        }
+    }
+
+    private void createReminderMedicineTable(SQLiteDatabase db) {
+        try {
+
+            Log.d(TAG, "CREATING TABLE_REMINDER_MEDICINE...");
+            String createReminderMedicineTable = "CREATE TABLE " +
+                    TABLE_REMINDER_MEDICINE + "("
+                    + KEY_ID + " INTEGER PRIMARY KEY,"
+                    + KEY_MEDICINE_UUID + TEXT
+                    + KEY_REMINDER_UUID +  " TEXT" + ")";
+            db.execSQL(createReminderMedicineTable);
+            Log.d(TAG, "TABLE_REMINDER_MEDICINE IS CREATED ...");
+
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+        }
+    }
+    private void createReminderTimeTable(SQLiteDatabase db) {
+        try {
+
+            Log.d(TAG, "CREATING TABLE_REMINDER_MEDICINE...");
+            String createReminderTimeTable = "CREATE TABLE " +
+                    TABLE_REMINDER_TIME + "("
+                    + KEY_ID + " INTEGER PRIMARY KEY,"
+                    + KEY_REMINDER_UUID + TEXT
+                    + KEY_TIME +  " TEXT" + ")";
+            db.execSQL(createReminderTimeTable);
+            Log.d(TAG, "TABLE_REMINDER_TIME IS CREATED ...");
 
         } catch (Exception e) {
             Log.d(TAG, "ERROR --------------- " + e.getMessage());
