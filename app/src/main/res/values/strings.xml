@@ -1,3 +1,25 @@
 <resources>
     <string name="app_name">MedAlert</string>
+    <array name="type">
+        <item>Syrup</item>
+        <item>Tablet</item>
+    </array>
+
+    <array name="relation">
+        <item>Father</item>
+        <item>Mother</item>
+        <item>Sister</item>
+        <item>Brother</item>
+        <item>Grand Father</item>
+        <item>Grand Mother</item>
+    </array>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
