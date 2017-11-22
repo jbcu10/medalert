@@ -134,16 +134,27 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
         }if (minute < 10) {
             sMinute = "0" + minute;
         }
-        String time =shourOfDay + ":" + sMinute;
-        timeStrings.add(time);
-        TextView txtAlarm = new TextView(this);
-        txtAlarm.setText(time);
-        txtAlarm.setId(a++);
-        txtAlarm.setTextColor(Color.BLACK);
-        txtAlarm.setLayoutParams(
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT));
-        ll_alarm_handler.addView(txtAlarm);
+        final String time =shourOfDay + ":" + sMinute;
+
+
+        boolean match = timeStrings.stream().anyMatch(time::contains);
+         if(match) {
+             Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
+         }
+         if(!match){
+             timeStrings.add(time);
+             TextView txtAlarm = new TextView(this);
+             txtAlarm.setText(time);
+             txtAlarm.setId(a++);
+             txtAlarm.setTextColor(Color.BLACK);
+             txtAlarm.setLayoutParams(
+                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                             LinearLayout.LayoutParams.WRAP_CONTENT));
+             ll_alarm_handler.addView(txtAlarm);
+
+         }
+
+
     }
 
     @Override

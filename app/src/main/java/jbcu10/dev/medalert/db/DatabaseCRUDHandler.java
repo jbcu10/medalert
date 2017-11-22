@@ -224,7 +224,8 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
             Log.d(TAG, ERROR + e);
             return false;
         }
-    }public boolean createReminder(Reminder reminder) {
+    }
+    public boolean createReminder(Reminder reminder) {
         try {
             Log.d(TAG, reminder.toString());
             SQLiteDatabase db = this.getWritableDatabase();
@@ -233,8 +234,59 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
             values.put(KEY_DESCRIPTION, reminder.getDescription());
 
             long id = db.insert(TABLE_REMINDER, null, values);
+            if(reminder.getMedicineList()!=null) {
+                for (Medicine medicine : reminder.getMedicineList()) {
+                    this.createReminderMedicine(reminder.getUuid(),medicine.getUuid());
+                }
+            }
             db.close();
+
+            if(reminder.getMedicineList()!=null) {
+                for (Medicine medicine : reminder.getMedicineList()) {
+                    this.createReminderMedicine(reminder.getUuid(),medicine.getUuid());
+                }
+            }if(reminder.getTime()!=null) {
+                for (String time: reminder.getTime()) {
+                    this.createReminderTime(reminder.getUuid(),time);
+                }
+            }
+
+
             Log.d(TAG, "NEW REMINDER IS CREATED W/ AN ID: " + id);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
+            return false;
+        }
+    }
+
+    public boolean createReminderMedicine(String reminderUuid,String medicineUuid) {
+        try {
+            Log.d(TAG, "reminder: "+reminderUuid+" &medicine: "+medicineUuid);
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_REMINDER_UUID, reminderUuid);
+            values.put(KEY_MEDICINE_UUID, medicineUuid);
+
+            long id = db.insert(TABLE_REMINDER_MEDICINE, null, values);
+            db.close();
+            Log.d(TAG, "NEW TABLE_REMINDER_MEDICINE IS CREATED W/ AN ID: " + id);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
+            return false;
+        }
+    }public boolean createReminderTime(String reminderUuid,String time) {
+        try {
+            Log.d(TAG, "reminder: "+reminderUuid+" & time: "+time);
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_REMINDER_UUID, reminderUuid);
+            values.put(KEY_TIME, time);
+
+            long id = db.insert(TABLE_REMINDER_TIME, null, values);
+            db.close();
+            Log.d(TAG, "NEW TABLE_REMINDER_TIME IS CREATED W/ AN ID: " + id);
             return id > 0;
         } catch (Exception e) {
             Log.d(TAG, ERROR + e);
