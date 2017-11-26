@@ -21,9 +21,7 @@ import java.util.Date;
 import java.util.Random;
 
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.activity.MainActivity;
 import jbcu10.dev.medalert.activity.MedicineActivity;
-import jbcu10.dev.medalert.activity.NewMedicineActivity;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.model.Medicine;
 

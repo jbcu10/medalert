@@ -15,10 +15,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.activity.FirstAidActivity;
 import jbcu10.dev.medalert.activity.ReminderActivity;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.model.FirstAid;
 import jbcu10.dev.medalert.model.Reminder;
 
 /**

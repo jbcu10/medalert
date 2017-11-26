@@ -1,7 +1,7 @@
 package jbcu10.dev.medalert.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 import jbcu10.dev.medalert.R;
 

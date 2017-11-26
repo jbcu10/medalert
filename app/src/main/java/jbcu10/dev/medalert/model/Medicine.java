@@ -1,7 +1,5 @@
 package jbcu10.dev.medalert.model;
 
-import java.util.List;
-
 /**
  * Created by dev on 10/1/17.
  */

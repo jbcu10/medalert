@@ -21,11 +21,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
-import jbcu10.dev.medalert.activity.NewMedicineActivity;
 import jbcu10.dev.medalert.activity.NewRemindersActivity;
 import jbcu10.dev.medalert.adapter.ReminderAdapter;
 import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
-import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Reminder;
 
 /**

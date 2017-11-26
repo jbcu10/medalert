@@ -11,21 +11,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Random;
 
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.activity.MedicineActivity;
 import jbcu10.dev.medalert.activity.RelativeActivity;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Relative;
 
 public class RelativeAdapter extends ArrayAdapter<Relative> {
