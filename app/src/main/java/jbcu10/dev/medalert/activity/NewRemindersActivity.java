@@ -137,11 +137,11 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
         final String time =shourOfDay + ":" + sMinute;
 
 
-        boolean match = timeStrings.stream().anyMatch(time::contains);
-         if(match) {
-             Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
-         }
-         if(!match){
+         //boolean match = timeStrings.stream().anyMatch(time::contains);
+         //if(match) {
+         //    Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
+         //}
+         //if(!match){
              timeStrings.add(time);
              TextView txtAlarm = new TextView(this);
              txtAlarm.setText(time);
@@ -152,7 +152,7 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
                              LinearLayout.LayoutParams.WRAP_CONTENT));
              ll_alarm_handler.addView(txtAlarm);
 
-         }
+         //}
 
 
     }
@@ -163,6 +163,7 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
         inflater.inflate(R.menu.reminder, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection

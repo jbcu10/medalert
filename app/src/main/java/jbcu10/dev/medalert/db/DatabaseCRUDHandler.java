@@ -29,7 +29,7 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
     public List<Medicine> getAllMedicine() {
         try {
             List<Medicine> medicines = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " order by " + KEY_ID + " desc";
+            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " order by " + KEY_ID + " asc";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
@@ -60,11 +60,66 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
         }
 
     }
+    public List<Medicine> getAllReminderMedicine(String reminderUuid) {
+        try {
+            List<Medicine> medicines = new LinkedList<>();
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER_MEDICINE + " where "+KEY_REMINDER_UUID+"='"+reminderUuid+"' order by " + KEY_ID + " asc";
+
+            Log.d(TAG, "selectQuery: " +   selectQuery);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Log.d(TAG, "get medicines uuid: " +   cursor.getString(1));
+
+
+                    Medicine medicine = this.getMedicineByUuid(cursor.getString(1));
+                    medicines.add(medicine);
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching medicines from database: " + medicines.get(0).getName().toString());
+            return medicines;
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+            return null;
+        }
+
+    }public List<String> getAllReminderTime(String reminderUuid) {
+        try {
+            List<String> stringList = new LinkedList<>();
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER_TIME + " where "+KEY_REMINDER_UUID+"='"+reminderUuid+"' order by " + KEY_ID + " asc";
+
+            Log.d(TAG, "selectQuery: " +   selectQuery);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Log.d(TAG, "get medicines uuid: " +   cursor.getString(2));
+
+                    stringList.add(cursor.getString(2));
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching medicines from database: " + stringList.get(0));
+            return stringList;
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+            return null;
+        }
+
+    }
 
     public List<Reminder> getAllReminders() {
         try {
             List<Reminder> reminders = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER + " order by " + KEY_ID + " desc";
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER + " order by " + KEY_ID + " asc";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
@@ -90,7 +145,7 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
     public List<FirstAid> getAllFirstAid() {
         try {
             List<FirstAid> firstAids = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_FIRST_AID + " order by " + KEY_ID + " desc";
+            String selectQuery = "SELECT  * FROM " + TABLE_FIRST_AID + " order by " + KEY_ID + " asc";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
@@ -407,6 +462,35 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
             return null;
         }
     }
+
+    public Reminder getReminder(int reminderId) {
+        try{
+            Reminder reminder = new Reminder();
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER + " where id = '"+reminderId+"' ;";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.d("size in cursor", cursor.getCount() + "");
+            if (cursor.moveToFirst())
+            {
+                reminder.setId(cursor.getInt(0));
+                reminder.setUuid(cursor.getString(1));
+                reminder.setDescription(cursor.getString(2));
+
+
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching reminder: " + reminder.getDescription());
+            if(reminder.getId()>0) {
+                return reminder;
+            }
+            return null;
+        }
+        catch (Exception e){
+            Log.d(TAG,ERROR + e.getMessage());
+            return null;
+        }
+    }
     public Medicine getMedicineByUuid(String uuid) {
         try{
             Medicine medicine = new Medicine();
@@ -460,7 +544,7 @@ public class DatabaseCRUDHandler extends SQLiteBaseHandler {
     public List<Relative> getAllRelative() {
         try {
             List<Relative> relatives = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_RELATIVE + " order by " + KEY_ID + " desc";
+            String selectQuery = "SELECT  * FROM " + TABLE_RELATIVE + " order by " + KEY_ID + " asc";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {

@@ -169,7 +169,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     private void createReminderTimeTable(SQLiteDatabase db) {
         try {
 
-            Log.d(TAG, "CREATING TABLE_REMINDER_MEDICINE...");
+            Log.d(TAG, "CREATING TABLE_REMINDER_TIME...");
             String createReminderTimeTable = "CREATE TABLE " +
                     TABLE_REMINDER_TIME + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
