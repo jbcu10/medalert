@@ -9,23 +9,23 @@ import android.widget.ProgressBar;
 import java.util.UUID;
 
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.FirstAidRepository;
 import jbcu10.dev.medalert.model.FirstAid;
 import jbcu10.dev.medalert.model.Instructions;
 
 public class SplashScreenActivity extends AppCompatActivity {
     ProgressBar progressbar;
     Intent intent;
-    public DatabaseCRUDHandler db;
+    public FirstAidRepository firstAidRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
-        db = new DatabaseCRUDHandler(SplashScreenActivity.this);
+        firstAidRepository = new FirstAidRepository(SplashScreenActivity.this);
 
-        if(db.getAllFirstAid()==null){
+        if(firstAidRepository.getAll()==null){
             for(int a=0 ; a<10;a++){
                 String firstAidUuid= UUID.randomUUID().toString();
                 FirstAid firstAid = new FirstAid();
@@ -36,14 +36,14 @@ public class SplashScreenActivity extends AppCompatActivity {
                     Instructions instructions = new Instructions();
                     instructions.setInstruction((b+1)+". Lorem Ipsum Dolorsit amit.");
                     instructions.setUuid(UUID.randomUUID().toString());
-                    db.createInstruction(firstAidUuid,instructions);
+                    firstAidRepository.createInstruction(firstAidUuid,instructions);
                 }
-                db.createFirstAid(firstAid);
+                firstAidRepository.create(firstAid);
             }
         }
 
 
-        progressbar = (ProgressBar) findViewById(R.id.progressBar2);
+        progressbar = findViewById(R.id.progressBar2);
         final Handler handler = new Handler();
         Runnable r = new Runnable() {
             public void run() {

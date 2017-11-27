@@ -19,7 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.RelativeRepository;
 import jbcu10.dev.medalert.model.Relative;
 
 public class NewRelativeActivity extends BaseActivity {
@@ -30,7 +30,7 @@ public class NewRelativeActivity extends BaseActivity {
     @BindView(R.id.edit_email) EditText edit_email;
     @BindView(R.id.edit_relationship) EditText edit_relationship;
     @BindView(R.id.button_submit) Button button_submit;
-    public DatabaseCRUDHandler db;
+    public RelativeRepository relativeRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class NewRelativeActivity extends BaseActivity {
         setContentView(R.layout.activity_new_relative);
         ButterKnife.bind(this);
         initializedViews();
-        db = new DatabaseCRUDHandler(NewRelativeActivity.this);
+        relativeRepository = new RelativeRepository(NewRelativeActivity.this);
 
     }
     @Override
@@ -77,7 +77,6 @@ public class NewRelativeActivity extends BaseActivity {
 
     @OnClick(R.id.button_submit)
     public void onClickButtonSubmit(View view) {
-
         new MaterialDialog.Builder(NewRelativeActivity.this)
                 .title("Save Relative?")
                 .content("Are you sure you want save this items?")
@@ -88,7 +87,7 @@ public class NewRelativeActivity extends BaseActivity {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         try{
                             String uuid =UUID.randomUUID().toString();
-                            boolean isCreated = db.createRelative(new Relative(uuid,
+                            boolean isCreated = relativeRepository.create(new Relative(uuid,
                                     edit_first_name.getText().toString(),edit_middle_name.getText().toString()
                                     ,edit_last_name.getText().toString(),edit_contact_number.getText().toString()
                                     , edit_email.getText().toString(),edit_relationship.getText().toString()));
@@ -96,7 +95,7 @@ public class NewRelativeActivity extends BaseActivity {
                             if(isCreated){
                                 Intent intent = new Intent(NewRelativeActivity.this, RelativeActivity.class);
                                 AppController appController= AppController.getInstance();
-                                appController.setRelativeId(db.getRelativeByUuid(uuid).getId());
+                                appController.setRelativeId(relativeRepository.getByUuid(uuid).getId());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                             }if(!isCreated){

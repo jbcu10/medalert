@@ -10,11 +10,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -27,17 +30,23 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.MedicineRepository;
+import jbcu10.dev.medalert.db.PatientRepository;
+import jbcu10.dev.medalert.db.ReminderRepository;
 import jbcu10.dev.medalert.model.Medicine;
+import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Reminder;
 
 public class NewRemindersActivity extends BaseActivity implements  TimePickerDialog.OnTimeSetListener {
-    public DatabaseCRUDHandler db;
+    public MedicineRepository medicineRepository;
+    public ReminderRepository reminderRepository;
+    public PatientRepository patientRepository;
     @BindView(R.id.button_submit)
     Button button_submit;
 
@@ -48,6 +57,9 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
     public static final String TIMEPICKER_TAG = "Time Picker";
     ArrayList<String> strings = new ArrayList<>();
     List<String> timeStrings = new LinkedList<>();
+    Spinner spinner ;
+    Patient patient;
+    String[] patientName = {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,18 +67,48 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
         setContentView(R.layout.activity_new_reminders);
         ButterKnife.bind(this);
         initializedViews();
-        db = new DatabaseCRUDHandler(this);
-        List<Medicine> medicines =db.getAllMedicine();
+        medicineRepository = new MedicineRepository(this);
+        patientRepository = new PatientRepository(this);
+        spinner = findViewById(R.id.spinner);
+        ArrayList<Patient> patients = new ArrayList<>();
+        List<Patient> patientsList = patientRepository.getAll();
 
-        if (medicines==null) {
-            addMedicine(this);
+        if(patientsList==null) {
+           addPatient(this,"Create new Patient?");
+        }
+        if(patientsList!=null) {
+            patients.addAll(patientsList);
+
+        ArrayAdapter<Patient> patientAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,patients);
+        patientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+        spinner.setAdapter(patientAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                 patient = (Patient) spinner.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
+
+        patient = (Patient) spinner.getSelectedItem();
+
+        Log.d("uuid",patient.getUuid());
+        }
+
+
+        List<Medicine> medicines = medicineRepository.getAll();
+        if (patientsList!=null&&medicines==null) {
+            addMedicine(this,"It seems that you don't have any medicine. Create a medicine to continue.");
         }
         Calendar calendar = Calendar.getInstance();
         timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true, false);
         if (medicines!=null) {
             timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
-
-
         for (Medicine medicine:medicines){
             final CheckBox checkBoxMedicine = new CheckBox(this);
             checkBoxMedicine.setText(medicine.getName());
@@ -106,7 +148,7 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
         if(!strings.isEmpty()) {
             List<Medicine> medicines = new LinkedList<>();
             for (String uuid : strings) {
-                Medicine medicine = db.getMedicineByUuid(uuid);
+                Medicine medicine = medicineRepository.getByUuid(uuid);
                 medicines.add(medicine);
             }
             reminder.setMedicineList(medicines);
@@ -114,6 +156,9 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
         if(!timeStrings.isEmpty()) {
 
             reminder.setTime(timeStrings);
+        }
+        if(patient!=null) {
+            reminder.setPatient((Patient) spinner.getSelectedItem());
         }
 
         return reminder;
@@ -137,7 +182,7 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
         final String time =shourOfDay + ":" + sMinute;
 
 
-        boolean match = timeStrings.stream().anyMatch(time::contains);
+         boolean match = timeStrings.stream().anyMatch(time::contains);
          if(match) {
              Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
          }
@@ -163,6 +208,7 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
         inflater.inflate(R.menu.reminder, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -171,6 +217,9 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
             case R.id.add_alarm:
                 timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
 
+                return true;
+            case R.id.add_medicine:
+                addMedicine(this,"Create New Medicine?");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -189,7 +238,7 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         try {
-                            boolean isCreated = db.createReminder(setReminder());
+                            boolean isCreated = reminderRepository.create(setReminder());
 
                             if (isCreated) {
                                 Intent intent = new Intent(NewRemindersActivity.this, HomeActivity.class);

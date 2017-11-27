@@ -21,28 +21,32 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
+import jbcu10.dev.medalert.activity.NewPatientActivity;
 import jbcu10.dev.medalert.activity.NewRelativeActivity;
+import jbcu10.dev.medalert.adapter.PatientAdapter;
 import jbcu10.dev.medalert.adapter.RelativeAdapter;
+import jbcu10.dev.medalert.db.PatientRepository;
 import jbcu10.dev.medalert.db.RelativeRepository;
+import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Relative;
 
 /**
  * Created by dev on 10/12/17.
  */
 
-public class RelativeFragments extends ListFragment implements AbsListView.OnScrollListener,
+public class PatientFragments extends ListFragment implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, OnItemLongClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
-    public RelativeRepository relativeRepository;
+    public PatientRepository patientRepository;
     private static final String LOADING_PLOTS = "Loading Relatives...";
     private static final String ERROR = "Error:";
     ProgressDialog pDialog;
     private StaggeredGridView mGridView;
     private boolean mHasRequestedMore;
-    private RelativeAdapter mAdapter;
+    private PatientAdapter patientAdapter;
     @BindView(R.id.fab)
     FloatingActionButton fab;
-    public RelativeFragments() {
+    public PatientFragments() {
         // Required empty public constructor
     }
     View rootView;
@@ -51,14 +55,14 @@ public class RelativeFragments extends ListFragment implements AbsListView.OnScr
 
         rootView = inflater.inflate(R.layout.fragment_relative, null, false);
         ButterKnife.bind(this,rootView);
-        relativeRepository = new RelativeRepository(getActivity());
+        patientRepository = new PatientRepository(getActivity());
         pDialog = new ProgressDialog(getActivity());
 
-        getActivity().setTitle("Relatives");
-        List<Relative> relatives = relativeRepository.getAll();
+        getActivity().setTitle("Patients");
+        List<Patient> patients = patientRepository.getAll();
         initializeGridView();
-        if(relatives!=null) {
-            onLoadMoreItems(relatives);
+        if(patients!=null) {
+            onLoadMoreItems(patients);
         }
         return rootView;
 
@@ -85,7 +89,7 @@ public class RelativeFragments extends ListFragment implements AbsListView.OnScr
 
     @OnClick(R.id.fab)
     public void onClickFAB(View view) {
-        Intent intent = new Intent(getActivity(), NewRelativeActivity.class);
+        Intent intent = new Intent(getActivity(), NewPatientActivity.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
@@ -98,19 +102,19 @@ public class RelativeFragments extends ListFragment implements AbsListView.OnScr
     }
 
     public void initializeGridView() {
-        mAdapter = new RelativeAdapter(getActivity(), R.id.txt_name, R.id.imageView);
+        patientAdapter = new PatientAdapter(getActivity(), R.id.txt_name, R.id.imageView);
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
-                setListAdapter(mAdapter);
+                setListAdapter(patientAdapter);
             }
 
         });
     }
-    private void onLoadMoreItems(List<Relative> relatives) {
-        for (Relative data : relatives) {
-            mAdapter.add(data);
+    private void onLoadMoreItems(List<Patient> patients) {
+        for (Patient data : patients) {
+            patientAdapter.add(data);
         }
-        mAdapter.notifyDataSetChanged();
+        patientAdapter.notifyDataSetChanged();
         mHasRequestedMore = false;
         hideDialog();
     }

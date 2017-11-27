@@ -3,6 +3,7 @@ package jbcu10.dev.medalert.config;
 import android.app.Application;
 
 import jbcu10.dev.medalert.model.Medicine;
+import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Relative;
 
 
@@ -12,10 +13,13 @@ public class AppController extends Application {
 
     private Medicine medicine;
     private Relative relative;
+    private Patient patient;
     private int medicineId;
     private int firstAidId;
     private int relativeId;
     private int reminderId;
+    private int patientId;
+
 
 
     private static AppController mInstance;
@@ -84,5 +88,21 @@ public class AppController extends Application {
 
     public void setReminderId(int reminderId) {
         this.reminderId = reminderId;
+    }
+
+    public int getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

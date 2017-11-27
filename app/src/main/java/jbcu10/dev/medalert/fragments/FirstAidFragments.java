@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
 import jbcu10.dev.medalert.adapter.FirstAidAdapter;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.FirstAidRepository;
 import jbcu10.dev.medalert.model.FirstAid;
 
 /**
@@ -30,7 +30,7 @@ import jbcu10.dev.medalert.model.FirstAid;
 public class FirstAidFragments extends ListFragment implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, OnItemLongClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
-    public DatabaseCRUDHandler db;
+    public FirstAidRepository firstAidRepository;
     private static final String LOADING_PLOTS = "Loading First Aid...";
     private static final String ERROR = "Error:";
     ProgressDialog pDialog;
@@ -48,11 +48,11 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
 
         rootView = inflater.inflate(R.layout.fragment_firstaid, null, false);
         ButterKnife.bind(this,rootView);
-        db = new DatabaseCRUDHandler(getActivity());
+        firstAidRepository = new FirstAidRepository(getActivity());
         pDialog = new ProgressDialog(getActivity());
 
         getActivity().setTitle("First Aid");
-        List<FirstAid> relatives = db.getAllFirstAid();
+        List<FirstAid> relatives = firstAidRepository.getAll();
         initializeGridView();
         if(relatives!=null) {
             onLoadMoreItems(relatives);

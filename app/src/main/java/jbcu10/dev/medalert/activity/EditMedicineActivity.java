@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.MedicineCRUDHandler;
+import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.model.Medicine;
 
 public class EditMedicineActivity extends BaseActivity implements  DatePickerDialog.OnDateSetListener{
@@ -42,7 +42,7 @@ public class EditMedicineActivity extends BaseActivity implements  DatePickerDia
     Button button_submit;
     Calendar calendar;
     private static final String TAG = EditMedicineActivity.class.getSimpleName();
-    public MedicineCRUDHandler db;
+    public MedicineRepository medicineRepository;
     public static final String DATEPICKER_TAG = "Date Picker";
     DatePickerDialog datePickerDialog;
     Medicine medicine = null ;
@@ -52,7 +52,7 @@ public class EditMedicineActivity extends BaseActivity implements  DatePickerDia
         setContentView(R.layout.activity_edit_medicine);
         ButterKnife.bind(this);
         initializedViews();
-        db = new MedicineCRUDHandler(EditMedicineActivity.this);
+        medicineRepository = new MedicineRepository(EditMedicineActivity.this);
         AppController appController =AppController.getInstance();
 
         medicine =appController.getMedicine();
@@ -86,13 +86,10 @@ public class EditMedicineActivity extends BaseActivity implements  DatePickerDia
         new MaterialDialog.Builder(this)
                 .title("Select Type")
                 .items(R.array.type)
-                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                .itemsCallbackSingleChoice(-1, (dialog, view1, which, text) -> {
 
-                        edit_type.setText(text);
-                        return true;
-                    }
+                    edit_type.setText(text);
+                    return true;
                 })
                 .positiveText("Submit")
                 .show();
@@ -133,47 +130,41 @@ public class EditMedicineActivity extends BaseActivity implements  DatePickerDia
                 .content("Are you sure you want save this items?")
                 .positiveText("Save")
                 .negativeText("Cancel")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .onPositive((dialog, which) -> {
 
-                        String expirationDateString = edit_expiration.getText().toString();
-                        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                        Date expirationDate;
-                        long milliseconds=0;
-                        try {
-                            expirationDate = df.parse(expirationDateString);
-                            milliseconds = expirationDate.getTime();
+                    String expirationDateString = edit_expiration.getText().toString();
+                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                    Date expirationDate;
+                    long milliseconds=0;
+                    try {
+                        expirationDate = df.parse(expirationDateString);
+                        milliseconds = expirationDate.getTime();
 
-                        } catch (ParseException e) {
-                            Log.d("Error",e.getMessage());
+                    } catch (ParseException e) {
+                        Log.d("Error",e.getMessage());
+                    }
+
+
+
+                    try{
+                        boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(),UUID.randomUUID().toString(),edit_name.getText().toString(),edit_generic_name.getText().toString(),edit_diagnosis.getText().toString(),edit_description.getText().toString(),milliseconds,Integer.parseInt(edit_total.getText().toString()),null,edit_type.getText().toString()));
+
+                        if(isCreated){
+                            Intent intent = new Intent(EditMedicineActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                        }if(!isCreated){
+                            Snackbar.make(findViewById(android.R.id.content), "Failed to Save Medicine!", Snackbar.LENGTH_LONG).show();
                         }
-
-
-
-                        try{
-                            boolean isCreated = db.updateMedicine(new Medicine(medicine.getId(),UUID.randomUUID().toString(),edit_name.getText().toString(),edit_generic_name.getText().toString(),edit_diagnosis.getText().toString(),edit_description.getText().toString(),milliseconds,Integer.parseInt(edit_total.getText().toString()),null,edit_type.getText().toString()));
-
-                            if(isCreated){
-                                Intent intent = new Intent(EditMedicineActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                            }if(!isCreated){
-                                Snackbar.make(findViewById(android.R.id.content), "Failed to Save Medicine!", Snackbar.LENGTH_LONG).show();
-                            }
-
-                        }
-                        catch (Exception e){
-                            Log.d("Error",e.getMessage());
-                        }
-
 
                     }
+                    catch (Exception e){
+                        Log.d("Error",e.getMessage());
+                    }
+
+
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    }
+                .onNegative((dialog, which) -> {
                 }).show();
 
     }

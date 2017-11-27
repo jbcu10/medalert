@@ -20,13 +20,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.adapter.MedicineAdapter;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.model.Medicine;
 
 public class MainActivity extends BaseActivity implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
-    public DatabaseCRUDHandler db;
+    public MedicineRepository medicineRepository;
     private static final String LOADING_PLOTS = "Loading Medicines...";
     private static final String ERROR = "Error:";
     ProgressDialog pDialog;
@@ -40,10 +40,10 @@ public class MainActivity extends BaseActivity implements AbsListView.OnScrollLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        db = new DatabaseCRUDHandler(MainActivity.this);
+        medicineRepository = new MedicineRepository(MainActivity.this);
         pDialog = new ProgressDialog(this);
 
-        List<Medicine> medicines = db.getAllMedicine();
+        List<Medicine> medicines = medicineRepository.getAll();
         initializeGridView();
         if(medicines!=null) {
             onLoadMoreItems(medicines);

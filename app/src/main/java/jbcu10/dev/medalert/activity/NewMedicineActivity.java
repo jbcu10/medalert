@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.model.Medicine;
 
 public class NewMedicineActivity extends BaseActivity  implements  DatePickerDialog.OnDateSetListener{
@@ -40,7 +40,7 @@ public class NewMedicineActivity extends BaseActivity  implements  DatePickerDia
     Button button_submit;
      Calendar calendar;
     private static final String TAG = NewMedicineActivity.class.getSimpleName();
-    public DatabaseCRUDHandler db;
+    public MedicineRepository medicineRepository;
     public static final String DATEPICKER_TAG = "Date Picker";
 
     DatePickerDialog datePickerDialog;
@@ -50,7 +50,7 @@ public class NewMedicineActivity extends BaseActivity  implements  DatePickerDia
         setContentView(R.layout.activity_new_medicine);
         ButterKnife.bind(this);
         initializedViews();
-        db = new DatabaseCRUDHandler(NewMedicineActivity.this);
+        medicineRepository = new MedicineRepository(NewMedicineActivity.this);
 
         calendar = Calendar.getInstance();
         datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH),false);
@@ -119,12 +119,12 @@ public class NewMedicineActivity extends BaseActivity  implements  DatePickerDia
 
                         try{
                             String uuid =UUID.randomUUID().toString();
-                            boolean isCreated = db.createMedicine(new Medicine(uuid,edit_name.getText().toString(),edit_generic_name.getText().toString(),edit_diagnosis.getText().toString(),edit_description.getText().toString(),milliseconds,Integer.parseInt(edit_total.getText().toString()),null,edit_type.getText().toString()));
+                            boolean isCreated = medicineRepository.create(new Medicine(uuid,edit_name.getText().toString(),edit_generic_name.getText().toString(),edit_diagnosis.getText().toString(),edit_description.getText().toString(),milliseconds,Integer.parseInt(edit_total.getText().toString()),null,edit_type.getText().toString()));
 
                             if(isCreated){
                                 Intent intent = new Intent(NewMedicineActivity.this, MedicineActivity.class);
                                 AppController appController= AppController.getInstance();
-                                appController.setMedicineId(db.getMedicineByUuid(uuid).getId());
+                                appController.setMedicineId(medicineRepository.getByUuid(uuid).getId());
                                 startActivity(intent);
                                 overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                             }if(!isCreated){

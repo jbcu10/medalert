@@ -13,6 +13,7 @@ public class Reminder {
     private String description;
     private List<Medicine> medicineList;
     private List<String> time;
+    private Patient patient;
 
 
     public String getDescription() {
@@ -53,5 +54,13 @@ public class Reminder {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

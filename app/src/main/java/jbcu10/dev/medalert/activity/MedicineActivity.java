@@ -19,22 +19,22 @@ import java.util.Date;
 
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.MedicineCRUDHandler;
+import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.model.Medicine;
 
 public class MedicineActivity extends BaseActivity {
     TextView txt_name,txt_genric_name,txt_description,txt_diagnosis,txt_expiration,txt_doctor_name;
-    public MedicineCRUDHandler db;
+    public MedicineRepository medicineRepository;
     Medicine medicine = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine);
         initialize();
-        db = new MedicineCRUDHandler(MedicineActivity.this);
+        medicineRepository = new MedicineRepository(MedicineActivity.this);
 
         AppController appController = AppController.getInstance();
-         medicine = db.getMedicine(appController.getMedicineId());
+         medicine = medicineRepository.getById(appController.getMedicineId());
 
 
         txt_name.setText(medicine.getName());
@@ -106,7 +106,7 @@ public class MedicineActivity extends BaseActivity {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                         try{
-                            boolean isDeleted =         db.deleteMedicine(medicine.getId());
+                            boolean isDeleted =         medicineRepository.deleteById(medicine.getId());
                             if(isDeleted){
                                 Snackbar.make(findViewById(android.R.id.content), "Successfully Deleted Medicine!", Snackbar.LENGTH_LONG).show();
                                 Intent intent = new Intent(MedicineActivity.this, HomeActivity.class);

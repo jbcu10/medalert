@@ -18,13 +18,12 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import butterknife.ButterKnife;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.RelativeRepository;
 import jbcu10.dev.medalert.model.Relative;
 
 public class RelativeActivity extends BaseActivity  {
-
     private static final String TAG = RelativeActivity.class.getSimpleName();
-    public DatabaseCRUDHandler db;
+    public RelativeRepository relativeRepository;
     TextView txt_name,txt_relation,txt_contact_number,txt_email;
     ImageView image_relation;
     Relative relative;
@@ -33,19 +32,16 @@ public class RelativeActivity extends BaseActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_relative);
         ButterKnife.bind(this);
-        db = new DatabaseCRUDHandler(RelativeActivity.this);
+        relativeRepository = new RelativeRepository(RelativeActivity.this);
         AppController appController = AppController.getInstance();
-        relative =  db.getRelative(appController.getRelativeId());
+        relative =  relativeRepository.getById(appController.getRelativeId());
         initializeView();
-
     }
     @Override
     public void onPause() {
         super.onPause();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
-
-
     private void initializeView(){
        txt_name = findViewById(R.id.txt_name);
        txt_relation = findViewById(R.id.txt_relation);
@@ -120,7 +116,7 @@ public class RelativeActivity extends BaseActivity  {
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                         try{
-                            boolean isDeleted =         db.deleteRelative(relative.getId());
+                            boolean isDeleted =         relativeRepository.deleteById(relative.getId());
                             if(isDeleted){
                                 Snackbar.make(findViewById(android.R.id.content), "Successfully Deleted Medicine!", Snackbar.LENGTH_LONG).show();
                                 Intent intent = new Intent(RelativeActivity.this, HomeActivity.class);

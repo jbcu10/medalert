@@ -23,7 +23,7 @@ import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
 import jbcu10.dev.medalert.activity.NewRemindersActivity;
 import jbcu10.dev.medalert.adapter.ReminderAdapter;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.ReminderRepository;
 import jbcu10.dev.medalert.model.Reminder;
 
 /**
@@ -33,7 +33,7 @@ import jbcu10.dev.medalert.model.Reminder;
 public class ReminderFragments extends ListFragment implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
-    public DatabaseCRUDHandler db;
+    public ReminderRepository reminderRepository;
     private static final String LOADING_PLOTS = "Loading Medicines...";
     private static final String ERROR = "Error:";
     ProgressDialog pDialog;
@@ -53,11 +53,11 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
 
         rootView = inflater.inflate(R.layout.fragment_medicines, container, false);
         ButterKnife.bind(this,rootView);
-        db = new DatabaseCRUDHandler(getActivity());
+        reminderRepository = new ReminderRepository(getActivity());
         pDialog = new ProgressDialog(getActivity());
         getActivity().setTitle("Reminders");
 
-        List<Reminder> reminders = db.getAllReminders();
+        List<Reminder> reminders = reminderRepository.getAll();
         initializeGridView();
         if(reminders!=null) {
             onLoadMoreItems(reminders);

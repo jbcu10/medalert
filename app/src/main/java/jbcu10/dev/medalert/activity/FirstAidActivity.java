@@ -6,14 +6,14 @@ import android.widget.TextView;
 
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.FirstAidRepository;
 import jbcu10.dev.medalert.model.FirstAid;
 import jbcu10.dev.medalert.model.Instructions;
 
 public class FirstAidActivity extends BaseActivity {
     TextView txt_name,txt_description;
     LinearLayout ll_instruction_handler;
-    public DatabaseCRUDHandler db;
+    public FirstAidRepository firstAidRepository;
     FirstAid firstAid = null;
 
 
@@ -22,9 +22,9 @@ public class FirstAidActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_aid);
         initialize();
-        db = new DatabaseCRUDHandler(FirstAidActivity.this);
+        firstAidRepository = new FirstAidRepository(FirstAidActivity.this);
         AppController appController = AppController.getInstance();
-        firstAid = db.getFirstAid(appController.getFirstAidId());
+        firstAid = firstAidRepository.getById(appController.getFirstAidId());
         txt_name.setText(firstAid.getName());
         txt_description.setText(firstAid.getDescription());
 
