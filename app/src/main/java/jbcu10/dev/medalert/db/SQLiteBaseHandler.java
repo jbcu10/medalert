@@ -42,12 +42,12 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_TYPE = "type";
 
     //person
-    protected static final String KEY_FIRST_NAME= "firstName";
-    protected static final String KEY_MIDDLE_NAME= "middleName";
-    protected static final String KEY_LAST_NAME= "lastName";
-    protected static final String KEY_CONTACT_NUMBER= "contactNumber";
-    protected static final String KEY_EMAIL= "email";
-    protected static final String KEY_GENDER= "gender";
+    protected static final String KEY_FIRST_NAME = "firstName";
+    protected static final String KEY_MIDDLE_NAME = "middleName";
+    protected static final String KEY_LAST_NAME = "lastName";
+    protected static final String KEY_CONTACT_NUMBER = "contactNumber";
+    protected static final String KEY_EMAIL = "email";
+    protected static final String KEY_GENDER = "gender";
     protected static final String KEY_RELATIONSHIP = "relationship";
 
     //first aid
@@ -62,6 +62,9 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_TIME = "time";
 
 
+    SQLiteBaseHandler(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -93,11 +96,6 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
         Log.d(TAG, "Database tables deleted");
         onCreate(db);
     }
-
-    SQLiteBaseHandler(Context context) {
-        super(context, DATABASE_NAME, null, DATABASE_VERSION);
-    }
-
 
     // Table Medicine Handler
     private void createMedicineTable(SQLiteDatabase db) {
@@ -135,7 +133,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_UUID + TEXT
                     + KEY_NAME + TEXT
-                    + KEY_DESCRIPTION +  " TEXT" + ")";
+                    + KEY_DESCRIPTION + " TEXT" + ")";
             db.execSQL(createFirstAidTable);
             Log.d(TAG, "TABLE_FIRST_AID IS CREATED ...");
 
@@ -153,7 +151,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     TABLE_REMINDER + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_UUID + TEXT
-                    + KEY_DESCRIPTION +  " TEXT" + ")";
+                    + KEY_DESCRIPTION + " TEXT" + ")";
             db.execSQL(createReminderTable);
             Log.d(TAG, "TABLE_REMINDER IS CREATED ...");
 
@@ -171,7 +169,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     TABLE_REMINDER_MEDICINE + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_MEDICINE_UUID + TEXT
-                    + KEY_REMINDER_UUID +  " TEXT" + ")";
+                    + KEY_REMINDER_UUID + " TEXT" + ")";
             db.execSQL(createReminderMedicineTable);
             Log.d(TAG, "TABLE_REMINDER_MEDICINE IS CREATED ...");
 
@@ -189,7 +187,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     TABLE_REMINDER_TIME + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_REMINDER_UUID + TEXT
-                    + KEY_TIME +  " TEXT" + ")";
+                    + KEY_TIME + " TEXT" + ")";
             db.execSQL(createReminderTimeTable);
             Log.d(TAG, "TABLE_REMINDER_TIME IS CREATED ...");
 
@@ -197,6 +195,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
             Log.d(TAG, "ERROR --------------- " + e.getMessage());
         }
     }
+
     // Table Instruction Handler
     private void createInstructionsTable(SQLiteDatabase db) {
         try {
@@ -207,7 +206,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_FIRST_AID_UUID + TEXT
                     + KEY_UUID + TEXT
-                    + KEY_INSTRUCTION +  " TEXT" + ")";
+                    + KEY_INSTRUCTION + " TEXT" + ")";
             db.execSQL(createInstructionTable);
             Log.d(TAG, "TABLE_INSTRUCTIONS IS CREATED ...");
 
@@ -230,7 +229,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_LAST_NAME + TEXT
                     + KEY_CONTACT_NUMBER + TEXT
                     + KEY_EMAIL + TEXT
-                    + KEY_RELATIONSHIP +  " TEXT" + ")";
+                    + KEY_RELATIONSHIP + " TEXT" + ")";
             db.execSQL(createRelativeTable);
             Log.d(TAG, "TABLE_MEDICINE IS CREATED ...");
 
@@ -253,7 +252,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_LAST_NAME + TEXT
                     + KEY_CONTACT_NUMBER + TEXT
                     + KEY_GENDER + TEXT
-                    + KEY_EMAIL +  " TEXT" + ")";
+                    + KEY_EMAIL + " TEXT" + ")";
             db.execSQL(createPatientTable);
             Log.d(TAG, "TABLE_PATIENT IS CREATED ...");
 
@@ -271,7 +270,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     TABLE_PATIENT_RELATIVE + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_PATIENT_UUID + TEXT
-                    + KEY_RELATIVE_UUID +  " TEXT" + ")";
+                    + KEY_RELATIVE_UUID + " TEXT" + ")";
             db.execSQL(createPatientRelativeTable);
             Log.d(TAG, "TABLE_PATIENT_RELATIVE IS CREATED ...");
 
@@ -279,6 +278,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
             Log.d(TAG, "ERROR --------------- " + e.getMessage());
         }
     }
+
     // Table Reminder Patient Handler
     private void createReminderPatient(SQLiteDatabase db) {
         try {
@@ -288,7 +288,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     TABLE_REMINDER_PATIENT + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_PATIENT_UUID + TEXT
-                    + KEY_REMINDER_UUID +  " TEXT" + ")";
+                    + KEY_REMINDER_UUID + " TEXT" + ")";
             db.execSQL(createReminderPatient);
             Log.d(TAG, "TABLE_REMINDER_PATIENT IS CREATED ...");
 

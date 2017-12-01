@@ -17,19 +17,21 @@ import jbcu10.dev.medalert.model.Reminder;
  */
 
 public class ReminderRepository extends SQLiteBaseHandler implements CrudRepository<Reminder> {
+
+    PatientRepository patientRepository;
+
     public ReminderRepository(Context context) {
         super(context);
     }
 
     public Reminder getById(int reminderId) {
-        try{
+        try {
             Reminder reminder = new Reminder();
-            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER + " where id = '"+reminderId+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER + " where id = '" + reminderId + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 reminder.setId(cursor.getInt(0));
                 reminder.setUuid(cursor.getString(1));
                 reminder.setDescription(cursor.getString(2));
@@ -39,27 +41,25 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching reminder: " + reminder.getDescription());
-            if(reminder.getId()>0) {
+            if (reminder.getId() > 0) {
                 return reminder;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
         }
     }
 
     @Override
     public Reminder getByUuid(String uuid) {
-        try{
+        try {
             Reminder reminder = new Reminder();
-            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER + " where uuid = '"+uuid+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER + " where uuid = '" + uuid + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 reminder.setId(cursor.getInt(0));
                 reminder.setUuid(cursor.getString(1));
                 reminder.setDescription(cursor.getString(2));
@@ -69,16 +69,17 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching reminder: " + reminder.getDescription());
-            if(reminder.getId()>0) {
+            if (reminder.getId() > 0) {
                 return reminder;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
-        }    }
+        }
+    }
 
+    @Override
     public List<Reminder> getAll() {
         try {
             List<Reminder> reminders = new LinkedList<>();
@@ -91,6 +92,7 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
                     reminder.setId(cursor.getInt(0));
                     reminder.setUuid(cursor.getString(1));
                     reminder.setDescription(cursor.getString(2));
+
                     reminders.add(reminder);
                     cursor.moveToNext();
                 }
@@ -105,18 +107,19 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
         }
 
     }
+
     public List<String> getAllReminderTime(String reminderUuid) {
         try {
             List<String> stringList = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER_TIME + " where "+KEY_REMINDER_UUID+"='"+reminderUuid+"' order by " + KEY_ID + " asc";
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER_TIME + " where " + KEY_REMINDER_UUID + "='" + reminderUuid + "' order by " + KEY_ID + " asc";
 
-            Log.d(TAG, "selectQuery: " +   selectQuery);
+            Log.d(TAG, "selectQuery: " + selectQuery);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
-                    Log.d(TAG, "get medicines uuid: " +   cursor.getString(2));
+                    Log.d(TAG, "get medicines uuid: " + cursor.getString(2));
 
                     stringList.add(cursor.getString(2));
                     cursor.moveToNext();
@@ -133,6 +136,7 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
 
     }
 
+    @Override
     public boolean create(Reminder reminder) {
         try {
             Log.d(TAG, reminder.toString());
@@ -142,30 +146,27 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
             values.put(KEY_DESCRIPTION, reminder.getDescription());
 
             long id = db.insert(TABLE_REMINDER, null, values);
-            if(reminder.getMedicineList()!=null) {
-                for (Medicine medicine : reminder.getMedicineList()) {
-                    this.createReminderMedicine(reminder.getUuid(),medicine.getUuid());
-                }
-            }
             db.close();
 
-            if(reminder.getMedicineList()!=null) {
+            if (reminder.getMedicineList() != null) {
                 for (Medicine medicine : reminder.getMedicineList()) {
-                    this.createReminderMedicine(reminder.getUuid(),medicine.getUuid());
+                    this.createReminderMedicine(reminder.getUuid(), medicine.getUuid());
                 }
             }
-            if(reminder.getTime()!=null) {
-                for (String time: reminder.getTime()) {
-                    this.createReminderTime(reminder.getUuid(),time);
+            if (reminder.getTime() != null) {
+                for (String time : reminder.getTime()) {
+                    this.createReminderTime(reminder.getUuid(), time);
                 }
-            }if(reminder.getPatient()!=null) {
-                    this.createReminderTime(reminder.getUuid(),reminder.getPatient().getUuid());
+            }
+            if (reminder.getPatient() != null) {
+                this.createReminderPatient(reminder.getUuid(), reminder.getPatient().getUuid());
             }
 
 
             Log.d(TAG, "NEW REMINDER IS CREATED W/ AN ID: " + id);
             return id > 0;
         } catch (Exception e) {
+            e.printStackTrace();
             Log.d(TAG, ERROR + e);
             return false;
         }
@@ -181,9 +182,9 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
         return false;
     }
 
-    private boolean createReminderMedicine(String reminderUuid, String medicineUuid) {
+    private void createReminderMedicine(String reminderUuid, String medicineUuid) {
         try {
-            Log.d(TAG, "reminder: "+reminderUuid+" &medicine: "+medicineUuid);
+            Log.d(TAG, "reminder: " + reminderUuid + " &medicine: " + medicineUuid);
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(KEY_REMINDER_UUID, reminderUuid);
@@ -192,14 +193,14 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
             long id = db.insert(TABLE_REMINDER_MEDICINE, null, values);
             db.close();
             Log.d(TAG, "NEW TABLE_REMINDER_MEDICINE IS CREATED W/ AN ID: " + id);
-            return id > 0;
         } catch (Exception e) {
             Log.d(TAG, ERROR + e);
-            return false;
         }
-    } private boolean createReminderPatient(String reminderUuid, String patientUuid) {
+    }
+
+    private void createReminderPatient(String reminderUuid, String patientUuid) {
         try {
-            Log.d(TAG, "reminder: "+reminderUuid+" & patient: "+patientUuid);
+            Log.d(TAG, "reminder: " + reminderUuid + " & patient: " + patientUuid);
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(KEY_REMINDER_UUID, reminderUuid);
@@ -208,15 +209,14 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
             long id = db.insert(TABLE_REMINDER_PATIENT, null, values);
             db.close();
             Log.d(TAG, "NEW TABLE_REMINDER_PATIENT IS CREATED W/ AN ID: " + id);
-            return id > 0;
         } catch (Exception e) {
             Log.d(TAG, ERROR + e);
-            return false;
         }
     }
-    private boolean createReminderTime(String reminderUuid, String time) {
+
+    private void createReminderTime(String reminderUuid, String time) {
         try {
-            Log.d(TAG, "reminder: "+reminderUuid+" & time: "+time);
+            Log.d(TAG, "reminder: " + reminderUuid + " & time: " + time);
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(KEY_REMINDER_UUID, reminderUuid);
@@ -225,10 +225,8 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
             long id = db.insert(TABLE_REMINDER_TIME, null, values);
             db.close();
             Log.d(TAG, "NEW TABLE_REMINDER_TIME IS CREATED W/ AN ID: " + id);
-            return id > 0;
         } catch (Exception e) {
             Log.d(TAG, ERROR + e);
-            return false;
         }
     }
 }

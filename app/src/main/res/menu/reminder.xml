@@ -7,13 +7,12 @@
         android:id="@+id/add_alarm"
         android:icon="@drawable/ic_add_alarm"
         android:title="Add Alarm"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
     <item
         android:id="@+id/add_medicine"
         android:icon="@drawable/ic_add"
         android:title="Add Alarm"
-        app:showAsAction="ifRoom"/>
-
+        app:showAsAction="ifRoom" />
 
 
 </menu>

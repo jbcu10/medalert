@@ -22,9 +22,10 @@ import jbcu10.dev.medalert.model.Patient;
 public class PatientActivity extends BaseActivity {
     private static final String TAG = PatientActivity.class.getSimpleName();
     public PatientRepository patientRepository;
-    TextView txt_name,txt_relation,txt_contact_number,txt_email;
+    TextView txt_name, txt_relation, txt_contact_number, txt_email;
     ImageView image_gender;
     Patient patient;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +33,7 @@ public class PatientActivity extends BaseActivity {
         ButterKnife.bind(this);
         patientRepository = new PatientRepository(PatientActivity.this);
         AppController appController = AppController.getInstance();
-        patient =  patientRepository.getById(appController.getPatientId());
+        patient = patientRepository.getById(appController.getPatientId());
         initializeView();
     }
 
@@ -42,27 +43,28 @@ public class PatientActivity extends BaseActivity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
     }
-    private void initializeView(){
+
+    private void initializeView() {
         txt_name = findViewById(R.id.txt_name);
         txt_relation = findViewById(R.id.txt_relation);
         txt_contact_number = findViewById(R.id.txt_contact_number);
         txt_email = findViewById(R.id.txt_email);
         image_gender = findViewById(R.id.image_relation);
-        txt_name.setText(patient.getFirstName()+" "+patient.getMiddleName()+" "+patient.getLastName());
+        txt_name.setText(patient.getFirstName() + " " + patient.getMiddleName() + " " + patient.getLastName());
         txt_contact_number.setText(patient.getContactNumber());
         txt_email.setText(patient.getEmail());
         txt_relation.setText(patient.getGender());
-        image_gender.setImageDrawable(this.getImageGender(patient)!=null? this.getImageGender(patient): getResources().getDrawable(R.drawable.male));
-
+        image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getResources().getDrawable(R.drawable.male));
 
 
     }
-    private Drawable getImageGender(Patient patient){
-        Log.d("Gender",patient.getGender());
-        if(patient.getGender()!=null && patient.getGender().toLowerCase().equals("female")){
-            return  this.getResources().getDrawable(R.drawable.female);
+
+    private Drawable getImageGender(Patient patient) {
+        Log.d("Gender", patient.getGender());
+        if (patient.getGender() != null && patient.getGender().toLowerCase().equals("female")) {
+            return this.getResources().getDrawable(R.drawable.female);
         }
-        return  this.getResources().getDrawable(R.drawable.male);
+        return this.getResources().getDrawable(R.drawable.male);
     }
 
     @Override
@@ -71,6 +73,7 @@ public class PatientActivity extends BaseActivity {
         inflater.inflate(R.menu.menu_medicine, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -87,7 +90,7 @@ public class PatientActivity extends BaseActivity {
         }
     }
 
-    private void deletePatient(){
+    private void deletePatient() {
         new MaterialDialog.Builder(PatientActivity.this)
                 .title("Delete Patient?")
                 .content("Are you sure you want delete this items?")
@@ -95,21 +98,21 @@ public class PatientActivity extends BaseActivity {
                 .negativeText("Cancel")
                 .onPositive((dialog, which) -> {
 
-                    try{
+                    try {
                         boolean isDeleted = patientRepository.deleteById(patient.getId());
-                        if(isDeleted){
+                        if (isDeleted) {
                             Snackbar.make(findViewById(android.R.id.content), "Successfully Deleted Medicine!", Snackbar.LENGTH_LONG).show();
                             Intent intent = new Intent(PatientActivity.this, HomeActivity.class);
                             startActivity(intent);
                             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
-                        }if(!isDeleted){
+                        }
+                        if (!isDeleted) {
                             Snackbar.make(findViewById(android.R.id.content), "Failed to Delete Medicine!", Snackbar.LENGTH_LONG).show();
                         }
 
-                    }
-                    catch (Exception e){
-                        Log.d("Error",e.getMessage());
+                    } catch (Exception e) {
+                        Log.d("Error", e.getMessage());
                     }
 
 
@@ -118,9 +121,9 @@ public class PatientActivity extends BaseActivity {
                 }).show();
 
 
-
     }
-    private void editPatient(){
+
+    private void editPatient() {
         AppController appController = AppController.getInstance();
         appController.setPatient(patient);
         Intent intent = new Intent(PatientActivity.this, EditPatientActivity.class);

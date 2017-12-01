@@ -10,7 +10,7 @@ import jbcu10.dev.medalert.model.Relative;
 public class AppController extends Application {
 
     public static final String TAG = AppController.class.getSimpleName();
-
+    private static AppController mInstance;
     private Medicine medicine;
     private Relative relative;
     private Patient patient;
@@ -20,26 +20,8 @@ public class AppController extends Application {
     private int reminderId;
     private int patientId;
 
-
-
-    private static AppController mInstance;
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mInstance = this;
-
-    }
-
     public static synchronized AppController getInstance() {
         return mInstance;
-    }
-
-    public Medicine getMedicine() {
-        return medicine;
-    }
-
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
     }
 
     public static AppController getmInstance() {
@@ -48,6 +30,21 @@ public class AppController extends Application {
 
     public static void setmInstance(AppController mInstance) {
         AppController.mInstance = mInstance;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mInstance = this;
+
+    }
+
+    public Medicine getMedicine() {
+        return medicine;
+    }
+
+    public void setMedicine(Medicine medicine) {
+        this.medicine = medicine;
     }
 
     public int getMedicineId() {

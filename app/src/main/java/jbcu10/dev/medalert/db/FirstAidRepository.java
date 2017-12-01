@@ -24,7 +24,7 @@ public class FirstAidRepository extends SQLiteBaseHandler implements CrudReposit
     private List<Instructions> getInstructions(String firstAidUuid) {
         try {
             List<Instructions> instructionsList = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_INSTRUCTIONS + " where "+KEY_FIRST_AID_UUID+"='"+firstAidUuid+"' order by " + KEY_ID + " asc";
+            String selectQuery = "SELECT  * FROM " + TABLE_INSTRUCTIONS + " where " + KEY_FIRST_AID_UUID + "='" + firstAidUuid + "' order by " + KEY_ID + " asc";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
@@ -67,10 +67,6 @@ public class FirstAidRepository extends SQLiteBaseHandler implements CrudReposit
     }
 
 
-
-
-
-
     @Override
     public List<FirstAid> getAll() {
         try {
@@ -96,18 +92,18 @@ public class FirstAidRepository extends SQLiteBaseHandler implements CrudReposit
         } catch (Exception e) {
             Log.d(TAG, "ERROR --------------- " + e.getMessage());
             return null;
-        }    }
+        }
+    }
 
     @Override
     public FirstAid getById(int id) {
-        try{
+        try {
             FirstAid firstAid = new FirstAid();
-            String selectQuery = "SELECT  * FROM " + TABLE_FIRST_AID + " where id = '"+id+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_FIRST_AID + " where id = '" + id + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 firstAid.setId(cursor.getInt(0));
                 String uuid = cursor.getString(1);
                 firstAid.setUuid(uuid);
@@ -118,13 +114,12 @@ public class FirstAidRepository extends SQLiteBaseHandler implements CrudReposit
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching first aid: " + firstAid.getName());
-            if(firstAid.getId()>0) {
+            if (firstAid.getId() > 0) {
                 return firstAid;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
         }
     }

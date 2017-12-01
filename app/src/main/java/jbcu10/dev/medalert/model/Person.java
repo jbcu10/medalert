@@ -15,7 +15,6 @@ public abstract class Person {
     protected String gender;
 
 
-
     protected Person() {
     }
 

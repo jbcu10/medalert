@@ -2,10 +2,8 @@ package jbcu10.dev.medalert.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import jbcu10.dev.medalert.R;
@@ -22,7 +20,7 @@ public class BaseActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    public void exitApplication(Activity activity){
+    public void exitApplication(Activity activity) {
         new MaterialDialog.Builder(activity)
                 .title("Exit Application")
                 .content("Are you sure you want to Exit?")
@@ -39,7 +37,8 @@ public class BaseActivity extends AppCompatActivity {
                 })
                 .show();
     }
-    public void addMedicine(final Activity activity,String contentMedicine){
+
+    public void addMedicine(final Activity activity, String contentMedicine) {
         new MaterialDialog.Builder(activity)
                 .title("Add Medicine")
                 .content(contentMedicine)
@@ -57,7 +56,9 @@ public class BaseActivity extends AppCompatActivity {
                 })
                 .cancelable(false)
                 .show();
-    }public void addPatient(final Activity activity,String contentPatient){
+    }
+
+    public void addPatient(final Activity activity, String contentPatient) {
 
         new MaterialDialog.Builder(activity)
                 .title("Add Patient")

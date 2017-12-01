@@ -99,7 +99,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.HomeActivity" />
         </activity>
-        <activity android:name=".activity.EditPatientActivity"
+        <activity
+            android:name=".activity.EditPatientActivity"
             android:label="Edit Patient">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

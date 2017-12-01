@@ -15,6 +15,17 @@ public class Reminder {
     private List<String> time;
     private Patient patient;
 
+    public Reminder() {
+
+    }
+
+    public Reminder(String uuid, String description, List<Medicine> medicineList, List<String> time, Patient patient) {
+        this.uuid = uuid;
+        this.description = description;
+        this.medicineList = medicineList;
+        this.time = time;
+        this.patient = patient;
+    }
 
     public String getDescription() {
         return description;
@@ -62,5 +73,16 @@ public class Reminder {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    @Override
+    public String toString() {
+        return "Reminder{" +
+                "uuid='" + uuid + '\'' +
+                ", description='" + description + '\'' +
+                ", medicineList=" + medicineList +
+                ", time=" + time +
+                ", patient=" + patient +
+                '}';
     }
 }

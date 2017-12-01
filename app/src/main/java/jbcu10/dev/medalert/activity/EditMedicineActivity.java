@@ -2,14 +2,12 @@ package jbcu10.dev.medalert.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
@@ -28,24 +26,31 @@ import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.model.Medicine;
 
-public class EditMedicineActivity extends BaseActivity implements  DatePickerDialog.OnDateSetListener{
+public class EditMedicineActivity extends BaseActivity implements DatePickerDialog.OnDateSetListener {
 
-    @BindView(R.id.edit_expiration) EditText edit_expiration;
-    @BindView(R.id.edit_type) EditText edit_type;
-    @BindView(R.id.edit_name) EditText edit_name;
-    @BindView(R.id.edit_generic_name) EditText edit_generic_name;
-    @BindView(R.id.edit_description) EditText edit_description;
-    @BindView(R.id.edit_diagnosis) EditText edit_diagnosis;
-    @BindView(R.id.edit_total) EditText edit_total;
-
+    public static final String DATEPICKER_TAG = "Date Picker";
+    private static final String TAG = EditMedicineActivity.class.getSimpleName();
+    public MedicineRepository medicineRepository;
+    @BindView(R.id.edit_expiration)
+    EditText edit_expiration;
+    @BindView(R.id.edit_type)
+    EditText edit_type;
+    @BindView(R.id.edit_name)
+    EditText edit_name;
+    @BindView(R.id.edit_generic_name)
+    EditText edit_generic_name;
+    @BindView(R.id.edit_description)
+    EditText edit_description;
+    @BindView(R.id.edit_diagnosis)
+    EditText edit_diagnosis;
+    @BindView(R.id.edit_total)
+    EditText edit_total;
     @BindView(R.id.button_submit)
     Button button_submit;
     Calendar calendar;
-    private static final String TAG = EditMedicineActivity.class.getSimpleName();
-    public MedicineRepository medicineRepository;
-    public static final String DATEPICKER_TAG = "Date Picker";
     DatePickerDialog datePickerDialog;
-    Medicine medicine = null ;
+    Medicine medicine = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,21 +58,22 @@ public class EditMedicineActivity extends BaseActivity implements  DatePickerDia
         ButterKnife.bind(this);
         initializedViews();
         medicineRepository = new MedicineRepository(EditMedicineActivity.this);
-        AppController appController =AppController.getInstance();
+        AppController appController = AppController.getInstance();
 
-        medicine =appController.getMedicine();
+        medicine = appController.getMedicine();
         setMedicineData(medicine);
         calendar = Calendar.getInstance();
-        datePickerDialog = DatePickerDialog.newInstance(EditMedicineActivity.this, calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH),false);
+        datePickerDialog = DatePickerDialog.newInstance(EditMedicineActivity.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
 
     }
+
     @OnClick(R.id.edit_expiration)
     public void onClickEditExpiration(View view) {
         datePickerDialog.show(getSupportFragmentManager(), DATEPICKER_TAG);
     }
 
 
-    private void setMedicineData(Medicine medicine){
+    private void setMedicineData(Medicine medicine) {
         edit_name.setText(medicine.getName());
         edit_generic_name.setText(medicine.getGenericName());
         edit_description.setText(medicine.getDescription());
@@ -80,6 +86,7 @@ public class EditMedicineActivity extends BaseActivity implements  DatePickerDia
         edit_total.setText(String.valueOf(medicine.getTotal()));
 
     }
+
     @OnClick(R.id.edit_type)
     public void onClickEditType(View view) {
 
@@ -98,20 +105,20 @@ public class EditMedicineActivity extends BaseActivity implements  DatePickerDia
 
     @Override
     public void onDateSet(DatePickerDialog datePickerDialog, int year, int month, int day) {
-        month = month+1;
-        String smonth = month+"";
-        String sday = day+"";
+        month = month + 1;
+        String smonth = month + "";
+        String sday = day + "";
         if (month < 10) {
             smonth = "0" + month;
         }
         if (day < 10) {
             sday = "0" + day;
         }
-        edit_expiration.setText(sday + "-" + smonth+"-"+year);
+        edit_expiration.setText(sday + "-" + smonth + "-" + year);
     }
 
 
-    public void initializedViews(){
+    public void initializedViews() {
         edit_expiration = findViewById(R.id.edit_expiration);
         edit_type = findViewById(R.id.edit_type);
         edit_name = findViewById(R.id.edit_name);
@@ -135,31 +142,30 @@ public class EditMedicineActivity extends BaseActivity implements  DatePickerDia
                     String expirationDateString = edit_expiration.getText().toString();
                     DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
                     Date expirationDate;
-                    long milliseconds=0;
+                    long milliseconds = 0;
                     try {
                         expirationDate = df.parse(expirationDateString);
                         milliseconds = expirationDate.getTime();
 
                     } catch (ParseException e) {
-                        Log.d("Error",e.getMessage());
+                        Log.d("Error", e.getMessage());
                     }
 
 
+                    try {
+                        boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(), UUID.randomUUID().toString(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString()));
 
-                    try{
-                        boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(),UUID.randomUUID().toString(),edit_name.getText().toString(),edit_generic_name.getText().toString(),edit_diagnosis.getText().toString(),edit_description.getText().toString(),milliseconds,Integer.parseInt(edit_total.getText().toString()),null,edit_type.getText().toString()));
-
-                        if(isCreated){
+                        if (isCreated) {
                             Intent intent = new Intent(EditMedicineActivity.this, HomeActivity.class);
                             startActivity(intent);
                             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }if(!isCreated){
+                        }
+                        if (!isCreated) {
                             Snackbar.make(findViewById(android.R.id.content), "Failed to Save Medicine!", Snackbar.LENGTH_LONG).show();
                         }
 
-                    }
-                    catch (Exception e){
-                        Log.d("Error",e.getMessage());
+                    } catch (Exception e) {
+                        Log.d("Error", e.getMessage());
                     }
 
 

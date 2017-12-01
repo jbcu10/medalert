@@ -15,10 +15,11 @@ import jbcu10.dev.medalert.model.Relative;
  * Created by dev on 11/26/17.
  */
 
-public class RelativeRepository extends SQLiteBaseHandler implements CrudRepository<Relative>{
+public class RelativeRepository extends SQLiteBaseHandler implements CrudRepository<Relative> {
     public RelativeRepository(Context context) {
         super(context);
     }
+
     @Override
     public boolean create(Relative relative) {
         try {
@@ -42,6 +43,7 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
             return false;
         }
     }
+
     @Override
     public boolean update(Relative relative) {
         try {
@@ -65,6 +67,7 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
             return false;
         }
     }
+
     @Override
     public List<Relative> getAll() {
         try {
@@ -97,30 +100,30 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
         }
 
     }
+
     @Override
     public boolean deleteById(int relativeId) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
-            long id = db.delete(TABLE_RELATIVE, KEY_ID +"= '"+relativeId+"'",null );
+            long id = db.delete(TABLE_RELATIVE, KEY_ID + "= '" + relativeId + "'", null);
             db.close();
             Log.d(TAG, "Relative is deleted: " + id);
             return id > 0;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return false;
         }
     }
+
     @Override
     public Relative getById(int relativeId) {
-        try{
+        try {
             Relative relative = new Relative();
-            String selectQuery = "SELECT  * FROM " + TABLE_RELATIVE + " where id = '"+relativeId+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_RELATIVE + " where id = '" + relativeId + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 relative.setId(cursor.getInt(0));
                 relative.setUuid(cursor.getString(1));
                 relative.setFirstName(cursor.getString(2));
@@ -133,26 +136,25 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching Medicine: " + relative.getFirstName());
-            if(relative.getId()>0) {
+            if (relative.getId() > 0) {
                 return relative;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
         }
     }
+
     @Override
     public Relative getByUuid(String uuid) {
-        try{
+        try {
             Relative relative = new Relative();
-            String selectQuery = "SELECT  * FROM " + TABLE_RELATIVE + " where uuid = '"+uuid+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_RELATIVE + " where uuid = '" + uuid + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 relative.setId(cursor.getInt(0));
                 relative.setUuid(cursor.getString(1));
                 relative.setFirstName(cursor.getString(2));
@@ -165,13 +167,12 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching Medicine: " + relative.getFirstName());
-            if(relative.getId()>0) {
+            if (relative.getId() > 0) {
                 return relative;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
         }
     }

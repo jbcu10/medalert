@@ -30,36 +30,39 @@ import jbcu10.dev.medalert.model.FirstAid;
 public class FirstAidFragments extends ListFragment implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, OnItemLongClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
-    public FirstAidRepository firstAidRepository;
     private static final String LOADING_PLOTS = "Loading First Aid...";
     private static final String ERROR = "Error:";
+    public FirstAidRepository firstAidRepository;
     ProgressDialog pDialog;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    View rootView;
     private StaggeredGridView mGridView;
     private boolean mHasRequestedMore;
     private FirstAidAdapter mAdapter;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+
     public FirstAidFragments() {
         // Required empty public constructor
     }
-    View rootView;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_firstaid, null, false);
-        ButterKnife.bind(this,rootView);
+        ButterKnife.bind(this, rootView);
         firstAidRepository = new FirstAidRepository(getActivity());
         pDialog = new ProgressDialog(getActivity());
 
         getActivity().setTitle("First Aid");
         List<FirstAid> relatives = firstAidRepository.getAll();
         initializeGridView();
-        if(relatives!=null) {
+        if (relatives != null) {
             onLoadMoreItems(relatives);
         }
         return rootView;
 
     }
+
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
 
@@ -80,8 +83,6 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
         return false;
     }
 
-    
-
 
     private void hideDialog() {
         if (pDialog.isShowing())
@@ -97,6 +98,7 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
 
         });
     }
+
     private void onLoadMoreItems(List<FirstAid> relatives) {
         for (FirstAid data : relatives) {
             mAdapter.add(data);
@@ -105,6 +107,7 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
         mHasRequestedMore = false;
         hideDialog();
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

@@ -8,7 +8,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -49,8 +48,8 @@ public class ReminderActivity extends AppCompatActivity {
 
         List<Medicine> medicines = medicineRepository.getAll();
         int sameUuid = 0;
-        for (Medicine medicine:medicines){
-            if(reminder.getMedicineList()!=null) {
+        for (Medicine medicine : medicines) {
+            if (reminder.getMedicineList() != null) {
                 for (Medicine medicine1 : reminder.getMedicineList()) {
                     if (medicine1.getUuid().equals(medicine.getUuid())) {
                         sameUuid++;
@@ -61,7 +60,7 @@ public class ReminderActivity extends AppCompatActivity {
             checkBoxMedicine.setText(medicine.getName());
             checkBoxMedicine.setId(medicine.getId());
             checkBoxMedicine.setHint(medicine.getUuid());
-            if(sameUuid>0){
+            if (sameUuid > 0) {
                 checkBoxMedicine.setChecked(true);
             }
             checkBoxMedicine.setLayoutParams(
@@ -70,15 +69,15 @@ public class ReminderActivity extends AppCompatActivity {
             checkBoxMedicine.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     strings.add(checkBoxMedicine.getHint().toString());
-                }else{
+                } else {
                     strings.remove(checkBoxMedicine.getHint().toString());
                 }
 
             });
             ll_medicine_handler.addView(checkBoxMedicine);
-            sameUuid=0;
+            sameUuid = 0;
         }
-        int a= 0;
+        int a = 0;
         for (String time : reminder.getTime()) {
             TextView txtAlarm = new TextView(this);
             txtAlarm.setText(time);
@@ -90,6 +89,7 @@ public class ReminderActivity extends AppCompatActivity {
             ll_alarm_handler.addView(txtAlarm);
         }
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -103,13 +103,14 @@ public class ReminderActivity extends AppCompatActivity {
         inflater.inflate(R.menu.reminder, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
 
             case R.id.add_alarm:
-            //    timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
+                //    timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
 
                 return true;
             default:
@@ -117,7 +118,7 @@ public class ReminderActivity extends AppCompatActivity {
         }
     }
 
-    public void initializedViews(){
+    public void initializedViews() {
         ll_alarm_handler = findViewById(R.id.ll_alarm_handler);
         ll_medicine_handler = findViewById(R.id.ll_medicine_handler);
         edit_description = findViewById(R.id.edit_description);

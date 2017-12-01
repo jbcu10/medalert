@@ -24,15 +24,15 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
     public List<Medicine> getAllReminderMedicine(String reminderUuid) {
         try {
             List<Medicine> medicines = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER_MEDICINE + " where "+KEY_REMINDER_UUID+"='"+reminderUuid+"' order by " + KEY_ID + " asc";
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER_MEDICINE + " where " + KEY_REMINDER_UUID + "='" + reminderUuid + "' order by " + KEY_ID + " asc";
 
-            Log.d(TAG, "selectQuery: " +   selectQuery);
+            Log.d(TAG, "selectQuery: " + selectQuery);
 
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
-                    Log.d(TAG, "get medicines uuid: " +   cursor.getString(1));
+                    Log.d(TAG, "get medicines uuid: " + cursor.getString(1));
 
 
                     Medicine medicine = this.getByUuid(cursor.getString(1));
@@ -88,14 +88,13 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
 
     @Override
     public Medicine getById(int id) {
-        try{
+        try {
             Medicine medicine = new Medicine();
-            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " where id = '"+id+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " where id = '" + id + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 medicine.setId(cursor.getInt(0));
                 medicine.setUuid(cursor.getString(1));
                 medicine.setName(cursor.getString(2));
@@ -111,26 +110,25 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching Medicine: " + medicine.getName());
-            if(medicine.getId()>0) {
+            if (medicine.getId() > 0) {
                 return medicine;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
-        }    }
+        }
+    }
 
     @Override
     public Medicine getByUuid(String uuid) {
-        try{
+        try {
             Medicine medicine = new Medicine();
-            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " where uuid = '"+uuid+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " where uuid = '" + uuid + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 medicine.setId(cursor.getInt(0));
                 medicine.setUuid(cursor.getString(1));
                 medicine.setName(cursor.getString(2));
@@ -146,13 +144,12 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching Medicine: " + medicine.getName());
-            if(medicine.getId()>0) {
+            if (medicine.getId() > 0) {
                 return medicine;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
         }
     }
@@ -215,13 +212,12 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
     public boolean deleteById(int medicineId) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
-            long id = db.delete(TABLE_MEDICINE, KEY_ID +"= '"+medicineId+"'",null );
+            long id = db.delete(TABLE_MEDICINE, KEY_ID + "= '" + medicineId + "'", null);
             db.close();
             Log.d(TAG, "Medicine is deleted: " + id);
             return id > 0;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return false;
         }
     }

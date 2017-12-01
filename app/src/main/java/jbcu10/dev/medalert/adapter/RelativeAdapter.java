@@ -6,16 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.RelativeActivity;
@@ -24,25 +20,12 @@ import jbcu10.dev.medalert.model.Relative;
 
 public class RelativeAdapter extends ArrayAdapter<Relative> {
 
-    private static final String TAG = "Relative adapter";
-
-    static class ViewHolder {
-        TextView txt_name,txt_relation,txt_contact_number,txt_email;
-        ImageView image_relation;
-
-    }
 
     private final LayoutInflater mLayoutInflater;
-    private final Random mRandom;
-    private final ArrayList<Integer> mBackgroundColors;
-
-    private static final SparseArray<Double> sPositionHeightRatios = new SparseArray<Double>();
 
     public RelativeAdapter(final Context context, final int textViewResourceId, final int imageViewResourceId) {
         super(context, textViewResourceId, imageViewResourceId);
         mLayoutInflater = LayoutInflater.from(context);
-        mRandom = new Random();
-        mBackgroundColors = new ArrayList<Integer>();
     }
 
     @Override
@@ -56,68 +39,72 @@ public class RelativeAdapter extends ArrayAdapter<Relative> {
             viewHolder.txt_relation = convertView.findViewById(R.id.txt_relation);
             viewHolder.txt_contact_number = convertView.findViewById(R.id.txt_contact_number);
             viewHolder.txt_email = convertView.findViewById(R.id.txt_email);
-           viewHolder.image_relation = convertView.findViewById(R.id.image_relation);
+            viewHolder.image_relation = convertView.findViewById(R.id.image_relation);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-         final Relative relative = getItem(position);
-        viewHolder.image_relation.setImageDrawable(this.getImageRelation(relative)!=null? this.getImageRelation(relative): getContext().getResources().getDrawable(R.drawable.relative));
+        final Relative relative = getItem(position);
+        viewHolder.image_relation.setImageDrawable(this.getImageRelation(relative) != null ? this.getImageRelation(relative) : getContext().getResources().getDrawable(R.drawable.relative));
 
 
-        viewHolder.txt_name.setText(relative.getFirstName()+" "+relative.getMiddleName()+" "+relative.getLastName());
+        viewHolder.txt_name.setText(relative.getFirstName() + " " + relative.getMiddleName() + " " + relative.getLastName());
         viewHolder.txt_contact_number.setText(relative.getContactNumber());
         viewHolder.txt_email.setText(relative.getEmail());
         viewHolder.txt_relation.setText(relative.getRelationship());
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
+        convertView.setOnClickListener(view -> {
+                    try {
 
-                    AppController appController = AppController.getInstance();
-                    appController.setRelativeId(relative.getId());
-                    Intent intent = new Intent(getContext(), RelativeActivity.class);
-                    getContext().startActivity(intent);
+                        AppController appController = AppController.getInstance();
+                        appController.setRelativeId(relative.getId());
+                        Intent intent = new Intent(getContext(), RelativeActivity.class);
+                        getContext().startActivity(intent);
 
-                    Activity activity = (Activity) getContext();
-                    activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        Activity activity = (Activity) getContext();
+                        activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                    } catch (Exception e) {
+                        Log.d("Error", e.getMessage());
+                    }
                 }
-                catch (Exception e){
-                    Log.d("Error",e.getMessage());
-                }
-                }
-        }
         );
 
         return convertView;
     }
 
-    private Drawable getImageRelation(Relative relative){
+    private Drawable getImageRelation(Relative relative) {
         try {
-            if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("mother")){
-                return  getContext().getResources().getDrawable(R.drawable.mother);
-            }if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("father")){
-                return  getContext().getResources().getDrawable(R.drawable.father);
-            }if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("grand father")){
-                return  getContext().getResources().getDrawable(R.drawable.grandfather);
-            }if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("grand mother")){
-                return  getContext().getResources().getDrawable(R.drawable.grandmother);
+            if (relative.getRelationship() != null && relative.getRelationship().toLowerCase().equals("mother")) {
+                return getContext().getResources().getDrawable(R.drawable.mother);
             }
-            if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("sister")){
-                return  getContext().getResources().getDrawable(R.drawable.daughter);
+            if (relative.getRelationship() != null && relative.getRelationship().toLowerCase().equals("father")) {
+                return getContext().getResources().getDrawable(R.drawable.father);
             }
-            if(relative.getRelationship()!=null&&relative.getRelationship().toLowerCase().equals("brother")){
-                return  getContext().getResources().getDrawable(R.drawable.boy);
+            if (relative.getRelationship() != null && relative.getRelationship().toLowerCase().equals("grand father")) {
+                return getContext().getResources().getDrawable(R.drawable.grandfather);
             }
-            return  getContext().getResources().getDrawable(R.drawable.relative);
+            if (relative.getRelationship() != null && relative.getRelationship().toLowerCase().equals("grand mother")) {
+                return getContext().getResources().getDrawable(R.drawable.grandmother);
+            }
+            if (relative.getRelationship() != null && relative.getRelationship().toLowerCase().equals("sister")) {
+                return getContext().getResources().getDrawable(R.drawable.daughter);
+            }
+            if (relative.getRelationship() != null && relative.getRelationship().toLowerCase().equals("brother")) {
+                return getContext().getResources().getDrawable(R.drawable.boy);
+            }
+            return getContext().getResources().getDrawable(R.drawable.relative);
 
-        }
-        catch (Exception e){
-            Log.d("Error",e.getMessage());
+        } catch (Exception e) {
+            Log.d("Error", e.getMessage());
             return null;
         }
-         }
+    }
+
+    static class ViewHolder {
+        TextView txt_name, txt_relation, txt_contact_number, txt_email;
+        ImageView image_relation;
+
+    }
 
 
 }

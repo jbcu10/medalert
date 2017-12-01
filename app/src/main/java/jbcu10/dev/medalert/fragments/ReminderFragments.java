@@ -33,38 +33,39 @@ import jbcu10.dev.medalert.model.Reminder;
 public class ReminderFragments extends ListFragment implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
-    public ReminderRepository reminderRepository;
     private static final String LOADING_PLOTS = "Loading Medicines...";
     private static final String ERROR = "Error:";
+    public ReminderRepository reminderRepository;
     ProgressDialog pDialog;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    View rootView;
     private StaggeredGridView mGridView;
     private boolean mHasRequestedMore;
     private ReminderAdapter mAdapter;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
 
     public ReminderFragments() {
         // Required empty public constructor
     }
-    View rootView;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_medicines, container, false);
-        ButterKnife.bind(this,rootView);
+        ButterKnife.bind(this, rootView);
         reminderRepository = new ReminderRepository(getActivity());
         pDialog = new ProgressDialog(getActivity());
         getActivity().setTitle("Reminders");
 
         List<Reminder> reminders = reminderRepository.getAll();
         initializeGridView();
-        if(reminders!=null) {
+        if (reminders != null) {
             onLoadMoreItems(reminders);
         }
         return rootView;
 
     }
+
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
 
@@ -104,15 +105,17 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
 
         });
     }
+
     private void onLoadMoreItems(List<Reminder> reminders) {
         for (Reminder data : reminders) {
-            Log.d("reminders",reminders.toString());
+            Log.d("reminders", reminders.toString());
             mAdapter.add(data);
         }
         mAdapter.notifyDataSetChanged();
         mHasRequestedMore = false;
         hideDialog();
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

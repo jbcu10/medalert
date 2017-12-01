@@ -4,7 +4,7 @@ package jbcu10.dev.medalert.model;
  * Created by dev on 10/1/17.
  */
 
-public class Doctor  extends Person {
+public class Doctor extends Person {
     private String specialization;
 
     public String getSpecialization() {

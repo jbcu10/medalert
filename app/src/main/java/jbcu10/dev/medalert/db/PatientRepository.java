@@ -23,7 +23,7 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
     @Override
     public List<Patient> getAll() {
         try {
-            List<Patient> patients  = new LinkedList<>();
+            List<Patient> patients = new LinkedList<>();
             String selectQuery = "SELECT  * FROM " + TABLE_PATIENT + " order by " + KEY_ID + " desc";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
@@ -55,14 +55,13 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
 
     @Override
     public Patient getById(int id) {
-        try{
+        try {
             Patient patient = new Patient();
-            String selectQuery = "SELECT  * FROM " + TABLE_PATIENT + " where id = '"+id+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_PATIENT + " where id = '" + id + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 patient.setId(cursor.getInt(0));
                 patient.setUuid(cursor.getString(1));
                 patient.setFirstName(cursor.getString(2));
@@ -75,27 +74,25 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching Patient: " + patient.getFirstName());
-            if(patient.getId()>0) {
+            if (patient.getId() > 0) {
                 return patient;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
         }
     }
 
     @Override
     public Patient getByUuid(String uuid) {
-        try{
+        try {
             Patient patient = new Patient();
-            String selectQuery = "SELECT  * FROM " + TABLE_PATIENT + " where uuid = '"+uuid+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_PATIENT + " where uuid = '" + uuid + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 patient.setId(cursor.getInt(0));
                 patient.setUuid(cursor.getString(1));
                 patient.setFirstName(cursor.getString(2));
@@ -108,25 +105,24 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching Patient: " + patient.getFirstName());
-            if(patient.getId()>0) {
+            if (patient.getId() > 0) {
                 return patient;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
         }
     }
-    public Patient getByLastNameAndFirstName(String lastName,String firstName) {
-        try{
+
+    public Patient getByLastNameAndFirstName(String lastName, String firstName) {
+        try {
             Patient patient = new Patient();
-            String selectQuery = "SELECT  * FROM " + TABLE_PATIENT + " where lastName = '"+lastName+"' and firstName = '"+firstName+"' ;";
+            String selectQuery = "SELECT  * FROM " + TABLE_PATIENT + " where lastName = '" + lastName + "' and firstName = '" + firstName + "' ;";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             Log.d("size in cursor", cursor.getCount() + "");
-            if (cursor.moveToFirst())
-            {
+            if (cursor.moveToFirst()) {
                 patient.setId(cursor.getInt(0));
                 patient.setUuid(cursor.getString(1));
                 patient.setFirstName(cursor.getString(2));
@@ -139,13 +135,12 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
             cursor.close();
             db.close();
             Log.d(TAG, "Fetching Patient: " + patient.getFirstName());
-            if(patient.getId()>0) {
+            if (patient.getId() > 0) {
                 return patient;
             }
             return null;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return null;
         }
     }
@@ -194,20 +189,47 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
         } catch (Exception e) {
             Log.d(TAG, ERROR + e);
             return false;
-        }    }
+        }
+    }
 
     @Override
     public boolean deleteById(int patientId) {
         try {
             SQLiteDatabase db = this.getWritableDatabase();
-            long id = db.delete(TABLE_PATIENT, KEY_ID +"= '"+patientId+"'",null );
+            long id = db.delete(TABLE_PATIENT, KEY_ID + "= '" + patientId + "'", null);
             db.close();
             Log.d(TAG, "Patient is deleted: " + id);
             return id > 0;
-        }
-        catch (Exception e){
-            Log.d(TAG,ERROR + e.getMessage());
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
             return false;
         }
+    }
+
+    public Patient getReminderPatientByReminderUuid(String reminderUuid) {
+        try {
+            Patient patient = new Patient();
+            String selectQuery = "SELECT  * FROM " + TABLE_REMINDER_PATIENT + " where " + KEY_REMINDER_UUID + "='" + reminderUuid + "'";
+
+
+            Log.d(TAG, "selectQuery: " + selectQuery);
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.d("size in cursor", cursor.getCount() + "");
+            if (cursor.moveToFirst()) {
+
+                patient = this.getByUuid(cursor.getString(1));
+
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching patient: " + patient.getFirstName());
+            return patient;
+
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+            return null;
+        }
+
     }
 }

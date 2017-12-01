@@ -13,11 +13,11 @@ public class Medicine {
     private String diagnosis;
     private String description;
     private long expiration;
-    private int total ;
-    private String type ;
+    private int total;
+    private String type;
     private Doctor doctor;
 
-    public Medicine( String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor,String type) {
+    public Medicine(String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type) {
         this.uuid = uuid;
         this.name = name;
         this.genericName = genericName;
@@ -27,7 +27,9 @@ public class Medicine {
         this.total = total;
         this.doctor = doctor;
         this.type = type;
-    }public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor,String type) {
+    }
+
+    public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;

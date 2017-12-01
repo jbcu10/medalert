@@ -7,5 +7,5 @@
         android:id="@+id/people"
         android:icon="@drawable/ic_people"
         android:title="Relatives"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 </menu>

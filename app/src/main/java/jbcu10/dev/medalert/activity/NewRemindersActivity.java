@@ -3,7 +3,6 @@ package jbcu10.dev.medalert.activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
@@ -14,13 +13,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
@@ -30,7 +27,6 @@ import java.util.Calendar;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,23 +39,21 @@ import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Reminder;
 
-public class NewRemindersActivity extends BaseActivity implements  TimePickerDialog.OnTimeSetListener {
+public class NewRemindersActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
+    public static final String TIMEPICKER_TAG = "Time Picker";
     public MedicineRepository medicineRepository;
     public ReminderRepository reminderRepository;
     public PatientRepository patientRepository;
-    @BindView(R.id.button_submit)
-    Button button_submit;
-
+    @BindView(R.id.button_submit_reminder)
+    Button button_submit_reminder;
     LinearLayout ll_alarm_handler, ll_medicine_handler;
     EditText edit_description;
     TimePickerDialog timePickerDialog;
-    int a =0;
-    public static final String TIMEPICKER_TAG = "Time Picker";
+    int a = 0;
     ArrayList<String> strings = new ArrayList<>();
     List<String> timeStrings = new LinkedList<>();
-    Spinner spinner ;
+    Spinner spinner;
     Patient patient;
-    String[] patientName = {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,83 +63,81 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
         initializedViews();
         medicineRepository = new MedicineRepository(this);
         patientRepository = new PatientRepository(this);
+        reminderRepository = new ReminderRepository(this);
         spinner = findViewById(R.id.spinner);
         ArrayList<Patient> patients = new ArrayList<>();
         List<Patient> patientsList = patientRepository.getAll();
 
-        if(patientsList==null) {
-           addPatient(this,"Create new Patient?");
+        if (patientsList == null) {
+            addPatient(this, "Create new Patient?");
         }
-        if(patientsList!=null) {
+        if (patientsList != null) {
             patients.addAll(patientsList);
 
-        ArrayAdapter<Patient> patientAdapter = new ArrayAdapter<>(this,android.R.layout.simple_spinner_item,patients);
-        patientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
-        spinner.setAdapter(patientAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
-                 patient = (Patient) spinner.getSelectedItem();
-            }
+            ArrayAdapter<Patient> patientAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, patients);
+            patientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
+            spinner.setAdapter(patientAdapter);
+            spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                    patient = (Patient) spinner.getSelectedItem();
+                }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parentView) {
-                // your code here
-            }
+                @Override
+                public void onNothingSelected(AdapterView<?> parentView) {
+                    // your code here
+                }
 
-        });
+            });
 
-        patient = (Patient) spinner.getSelectedItem();
+            // patient = (Patient) spinner.getSelectedItem();
 
-        Log.d("uuid",patient.getUuid());
+            //Log.d("uuid",patient.getUuid());
         }
 
 
         List<Medicine> medicines = medicineRepository.getAll();
-        if (patientsList!=null&&medicines==null) {
-            addMedicine(this,"It seems that you don't have any medicine. Create a medicine to continue.");
+        if (patientsList != null && medicines == null) {
+            addMedicine(this, "It seems that you don't have any medicine. Create a medicine to continue.");
         }
         Calendar calendar = Calendar.getInstance();
         timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true, false);
-        if (medicines!=null) {
+        if (medicines != null) {
             timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
-        for (Medicine medicine:medicines){
-            final CheckBox checkBoxMedicine = new CheckBox(this);
-            checkBoxMedicine.setText(medicine.getName());
-            checkBoxMedicine.setId(medicine.getId());
-            checkBoxMedicine.setHint(medicine.getUuid());
-            checkBoxMedicine.setLayoutParams(
-                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT));
-            checkBoxMedicine.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            for (Medicine medicine : medicines) {
+                final CheckBox checkBoxMedicine = new CheckBox(this);
+                checkBoxMedicine.setText(medicine.getName());
+                checkBoxMedicine.setId(medicine.getId());
+                checkBoxMedicine.setHint(medicine.getUuid());
+                checkBoxMedicine.setLayoutParams(
+                        new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                LinearLayout.LayoutParams.WRAP_CONTENT));
+                checkBoxMedicine.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
                         strings.add(checkBoxMedicine.getHint().toString());
-                    }else{
+                    } else {
                         strings.remove(checkBoxMedicine.getHint().toString());
                     }
 
-                }
-            });
-            ll_medicine_handler.addView(checkBoxMedicine);
+                });
+                ll_medicine_handler.addView(checkBoxMedicine);
 
-        }
+            }
         }
 
     }
-    public void initializedViews(){
+
+    public void initializedViews() {
         ll_alarm_handler = findViewById(R.id.ll_alarm_handler);
         ll_medicine_handler = findViewById(R.id.ll_medicine_handler);
         edit_description = findViewById(R.id.edit_description);
     }
 
-    public Reminder setReminder(){
-        Reminder reminder =new Reminder();
+    public Reminder setReminder() {
+        Reminder reminder = new Reminder();
         reminder.setDescription(edit_description.getText().toString());
         reminder.setUuid(UUID.randomUUID().toString());
-        if(!strings.isEmpty()) {
+        if (!strings.isEmpty()) {
             List<Medicine> medicines = new LinkedList<>();
             for (String uuid : strings) {
                 Medicine medicine = medicineRepository.getByUuid(uuid);
@@ -153,16 +145,17 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
             }
             reminder.setMedicineList(medicines);
         }
-        if(!timeStrings.isEmpty()) {
+        if (!timeStrings.isEmpty()) {
 
             reminder.setTime(timeStrings);
         }
-        if(patient!=null) {
-            reminder.setPatient((Patient) spinner.getSelectedItem());
-        }
+        //if(patient!=null) {
+        reminder.setPatient((Patient) spinner.getSelectedItem());
+        //}
 
         return reminder;
     }
+
     @Override
     public void onPause() {
         super.onPause();
@@ -172,32 +165,33 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
-        String sMinute = minute+"";
-        String shourOfDay = hourOfDay+"";
+        String sMinute = minute + "";
+        String shourOfDay = hourOfDay + "";
         if (hourOfDay < 10) {
             shourOfDay = "0" + hourOfDay;
-        }if (minute < 10) {
+        }
+        if (minute < 10) {
             sMinute = "0" + minute;
         }
-        final String time =shourOfDay + ":" + sMinute;
+        final String time = shourOfDay + ":" + sMinute;
 
 
-         boolean match = timeStrings.stream().anyMatch(time::contains);
-         if(match) {
-             Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
-         }
-         if(!match){
-             timeStrings.add(time);
-             TextView txtAlarm = new TextView(this);
-             txtAlarm.setText(time);
-             txtAlarm.setId(a++);
-             txtAlarm.setTextColor(Color.BLACK);
-             txtAlarm.setLayoutParams(
-                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                             LinearLayout.LayoutParams.WRAP_CONTENT));
-             ll_alarm_handler.addView(txtAlarm);
+        boolean match = timeStrings.stream().anyMatch(time::contains);
+        if (match) {
+            Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
+        }
+        if (!match) {
+            timeStrings.add(time);
+            TextView txtAlarm = new TextView(this);
+            txtAlarm.setText(time);
+            txtAlarm.setId(a++);
+            txtAlarm.setTextColor(Color.BLACK);
+            txtAlarm.setLayoutParams(
+                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT));
+            ll_alarm_handler.addView(txtAlarm);
 
-         }
+        }
 
 
     }
@@ -219,14 +213,14 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
 
                 return true;
             case R.id.add_medicine:
-                addMedicine(this,"Create New Medicine?");
+                addMedicine(this, "Create New Medicine?");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    @OnClick(R.id.button_submit)
+    @OnClick(R.id.button_submit_reminder)
     public void onClickButtonSubmit(View view) {
 
         new MaterialDialog.Builder(NewRemindersActivity.this)
@@ -234,30 +228,32 @@ public class NewRemindersActivity extends BaseActivity implements  TimePickerDia
                 .content("Are you sure you want save this items?")
                 .positiveText("Save")
                 .negativeText("Cancel")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        try {
-                            boolean isCreated = reminderRepository.create(setReminder());
+                .onPositive((dialog, which) -> {
+                    try {
+                        Reminder reminder = setReminder();
+                        Log.d("Reminder", reminder.getPatient().getUuid());
 
-                            if (isCreated) {
-                                Intent intent = new Intent(NewRemindersActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                            }
-                            if (!isCreated) {
-                                Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
-                            }
-                        } catch (Exception e) {
-                            Log.d("Error", e.getMessage());
+                        boolean isCreated = reminderRepository.create(reminder);
 
+                        if (isCreated) {
+                            Intent intent = new Intent(NewRemindersActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                         }
+                        if (!isCreated) {
+                            Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Log.d("Error", e.getMessage());
+                        Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
+
+
                     }
-                }).onNegative(new MaterialDialog.SingleButtonCallback() {
-            @Override
-            public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-            }
-        }).show();
+                })
+                .onNegative((dialog, which) -> {
+                })
+                .show();
 
     }
 }
