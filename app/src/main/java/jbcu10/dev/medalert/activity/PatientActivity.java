@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +19,8 @@ import butterknife.ButterKnife;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.PatientRepository;
+import jbcu10.dev.medalert.fragments.RelativeFragments;
+import jbcu10.dev.medalert.fragments.ReminderFragments;
 import jbcu10.dev.medalert.model.Patient;
 
 public class PatientActivity extends BaseActivity {
@@ -25,7 +29,9 @@ public class PatientActivity extends BaseActivity {
     TextView txt_name, txt_relation, txt_contact_number, txt_email;
     ImageView image_gender;
     Patient patient;
-
+    Fragment fragment;
+    public static int destination = 0;
+    public static String patientUuid = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,15 +40,24 @@ public class PatientActivity extends BaseActivity {
         patientRepository = new PatientRepository(PatientActivity.this);
         AppController appController = AppController.getInstance();
         patient = patientRepository.getById(appController.getPatientId());
+        HomeActivity.selectedItem =2;
+
+        patientUuid = patient.getUuid();
         initializeView();
+        fragment = new RelativeFragments();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container_patient, fragment);
+        ft.commit();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-
+        if(destination==0) {
+            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        }
     }
+
 
     private void initializeView() {
         txt_name = findViewById(R.id.txt_name);

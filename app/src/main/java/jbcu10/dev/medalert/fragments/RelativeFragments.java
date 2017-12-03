@@ -22,8 +22,10 @@ import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
 import jbcu10.dev.medalert.activity.NewRelativeActivity;
+import jbcu10.dev.medalert.activity.PatientActivity;
 import jbcu10.dev.medalert.adapter.RelativeAdapter;
 import jbcu10.dev.medalert.db.RelativeRepository;
+import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Relative;
 
 /**
@@ -56,8 +58,9 @@ public class RelativeFragments extends ListFragment implements AbsListView.OnScr
         relativeRepository = new RelativeRepository(getActivity());
         pDialog = new ProgressDialog(getActivity());
 
-        getActivity().setTitle("Relatives");
-        List<Relative> relatives = relativeRepository.getAll();
+       // getActivity().setTitle("Relatives");
+
+        List<Relative> relatives = relativeRepository.getAllRelativeByPatienUuid(PatientActivity.patientUuid);
         initializeGridView();
         if (relatives != null) {
             onLoadMoreItems(relatives);
@@ -88,6 +91,7 @@ public class RelativeFragments extends ListFragment implements AbsListView.OnScr
 
     @OnClick(R.id.fab)
     public void onClickFAB(View view) {
+        PatientActivity.destination =1;
         Intent intent = new Intent(getActivity(), NewRelativeActivity.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);

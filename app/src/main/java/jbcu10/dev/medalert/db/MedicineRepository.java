@@ -109,6 +109,7 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
                     medicine.setType(cursor.getString(8));
                     medicine.setTotal(cursor.getInt(9));
                     medicine.setEnabled(cursor.getInt(10)>0);
+                    medicine.setSchedules(this.getAllMedicineSchedule(cursor.getString(1)));
 
                     medicines.add(medicine);
                     cursor.moveToNext();

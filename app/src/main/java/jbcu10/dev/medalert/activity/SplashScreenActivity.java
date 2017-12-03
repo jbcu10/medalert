@@ -9,6 +9,7 @@ import android.widget.ProgressBar;
 import java.util.UUID;
 
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.config.Permission;
 import jbcu10.dev.medalert.db.FirstAidRepository;
 import jbcu10.dev.medalert.model.FirstAid;
 import jbcu10.dev.medalert.model.Instructions;
@@ -17,14 +18,14 @@ public class SplashScreenActivity extends AppCompatActivity {
     public FirstAidRepository firstAidRepository;
     ProgressBar progressbar;
     Intent intent;
-
+    Permission permission =new Permission();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
         firstAidRepository = new FirstAidRepository(SplashScreenActivity.this);
-
+        permission.requestSendSmsPermission(this);
         if (firstAidRepository.getAll() == null) {
             for (int a = 0; a < 10; a++) {
                 String firstAidUuid = UUID.randomUUID().toString();

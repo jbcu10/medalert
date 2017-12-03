@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.fragments.FirstAidFragments;
 import jbcu10.dev.medalert.fragments.MedicineFragments;
 import jbcu10.dev.medalert.fragments.PatientFragments;
@@ -20,7 +21,7 @@ import jbcu10.dev.medalert.fragments.ReminderFragments;
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Fragment fragment;
-
+    public static int selectedItem = 0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,10 +36,35 @@ public class HomeActivity extends BaseActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        fragment = new ReminderFragments();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container_new, fragment);
-        ft.commit();
+
+        if(selectedItem==0) {
+            fragment = new ReminderFragments();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_new, fragment);
+            ft.commit();
+            navigationView.setCheckedItem( R.id.alarm);
+        }if(selectedItem==1) {
+            fragment = new MedicineFragments();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_new, fragment);
+            ft.commit();
+            navigationView.setCheckedItem( R.id.medicines);
+
+        }if(selectedItem==2) {
+            fragment = new PatientFragments();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_new, fragment);
+            ft.commit();
+            navigationView.setCheckedItem( R.id.patients);
+
+        }if(selectedItem==3) {
+            fragment = new FirstAidFragments();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_new, fragment);
+            ft.commit();
+            navigationView.setCheckedItem( R.id.firstaid);
+
+        }
 
     }
 
@@ -56,6 +82,7 @@ public class HomeActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.home, menu);
+
         return true;
     }
 

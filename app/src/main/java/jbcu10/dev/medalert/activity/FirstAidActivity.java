@@ -27,6 +27,7 @@ public class FirstAidActivity extends BaseActivity {
         firstAid = firstAidRepository.getById(appController.getFirstAidId());
         txt_name.setText(firstAid.getName());
         txt_description.setText(firstAid.getDescription());
+        HomeActivity.selectedItem =3;
 
         for (Instructions instruction : firstAid.getInstructionsList()) {
             TextView txt_instruction = new TextView(this);
@@ -40,7 +41,12 @@ public class FirstAidActivity extends BaseActivity {
 
 
     }
+    @Override
+    public void onPause() {
+        super.onPause();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
+    }
     private void initialize() {
         txt_name = findViewById(R.id.txt_name);
         txt_description = findViewById(R.id.txt_description);

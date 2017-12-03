@@ -67,12 +67,11 @@ public class EditMedicineActivity extends BaseActivity implements DatePickerDial
         initializedViews();
         medicineRepository = new MedicineRepository(EditMedicineActivity.this);
         AppController appController = AppController.getInstance();
-
+        HomeActivity.selectedItem =1;
         medicine = appController.getMedicine();
         setMedicineData(medicine);
         calendar = Calendar.getInstance();
         datePickerDialog = DatePickerDialog.newInstance(EditMedicineActivity.this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
-
     }
 
     @OnClick(R.id.edit_expiration)
@@ -174,7 +173,7 @@ public class EditMedicineActivity extends BaseActivity implements DatePickerDial
 
 
                     try {
-                        boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(), UUID.randomUUID().toString(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(),getSchedule()));
+                        boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(),medicine.getUuid(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(),getSchedule()));
 
                         if (isCreated) {
                             Intent intent = new Intent(EditMedicineActivity.this, HomeActivity.class);

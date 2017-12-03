@@ -31,6 +31,7 @@ public class MedicineActivity extends BaseActivity {
         setContentView(R.layout.activity_medicine);
         initialize();
         medicineRepository = new MedicineRepository(MedicineActivity.this);
+        HomeActivity.selectedItem =1;
 
         AppController appController = AppController.getInstance();
         medicine = medicineRepository.getById(appController.getMedicineId());

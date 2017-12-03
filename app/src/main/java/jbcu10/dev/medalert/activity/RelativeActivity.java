@@ -17,6 +17,7 @@ import butterknife.ButterKnife;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.RelativeRepository;
+import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Relative;
 
 public class RelativeActivity extends BaseActivity {
@@ -41,6 +42,7 @@ public class RelativeActivity extends BaseActivity {
     public void onPause() {
         super.onPause();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        PatientActivity.destination=0;
     }
 
     private void initializeView() {

@@ -51,7 +51,13 @@ public class EditRelativeActivity extends AppCompatActivity {
         AppController appController = AppController.getInstance();
         relative = appController.getRelative();
         initializedViews();
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+        PatientActivity.destination=0;
     }
 
     public void initializedViews() {
@@ -95,7 +101,7 @@ public class EditRelativeActivity extends AppCompatActivity {
                 .negativeText("Cancel")
                 .onPositive((dialog, which) -> {
                     try {
-                        boolean isCreated = relativeRepository.update(new Relative(relative.getId(), UUID.randomUUID().toString(),
+                        boolean isCreated = relativeRepository.update(new Relative(relative.getId(), relative.getUuid().toString(),
                                 edit_first_name.getText().toString(), edit_middle_name.getText().toString()
                                 , edit_last_name.getText().toString(), edit_contact_number.getText().toString()
                                 , edit_email.getText().toString(), edit_relationship.getText().toString()));
