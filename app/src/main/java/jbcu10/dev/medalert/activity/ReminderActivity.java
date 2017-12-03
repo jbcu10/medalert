@@ -1,11 +1,14 @@
 package jbcu10.dev.medalert.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -26,6 +29,7 @@ import jbcu10.dev.medalert.db.ReminderRepository;
 import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Reminder;
+import jbcu10.dev.medalert.notification.NotificationHelper;
 
 public class ReminderActivity extends AppCompatActivity {
     public MedicineRepository medicineRepository;
@@ -47,9 +51,14 @@ public class ReminderActivity extends AppCompatActivity {
         medicineRepository = new MedicineRepository(this);
         reminderRepository = new ReminderRepository(this);
         patientRepository = new PatientRepository(this);
+        HomeActivity.selectedItem =0;
+
         initializedViews();
         AppController appController = AppController.getInstance();
         reminder = reminderRepository.getById(appController.getReminderId());
+        if(reminder ==null){
+            reminder=      reminderRepository.getByUuid(appController.getReminderUuid());
+        }
         edit_description.setText(reminder.getDescription());
         reminder.setMedicineList(medicineRepository.getAllReminderMedicine(reminder.getUuid()));
         reminder.setTime(reminderRepository.getAllReminderTime(reminder.getUuid()));
@@ -109,6 +118,8 @@ public class ReminderActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

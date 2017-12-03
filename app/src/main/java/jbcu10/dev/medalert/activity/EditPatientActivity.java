@@ -48,6 +48,8 @@ public class EditPatientActivity extends AppCompatActivity {
         AppController appController = AppController.getInstance();
         patient = appController.getPatient();
         initializedViews();
+        HomeActivity.selectedItem =2;
+
     }
 
     @Override
@@ -98,8 +100,7 @@ public class EditPatientActivity extends AppCompatActivity {
                 .negativeText("Cancel")
                 .onPositive((dialog, which) -> {
                     try {
-                        String uuid = UUID.randomUUID().toString();
-                        boolean isCreated = patientRepository.update(new Patient(patient.getId(), uuid,
+                        boolean isCreated = patientRepository.update(new Patient(patient.getId(), patient.getUuid(),
                                 edit_first_name.getText().toString(), edit_middle_name.getText().toString()
                                 , edit_last_name.getText().toString(), edit_contact_number.getText().toString()
                                 , edit_email.getText().toString(), edit_gender.getText().toString()));
@@ -107,7 +108,7 @@ public class EditPatientActivity extends AppCompatActivity {
                         if (isCreated) {
                             Intent intent = new Intent(EditPatientActivity.this, PatientActivity.class);
                             AppController appController = AppController.getInstance();
-                            appController.setPatientId(patientRepository.getByUuid(uuid).getId());
+                            appController.setPatientId(patientRepository.getByUuid( patient.getUuid()).getId());
                             startActivity(intent);
                             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
                         }

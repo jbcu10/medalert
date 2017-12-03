@@ -18,6 +18,7 @@ import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.RelativeRepository;
+import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Relative;
 
 public class NewRelativeActivity extends BaseActivity {
@@ -51,7 +52,7 @@ public class NewRelativeActivity extends BaseActivity {
     public void onPause() {
         super.onPause();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-
+        PatientActivity.destination=0;
     }
 
     public void initializedViews() {
@@ -89,7 +90,7 @@ public class NewRelativeActivity extends BaseActivity {
                 .onPositive((dialog, which) -> {
                     try {
                         String uuid = UUID.randomUUID().toString();
-                        boolean isCreated = relativeRepository.create(new Relative(uuid,
+                        boolean isCreated = relativeRepository.createPatientRelative(PatientActivity.patientUuid, new Relative(uuid,
                                 edit_first_name.getText().toString(), edit_middle_name.getText().toString()
                                 , edit_last_name.getText().toString(), edit_contact_number.getText().toString()
                                 , edit_email.getText().toString(), edit_relationship.getText().toString()));

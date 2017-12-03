@@ -43,6 +43,8 @@ public class NewPatientActivity extends BaseActivity {
         setContentView(R.layout.activity_new_patient);
         ButterKnife.bind(this);
         initializedViews();
+        HomeActivity.selectedItem =2;
+
         patientRepository = new PatientRepository(NewPatientActivity.this);
     }
 

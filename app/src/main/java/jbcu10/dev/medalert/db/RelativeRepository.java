@@ -43,6 +43,28 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
             return false;
         }
     }
+    public boolean createPatientRelative(String patientUuid,Relative relative) {
+        try {
+            Log.d(TAG, relative.toString());
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_UUID, relative.getUuid());
+            values.put(KEY_FIRST_NAME, relative.getFirstName());
+            values.put(KEY_MIDDLE_NAME, relative.getMiddleName());
+            values.put(KEY_LAST_NAME, relative.getLastName());
+            values.put(KEY_CONTACT_NUMBER, relative.getContactNumber());
+            values.put(KEY_EMAIL, relative.getEmail());
+            values.put(KEY_RELATIONSHIP, relative.getRelationship());
+            long id = db.insert(TABLE_RELATIVE, null, values);
+            db.close();
+            this.createPatientRelative(patientUuid,relative.getUuid());
+            Log.d(TAG, "NEW RELATIVE IS CREATED W/ AN ID: " + id);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
+            return false;
+        }
+    }
 
     @Override
     public boolean update(Relative relative) {
@@ -86,6 +108,29 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
                     relative.setContactNumber(cursor.getString(5));
                     relative.setEmail(cursor.getString(6));
                     relative.setRelationship(cursor.getString(7));
+                    relatives.add(relative);
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching relatives from database: " + relatives.get(0).getLastName());
+            return relatives;
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+            return null;
+        }
+
+    }
+    public List<Relative> getAllRelativeByPatienUuid(String patientUuid) {
+        try {
+            List<Relative> relatives = new LinkedList<>();
+            String selectQuery = "SELECT  * FROM " + TABLE_PATIENT_RELATIVE + " where "+KEY_PATIENT_UUID+" = '"+patientUuid+"'  order by " + KEY_ID + " desc";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Relative relative = this.getByUuid(cursor.getString(2));
                     relatives.add(relative);
                     cursor.moveToNext();
                 }
@@ -174,6 +219,21 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
         } catch (Exception e) {
             Log.d(TAG, ERROR + e.getMessage());
             return null;
+        }
+    }
+
+    private void createPatientRelative(String patientUuid, String relativeUuid) {
+        try {
+            Log.d(TAG, "patientUuid: " + patientUuid + " & relativeUuid: " + relativeUuid);
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_PATIENT_UUID, patientUuid);
+            values.put(KEY_RELATIVE_UUID, relativeUuid);
+            long id = db.insert(TABLE_PATIENT_RELATIVE, null, values);
+            db.close();
+            Log.d(TAG, "NEW  PATIENT_RELATIVE IS CREATED W/ AN ID: " + id);
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
         }
     }
 }

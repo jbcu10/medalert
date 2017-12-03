@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.activity.PatientActivity;
 import jbcu10.dev.medalert.activity.RelativeActivity;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.model.Relative;
@@ -55,12 +56,11 @@ public class RelativeAdapter extends ArrayAdapter<Relative> {
 
         convertView.setOnClickListener(view -> {
                     try {
-
+                        PatientActivity.destination =1;
                         AppController appController = AppController.getInstance();
                         appController.setRelativeId(relative.getId());
                         Intent intent = new Intent(getContext(), RelativeActivity.class);
                         getContext().startActivity(intent);
-
                         Activity activity = (Activity) getContext();
                         activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     } catch (Exception e) {

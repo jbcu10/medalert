@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="jbcu10.dev.medalert">
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.SET_ALARM" />
 
     <application
         android:name=".config.AppController"
@@ -50,14 +52,14 @@
             android:label="Relatives">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.HomeActivity" />
+                android:value=".activity.PatientActivity" />
         </activity>
         <activity
             android:name=".activity.NewRelativeActivity"
             android:label="New Relative">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.HomeActivity" />
+                android:value=".activity.PatientActivity" />
         </activity>
         <activity
             android:name=".activity.HomeActivity"
@@ -68,7 +70,7 @@
             android:label="Edit Relative">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.RelativeActivity" />
+                android:value=".activity.PatientActivity" />
         </activity>
         <activity
             android:name=".activity.FirstAidActivity"
@@ -112,6 +114,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.PatientActivity" />
         </activity>
+
+
+        <receiver android:name=".notification.AlarmReceiver"/>
+        <service android:name=".notification.RingtonePlayingService"
+            android:enabled="true">
+        </service>
+        <receiver android:name=".notification.AlarmBootReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

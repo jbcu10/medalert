@@ -1,5 +1,8 @@
 package jbcu10.dev.medalert.activity;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -17,6 +20,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
@@ -32,12 +36,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.db.PatientRepository;
 import jbcu10.dev.medalert.db.ReminderRepository;
 import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Reminder;
+import jbcu10.dev.medalert.notification.AlarmReceiver;
+import jbcu10.dev.medalert.notification.NotificationHelper;
 
 public class NewRemindersActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
     public static final String TIMEPICKER_TAG = "Time Picker";
@@ -54,20 +61,27 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
     List<String> timeStrings = new LinkedList<>();
     Spinner spinner;
     Patient patient;
+    private AlarmReceiver alarm;
+    AlarmManager alarmManager;
+    private PendingIntent pending_intent;
 
+    Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_reminders);
         ButterKnife.bind(this);
         initializedViews();
+        this.context = this;
+
+
         medicineRepository = new MedicineRepository(this);
         patientRepository = new PatientRepository(this);
         reminderRepository = new ReminderRepository(this);
         spinner = findViewById(R.id.spinner);
         ArrayList<Patient> patients = new ArrayList<>();
         List<Patient> patientsList = patientRepository.getAllEnabledPatient();
-
+        HomeActivity.selectedItem =0;
         if (patientsList == null) {
             addPatient(this, "Create new Patient?");
         }
@@ -102,7 +116,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         }
         Calendar calendar = Calendar.getInstance();
         timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true, false);
-        if (medicines != null) {
+        if (patientsList != null && medicines != null) {
             timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
             for (Medicine medicine : medicines) {
                 final CheckBox checkBoxMedicine = new CheckBox(this);
@@ -114,6 +128,12 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
                                 LinearLayout.LayoutParams.WRAP_CONTENT));
                 checkBoxMedicine.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
+                        new MaterialDialog.Builder(this)
+                                .title(medicine.getName())
+                                .content(this.getSchedule(medicine.getSchedules()))
+                                .positiveText("Ok")
+                                .show();
+
                         strings.add(checkBoxMedicine.getHint().toString());
                     } else {
                         strings.remove(checkBoxMedicine.getHint().toString());
@@ -131,6 +151,8 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         ll_alarm_handler = findViewById(R.id.ll_alarm_handler);
         ll_medicine_handler = findViewById(R.id.ll_medicine_handler);
         edit_description = findViewById(R.id.edit_description);
+        alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
     }
 
     public Reminder setReminder() {
@@ -236,6 +258,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
                         boolean isCreated = reminderRepository.create(reminder);
 
                         if (isCreated) {
+                            setAlarmFromTimer(reminder);
                             Intent intent = new Intent(NewRemindersActivity.this, HomeActivity.class);
                             startActivity(intent);
                             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
@@ -255,5 +278,42 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
                 })
                 .show();
 
+    }
+
+    public void setAlarmFromTimer( Reminder reminder) {
+        final Calendar calendar = Calendar.getInstance();
+        final Intent myIntent = new Intent(this.context, AlarmReceiver.class);
+
+        for(String time:timeStrings) {
+            String[] timeArray= time.split(":");
+            calendar.add(Calendar.SECOND, 3);
+            //setAlarmText("You clicked a button");
+
+            final int hour = Integer.parseInt(timeArray[0]);
+            final int minute =  Integer.parseInt(timeArray[1]);
+
+            Log.e("MyActivity", "In the receiver with " + hour + " and " + minute);
+
+
+            calendar.set(Calendar.HOUR_OF_DAY, hour);
+            calendar.set(Calendar.MINUTE, minute);
+            myIntent.putExtra("title", "Reminder for - "+ reminder.getPatient().getFirstName());
+            myIntent.putExtra("content", reminder.getDescription());
+            myIntent.putExtra("uuid", reminder.getUuid());
+            pending_intent = PendingIntent.getBroadcast(NewRemindersActivity.this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+
+        }
+    }
+    public StringBuffer getSchedule(List<String> schedules) {
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < schedules.size(); i++) {
+            stringBuffer.append(schedules.get(i));
+            if(i!=schedules.size()-1){
+                stringBuffer.append(", ");
+            }
+        }
+            return stringBuffer;
     }
 }

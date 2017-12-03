@@ -19,6 +19,8 @@ public class AppController extends Application {
     private int relativeId;
     private int reminderId;
     private int patientId;
+    private String reminderUuid;
+    private int selectedIndex;
 
     public static synchronized AppController getInstance() {
         return mInstance;
@@ -101,5 +103,13 @@ public class AppController extends Application {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public String getReminderUuid() {
+        return reminderUuid;
+    }
+
+    public void setReminderUuid(String reminderUuid) {
+        this.reminderUuid = reminderUuid;
     }
 }
