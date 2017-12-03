@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="jbcu10.dev.medalert.activity.MedicineActivity">
+    tools:context="jbcu10.dev.medalert.activity.RelativeActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -23,78 +23,88 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="4">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txt_name"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:fontFamily="sans-serif-smallcaps"
+                    android:orientation="horizontal"
+                    android:weightSum="4">
 
-                    android:text="Juan dela Cruz"
-                    android:textAllCaps="true"
-                    android:textColor="@color/teal"
-                    android:textSize="24sp"
-                    android:textStyle="bold" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/txt_relation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                        <TextView
+                            android:id="@+id/txt_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="sans-serif-smallcaps"
 
-                    android:fontFamily="sans-serif-condensed"
-                    android:text="Father"
-                    android:textAllCaps="true"
-                    android:textSize="12sp" />
+                            android:text="Juan dela Cruz"
+                            android:textAllCaps="true"
+                            android:textColor="@color/teal"
+                            android:textSize="24sp"
+                            android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/txt_contact_number"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="1"
-                    android:fontFamily="monospace"
-                    android:text="091234567890"
-                    android:textAllCaps="true"
-                    android:textColor="@color/red"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                        <TextView
+                            android:id="@+id/txt_relation"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
 
-                <TextView
-                    android:id="@+id/txt_email"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="jd.cruz@gmail.com"
-                    android:textAllCaps="false"
-                    android:textColor="@color/dimgray"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                            android:fontFamily="sans-serif-condensed"
+                            android:text="Father"
+                            android:textAllCaps="true"
+                            android:textSize="12sp" />
 
+                        <TextView
+                            android:id="@+id/txt_contact_number"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="1"
+                            android:fontFamily="monospace"
+                            android:text="091234567890"
+                            android:textAllCaps="true"
+                            android:textColor="@color/red"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txt_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="end"
+                            android:layout_weight="1"
+                            android:text="jd.cruz@gmail.com"
+                            android:textAllCaps="false"
+                            android:textColor="@color/dimgray"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/image_relation"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:scaleType="fitCenter"
+                        app:srcCompat="@drawable/father" />
+                </LinearLayout>
             </LinearLayout>
-
-            <ImageView
-                android:id="@+id/image_relation"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="3"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/father" />
-        </LinearLayout>
-
+        </ScrollView>
     </LinearLayout>
 
 

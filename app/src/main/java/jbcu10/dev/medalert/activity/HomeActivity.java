@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.fragments.FirstAidFragments;
 import jbcu10.dev.medalert.fragments.MedicineFragments;
-import jbcu10.dev.medalert.fragments.RelativeFragments;
+import jbcu10.dev.medalert.fragments.PatientFragments;
 import jbcu10.dev.medalert.fragments.ReminderFragments;
 
 public class HomeActivity extends BaseActivity
@@ -80,13 +80,12 @@ public class HomeActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.relatives) {
-            fragment = new RelativeFragments();
+        if (id == R.id.patients) {
+            fragment = new PatientFragments();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_new, fragment);
             ft.commit();
-        }
-        else if (id == R.id.medicines) {
+        } else if (id == R.id.medicines) {
             fragment = new MedicineFragments();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_new, fragment);
@@ -104,7 +103,7 @@ public class HomeActivity extends BaseActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_exit) {
-                exitApplication(this);
+            exitApplication(this);
         }
 
         DrawerLayout drawer = findViewById(R.id.drawer_layout);

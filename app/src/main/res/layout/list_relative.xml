@@ -38,7 +38,7 @@
                     android:text="Juan dela Cruz"
                     android:textAllCaps="true"
                     android:textColor="@color/teal"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <TextView

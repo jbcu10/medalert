@@ -20,48 +20,51 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.adapter.MedicineAdapter;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.model.Medicine;
 
 public class MainActivity extends BaseActivity implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
-    public DatabaseCRUDHandler db;
     private static final String LOADING_PLOTS = "Loading Medicines...";
     private static final String ERROR = "Error:";
+    public MedicineRepository medicineRepository;
     ProgressDialog pDialog;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
     private StaggeredGridView mGridView;
     private boolean mHasRequestedMore;
     private MedicineAdapter mAdapter;
-    @BindView(R.id.fab) FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        db = new DatabaseCRUDHandler(MainActivity.this);
+        medicineRepository = new MedicineRepository(MainActivity.this);
         pDialog = new ProgressDialog(this);
 
-        List<Medicine> medicines = db.getAllMedicine();
+        List<Medicine> medicines = medicineRepository.getAll();
         initializeGridView();
-        if(medicines!=null) {
+        if (medicines != null) {
             onLoadMoreItems(medicines);
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_main, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
 
             case R.id.people:
-                Intent  intent = new Intent(MainActivity.this, RelativeActivity.class);
+                Intent intent = new Intent(MainActivity.this, RelativeActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
@@ -74,7 +77,7 @@ public class MainActivity extends BaseActivity implements AbsListView.OnScrollLi
 
     @OnClick(R.id.fab)
     public void onClickFAB(View view) {
-        Intent  intent = new Intent(MainActivity.this, NewMedicineActivity.class);
+        Intent intent = new Intent(MainActivity.this, NewMedicineActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
@@ -118,6 +121,7 @@ public class MainActivity extends BaseActivity implements AbsListView.OnScrollLi
         mGridView.setOnItemClickListener(this);
         mGridView.setOnItemLongClickListener(this);
     }
+
     private void onLoadMoreItems(List<Medicine> medicines) {
         for (Medicine data : medicines) {
             mAdapter.add(data);
@@ -126,7 +130,6 @@ public class MainActivity extends BaseActivity implements AbsListView.OnScrollLi
         mHasRequestedMore = false;
         hideDialog();
     }
-
 
 
 }

@@ -23,7 +23,7 @@ import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
 import jbcu10.dev.medalert.activity.NewRelativeActivity;
 import jbcu10.dev.medalert.adapter.RelativeAdapter;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.RelativeRepository;
 import jbcu10.dev.medalert.model.Relative;
 
 /**
@@ -33,36 +33,39 @@ import jbcu10.dev.medalert.model.Relative;
 public class RelativeFragments extends ListFragment implements AbsListView.OnScrollListener,
         AbsListView.OnItemClickListener, OnItemLongClickListener {
     private static final String TAG = HomeActivity.class.getSimpleName();
-    public DatabaseCRUDHandler db;
     private static final String LOADING_PLOTS = "Loading Relatives...";
     private static final String ERROR = "Error:";
+    public RelativeRepository relativeRepository;
     ProgressDialog pDialog;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    View rootView;
     private StaggeredGridView mGridView;
     private boolean mHasRequestedMore;
     private RelativeAdapter mAdapter;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+
     public RelativeFragments() {
         // Required empty public constructor
     }
-    View rootView;
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_relative, null, false);
-        ButterKnife.bind(this,rootView);
-        db = new DatabaseCRUDHandler(getActivity());
+        ButterKnife.bind(this, rootView);
+        relativeRepository = new RelativeRepository(getActivity());
         pDialog = new ProgressDialog(getActivity());
 
         getActivity().setTitle("Relatives");
-        List<Relative> relatives = db.getAllRelative();
+        List<Relative> relatives = relativeRepository.getAll();
         initializeGridView();
-        if(relatives!=null) {
+        if (relatives != null) {
             onLoadMoreItems(relatives);
         }
         return rootView;
 
     }
+
     @Override
     public void onScrollStateChanged(AbsListView absListView, int i) {
 
@@ -106,6 +109,7 @@ public class RelativeFragments extends ListFragment implements AbsListView.OnScr
 
         });
     }
+
     private void onLoadMoreItems(List<Relative> relatives) {
         for (Relative data : relatives) {
             mAdapter.add(data);
@@ -114,6 +118,7 @@ public class RelativeFragments extends ListFragment implements AbsListView.OnScr
         mHasRequestedMore = false;
         hideDialog();
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

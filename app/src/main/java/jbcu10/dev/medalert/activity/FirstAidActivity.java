@@ -6,14 +6,14 @@ import android.widget.TextView;
 
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.FirstAidRepository;
 import jbcu10.dev.medalert.model.FirstAid;
 import jbcu10.dev.medalert.model.Instructions;
 
 public class FirstAidActivity extends BaseActivity {
-    TextView txt_name,txt_description;
+    public FirstAidRepository firstAidRepository;
+    TextView txt_name, txt_description;
     LinearLayout ll_instruction_handler;
-    public DatabaseCRUDHandler db;
     FirstAid firstAid = null;
 
 
@@ -22,26 +22,26 @@ public class FirstAidActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_first_aid);
         initialize();
-        db = new DatabaseCRUDHandler(FirstAidActivity.this);
+        firstAidRepository = new FirstAidRepository(FirstAidActivity.this);
         AppController appController = AppController.getInstance();
-        firstAid = db.getFirstAid(appController.getFirstAidId());
+        firstAid = firstAidRepository.getById(appController.getFirstAidId());
         txt_name.setText(firstAid.getName());
         txt_description.setText(firstAid.getDescription());
 
-        for (Instructions instruction:firstAid.getInstructionsList()){
+        for (Instructions instruction : firstAid.getInstructionsList()) {
             TextView txt_instruction = new TextView(this);
             txt_instruction.setText(instruction.getInstruction());
             txt_instruction.setId(instruction.getId());
             txt_instruction.setLayoutParams(
                     new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.WRAP_CONTENT));
-           ll_instruction_handler.addView(txt_instruction);
+            ll_instruction_handler.addView(txt_instruction);
         }
 
 
     }
 
-    private void initialize(){
+    private void initialize() {
         txt_name = findViewById(R.id.txt_name);
         txt_description = findViewById(R.id.txt_description);
         ll_instruction_handler = findViewById(R.id.ll_instruction_handler);

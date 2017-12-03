@@ -2,7 +2,6 @@ package jbcu10.dev.medalert.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
@@ -10,7 +9,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.text.DateFormat;
@@ -19,22 +17,23 @@ import java.util.Date;
 
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
-import jbcu10.dev.medalert.db.DatabaseCRUDHandler;
+import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.model.Medicine;
 
 public class MedicineActivity extends BaseActivity {
-    TextView txt_name,txt_genric_name,txt_description,txt_diagnosis,txt_expiration,txt_doctor_name;
-    public DatabaseCRUDHandler db;
+    public MedicineRepository medicineRepository;
+    TextView txt_name, txt_genric_name, txt_description, txt_diagnosis, txt_expiration, txt_doctor_name;
     Medicine medicine = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine);
         initialize();
-        db = new DatabaseCRUDHandler(MedicineActivity.this);
+        medicineRepository = new MedicineRepository(MedicineActivity.this);
 
         AppController appController = AppController.getInstance();
-         medicine = db.getMedicine(appController.getMedicineId());
+        medicine = medicineRepository.getById(appController.getMedicineId());
 
 
         txt_name.setText(medicine.getName());
@@ -45,11 +44,12 @@ public class MedicineActivity extends BaseActivity {
         Date date = new Date(medicine.getExpiration());
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         txt_expiration.setText(df.format(date));
-        txt_doctor_name.setText(medicine.getDoctor()!=null ? medicine.getDoctor().getFirstName()+" "+medicine.getDoctor().getFirstName():"Not Available..");
+        txt_doctor_name.setText(medicine.getDoctor() != null ? medicine.getDoctor().getFirstName() + " " + medicine.getDoctor().getFirstName() : "Not Available..");
 
 
     }
-    private void initialize(){
+
+    private void initialize() {
         txt_diagnosis = findViewById(R.id.txt_diagnosis);
         txt_name = findViewById(R.id.txt_name);
         txt_genric_name = findViewById(R.id.txt_genric_name);
@@ -71,23 +71,24 @@ public class MedicineActivity extends BaseActivity {
         inflater.inflate(R.menu.menu_medicine, menu);
         return true;
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
 
             case R.id.edit_medicine:
-                this.editMedicicine();
+                this.editMedicine();
                 return true;
             case R.id.delete_medicine:
-                this.deleteMedicicine();
+                this.deleteMedicine();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    private void editMedicicine(){
+    private void editMedicine() {
         AppController appController = AppController.getInstance();
         appController.setMedicine(medicine);
         Intent intent = new Intent(MedicineActivity.this, EditMedicineActivity.class);
@@ -95,42 +96,36 @@ public class MedicineActivity extends BaseActivity {
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
     }
-    private void deleteMedicicine(){
+
+    private void deleteMedicine() {
         new MaterialDialog.Builder(MedicineActivity.this)
                 .title("Delete Medicine?")
                 .content("Are you sure you want delete this items?")
                 .positiveText("Delete")
                 .negativeText("Cancel")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .onPositive((dialog, which) -> {
 
-                        try{
-                            boolean isDeleted =         db.deleteMedicine(medicine.getId());
-                            if(isDeleted){
-                                Snackbar.make(findViewById(android.R.id.content), "Successfully Deleted Medicine!", Snackbar.LENGTH_LONG).show();
-                                Intent intent = new Intent(MedicineActivity.this, HomeActivity.class);
-                                startActivity(intent);
-                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-                            }if(!isDeleted){
-                                Snackbar.make(findViewById(android.R.id.content), "Failed to Delete Medicine!", Snackbar.LENGTH_LONG).show();
-                            }
+                    try {
+                        boolean isDeleted = medicineRepository.deleteById(medicine.getId());
+                        if (isDeleted) {
+                            Snackbar.make(findViewById(android.R.id.content), "Successfully Deleted Medicine!", Snackbar.LENGTH_LONG).show();
+                            Intent intent = new Intent(MedicineActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
                         }
-                        catch (Exception e){
-                            Log.d("Error",e.getMessage());
+                        if (!isDeleted) {
+                            Snackbar.make(findViewById(android.R.id.content), "Failed to Delete Medicine!", Snackbar.LENGTH_LONG).show();
                         }
 
-
+                    } catch (Exception e) {
+                        Log.d("Error", e.getMessage());
                     }
+
+
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                    }
+                .onNegative((dialog, which) -> {
                 }).show();
-
 
 
     }

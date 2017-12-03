@@ -3,39 +3,25 @@ package jbcu10.dev.medalert.config;
 import android.app.Application;
 
 import jbcu10.dev.medalert.model.Medicine;
+import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Relative;
 
 
 public class AppController extends Application {
 
     public static final String TAG = AppController.class.getSimpleName();
-
+    private static AppController mInstance;
     private Medicine medicine;
     private Relative relative;
+    private Patient patient;
     private int medicineId;
     private int firstAidId;
     private int relativeId;
     private int reminderId;
-
-
-    private static AppController mInstance;
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        mInstance = this;
-
-    }
+    private int patientId;
 
     public static synchronized AppController getInstance() {
         return mInstance;
-    }
-
-    public Medicine getMedicine() {
-        return medicine;
-    }
-
-    public void setMedicine(Medicine medicine) {
-        this.medicine = medicine;
     }
 
     public static AppController getmInstance() {
@@ -44,6 +30,21 @@ public class AppController extends Application {
 
     public static void setmInstance(AppController mInstance) {
         AppController.mInstance = mInstance;
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        mInstance = this;
+
+    }
+
+    public Medicine getMedicine() {
+        return medicine;
+    }
+
+    public void setMedicine(Medicine medicine) {
+        this.medicine = medicine;
     }
 
     public int getMedicineId() {
@@ -84,5 +85,21 @@ public class AppController extends Application {
 
     public void setReminderId(int reminderId) {
         this.reminderId = reminderId;
+    }
+
+    public int getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(int patientId) {
+        this.patientId = patientId;
+    }
+
+    public Patient getPatient() {
+        return patient;
+    }
+
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 }

@@ -5,5 +5,5 @@
         android:id="@+id/exit"
         android:icon="@drawable/ic_exit"
         android:title="Exit"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 </menu>

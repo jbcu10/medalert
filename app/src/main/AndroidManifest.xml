@@ -70,7 +70,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.RelativeActivity" />
         </activity>
-        <activity android:name=".activity.FirstAidActivity" />
+        <activity
+            android:name=".activity.FirstAidActivity"
+            android:label="First Aid">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.HomeActivity" />
+        </activity>
         <activity
             android:name=".activity.NewRemindersActivity"
             android:label="Create Reminders">
@@ -78,11 +84,33 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.HomeActivity" />
         </activity>
-        <activity android:name=".activity.ReminderActivity"
+        <activity
+            android:name=".activity.ReminderActivity"
             android:label="Reminder">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.HomeActivity"/>
+                android:value=".activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".activity.NewPatientActivity"
+            android:label="New Patient">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".activity.PatientActivity"
+            android:label="Patient">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.HomeActivity" />
+        </activity>
+        <activity
+            android:name=".activity.EditPatientActivity"
+            android:label="Edit Patient">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.PatientActivity" />
         </activity>
     </application>
 

@@ -14,9 +14,9 @@
             android:iconTintMode="screen"
             android:title="Medicines" />
         <item
-            android:id="@+id/relatives"
+            android:id="@+id/patients"
             android:icon="@drawable/ic_people"
-            android:title="Relatives" />
+            android:title="Patients" />
 
         <item
             android:id="@+id/firstaid"

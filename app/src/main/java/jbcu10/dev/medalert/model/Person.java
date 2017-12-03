@@ -12,7 +12,7 @@ public abstract class Person {
     protected String lastName;
     protected String contactNumber;
     protected String email;
-
+    protected String gender;
 
 
     protected Person() {
@@ -72,5 +72,13 @@ public abstract class Person {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
     }
 }

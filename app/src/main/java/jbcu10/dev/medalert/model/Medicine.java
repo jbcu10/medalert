@@ -1,6 +1,9 @@
 package jbcu10.dev.medalert.model;
 
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by dev on 10/1/17.
@@ -15,11 +18,13 @@ public class Medicine {
     private String diagnosis;
     private String description;
     private long expiration;
-    private int total ;
-    private String type ;
+    private int total;
+    private String type;
     private Doctor doctor;
+    private boolean enabled;
+    private List<String> schedules = new LinkedList<>();
 
-    public Medicine( String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor,String type) {
+    public Medicine(String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type, boolean enabled,List<String> schedules ) {
         this.uuid = uuid;
         this.name = name;
         this.genericName = genericName;
@@ -29,7 +34,12 @@ public class Medicine {
         this.total = total;
         this.doctor = doctor;
         this.type = type;
-    }public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor,String type) {
+        this.enabled = enabled;
+        this.schedules = schedules;
+
+    }
+
+    public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type, List<String> schedules) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
@@ -40,6 +50,7 @@ public class Medicine {
         this.total = total;
         this.doctor = doctor;
         this.type = type;
+        this.schedules =schedules;
     }
 
     public Medicine() {
@@ -125,6 +136,22 @@ public class Medicine {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public List<String> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<String> schedules) {
+        this.schedules = schedules;
     }
 
     @Override
