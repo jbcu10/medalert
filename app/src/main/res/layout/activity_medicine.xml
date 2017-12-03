@@ -42,133 +42,143 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.00999999">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:elevation="9dp"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="4">
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_weight="3"
+                    android:elevation="9dp"
                     android:orientation="vertical">
 
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="4">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="3"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/txt_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif-smallcaps"
+
+                                android:text="Medicine 2"
+                                android:textAllCaps="true"
+                                android:textColor="@color/teal"
+                                android:textSize="24sp"
+                                android:textStyle="bold"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.502" />
+
+                            <TextView
+                                android:id="@+id/txt_genric_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="sans-serif-condensed"
+
+                                android:text="Generic Name"
+                                android:textAllCaps="true"
+                                android:textSize="12sp"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintLeft_toLeftOf="parent"
+                                app:layout_constraintRight_toRightOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.502" />
+                        </LinearLayout>
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="5dp"
+                            android:layout_weight="1"
+                            app:srcCompat="@drawable/drugs" />
+                    </LinearLayout>
+
                     <TextView
-                        android:id="@+id/txt_name"
+                        android:id="@+id/txt_description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="sans-serif-smallcaps"
-
-                        android:text="Medicine 2"
-                        android:textAllCaps="true"
-                        android:textColor="@color/teal"
-                        android:textSize="24sp"
-                        android:textStyle="bold"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.502" />
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="sans-serif"
+                        android:text="\tAllergy shots and immunotherapy conjunctivitis contact lenses depressant fluoride glycemic index icu immune system lymph melanin nervous system occupational therapy rhinovirus sebaceous glands tinnitus. "
+                        android:textColor="@color/dimgray"
+                        android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/txt_genric_name"
+                        android:id="@+id/txt_diagnosis"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="sans-serif-condensed"
-
-                        android:text="Generic Name"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="monospace"
+                        android:text="Flu "
+                        android:textAlignment="center"
                         android:textAllCaps="true"
-                        android:textSize="12sp"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.502" />
+                        android:textColor="@color/dimgray"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/txt_doctor_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:text="Dr. Juan Dela Cruz"
+                        android:textColor="@color/mediumaquamarine"
+                        android:textSize="14sp" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        android:weightSum="5">
+
+                        <TextView
+                            android:id="@+id/textView5"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="4"
+                            android:text="Expiration:"
+                            android:textAlignment="viewStart"
+                            android:textAllCaps="true"
+                            android:textColor="@color/dimgray"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txt_expiration"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:text="01-01-2018"
+                            android:textAlignment="textEnd"
+                            android:textColor="@color/red"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
                 </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    app:srcCompat="@drawable/drugs" />
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/txt_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif"
-                android:text="\tAllergy shots and immunotherapy conjunctivitis contact lenses depressant fluoride glycemic index icu immune system lymph melanin nervous system occupational therapy rhinovirus sebaceous glands tinnitus. "
-                android:textColor="@color/dimgray"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/txt_diagnosis"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="monospace"
-                android:text="Flu "
-                android:textAlignment="center"
-                android:textAllCaps="true"
-                android:textColor="@color/dimgray"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txt_doctor_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:text="Dr. Juan Dela Cruz"
-                android:textColor="@color/mediumaquamarine"
-                android:textSize="14sp" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="5">
-
-                <TextView
-                    android:id="@+id/textView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="4"
-                    android:text="Expiration:"
-                    android:textAlignment="viewStart"
-                    android:textAllCaps="true"
-                    android:textColor="@color/dimgray"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txt_expiration"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
-                    android:text="01-01-2018"
-                    android:textAlignment="textEnd"
-                    android:textColor="@color/red"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-
-        </LinearLayout>
-
+        </ScrollView>
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

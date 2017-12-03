@@ -18,7 +18,6 @@ import jbcu10.dev.medalert.model.Reminder;
 
 public class ReminderRepository extends SQLiteBaseHandler implements CrudRepository<Reminder> {
 
-    PatientRepository patientRepository;
 
     public ReminderRepository(Context context) {
         super(context);

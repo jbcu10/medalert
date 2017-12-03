@@ -39,6 +39,39 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
                     patient.setContactNumber(cursor.getString(5));
                     patient.setGender(cursor.getString(6));
                     patient.setEmail(cursor.getString(7));
+                    patient.setEnabled(cursor.getInt(8)>0);
+                    patients.add(patient);
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching Patients from database: " + patients.get(0).getLastName());
+            return patients;
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+            return null;
+        }
+    }
+    public List<Patient> getAllEnabledPatient() {
+        try {
+            List<Patient> patients = new LinkedList<>();
+            String selectQuery = "SELECT  * FROM " + TABLE_PATIENT + " where "+KEY_ENABLED+" >0 order by " + KEY_ID + " desc";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+
+                    Patient patient = new Patient();
+                    patient.setId(cursor.getInt(0));
+                    patient.setUuid(cursor.getString(1));
+                    patient.setFirstName(cursor.getString(2));
+                    patient.setMiddleName(cursor.getString(3));
+                    patient.setLastName(cursor.getString(4));
+                    patient.setContactNumber(cursor.getString(5));
+                    patient.setGender(cursor.getString(6));
+                    patient.setEmail(cursor.getString(7));
+                    patient.setEnabled(cursor.getInt(8)>0);
                     patients.add(patient);
                     cursor.moveToNext();
                 }
@@ -70,6 +103,8 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
                 patient.setContactNumber(cursor.getString(5));
                 patient.setGender(cursor.getString(6));
                 patient.setEmail(cursor.getString(7));
+                patient.setEnabled(cursor.getInt(8)>0);
+
             }
             cursor.close();
             db.close();
@@ -101,6 +136,8 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
                 patient.setContactNumber(cursor.getString(5));
                 patient.setGender(cursor.getString(6));
                 patient.setEmail(cursor.getString(7));
+                patient.setEnabled(cursor.getInt(8)>0);
+
             }
             cursor.close();
             db.close();
@@ -131,6 +168,8 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
                 patient.setContactNumber(cursor.getString(5));
                 patient.setGender(cursor.getString(6));
                 patient.setEmail(cursor.getString(7));
+                patient.setEnabled(cursor.getInt(8)>0);
+
             }
             cursor.close();
             db.close();
@@ -158,7 +197,7 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
             values.put(KEY_CONTACT_NUMBER, patient.getContactNumber());
             values.put(KEY_EMAIL, patient.getEmail());
             values.put(KEY_GENDER, patient.getGender());
-
+            values.put(KEY_ENABLED, patient.isEnabled()?1:0);
             long id = db.insert(TABLE_PATIENT, null, values);
             db.close();
             Log.d(TAG, "NEW PATIENT IS CREATED W/ AN ID: " + id);
@@ -182,6 +221,7 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
             values.put(KEY_CONTACT_NUMBER, patient.getContactNumber());
             values.put(KEY_EMAIL, patient.getEmail());
             values.put(KEY_GENDER, patient.getGender());
+            values.put(KEY_ENABLED, patient.isEnabled()?1:0);
             long id = db.update(TABLE_PATIENT, values, KEY_ID + "= '" + patient.getId() + "'", null);
             db.close();
             Log.d(TAG, "NEW TABLE_PATIENT IS UPDATED W/ AN ID: " + id);

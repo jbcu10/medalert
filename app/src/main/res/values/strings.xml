@@ -14,6 +14,12 @@
         <item>Grand Mother</item>
     </array>
 
+    <array name="schedule">
+        <item>Breakfast</item>
+        <item>Lunch</item>
+        <item>Dinner</item>
+    </array>
+
     <array name="gender">
         <item>Male</item>
         <item>Female</item>

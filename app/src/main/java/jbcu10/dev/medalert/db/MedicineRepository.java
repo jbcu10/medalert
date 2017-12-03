@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import jbcu10.dev.medalert.model.Medicine;
 
@@ -71,6 +73,42 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
                     medicine.setExpiration(cursor.getLong(7));
                     medicine.setType(cursor.getString(8));
                     medicine.setTotal(cursor.getInt(9));
+                    medicine.setEnabled(cursor.getInt(10)>0);
+
+                    medicines.add(medicine);
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching medicines from database: " + medicines.get(0).getName().toString());
+            return medicines;
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+            return null;
+        }
+    }
+    public List<Medicine> getAllEnabledMedicine() {
+        try {
+            List<Medicine> medicines = new LinkedList<>();
+            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE + " where "+KEY_ENABLED+" > 0 order by " + KEY_ID + " desc";
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            Log.d("size",cursor.getColumnCount()+"");
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Medicine medicine = new Medicine();
+                    medicine.setId(cursor.getInt(0));
+                    medicine.setUuid(cursor.getString(1));
+                    medicine.setName(cursor.getString(2));
+                    medicine.setGenericName(cursor.getString(3));
+                    medicine.setDiagnosis(cursor.getString(4));
+                    medicine.setDescription(cursor.getString(5));
+                    // getDoctor    medicine.setDoctor(cursor.getString(6));
+                    medicine.setExpiration(cursor.getLong(7));
+                    medicine.setType(cursor.getString(8));
+                    medicine.setTotal(cursor.getInt(9));
+                    medicine.setEnabled(cursor.getInt(10)>0);
 
                     medicines.add(medicine);
                     cursor.moveToNext();
@@ -105,6 +143,8 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
                 medicine.setExpiration(cursor.getLong(7));
                 medicine.setType(cursor.getString(8));
                 medicine.setTotal(cursor.getInt(9));
+                medicine.setEnabled(cursor.getInt(10)>0);
+                medicine.setSchedules(this.getAllMedicineSchedule(cursor.getString(1)));
 
             }
             cursor.close();
@@ -139,7 +179,7 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
                 medicine.setExpiration(cursor.getLong(7));
                 medicine.setType(cursor.getString(8));
                 medicine.setTotal(cursor.getInt(9));
-
+                medicine.setSchedules(this.getAllMedicineSchedule(uuid));
             }
             cursor.close();
             db.close();
@@ -171,9 +211,14 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
             values.put(KEY_EXPIRATION, medicine.getExpiration());
             values.put(KEY_TYPE, medicine.getType());
             values.put(KEY_TOTAL, medicine.getTotal());
+            values.put(KEY_ENABLED, medicine.isEnabled()?1:0);
+
             long id = db.insert(TABLE_MEDICINE, null, values);
             db.close();
             Log.d(TAG, "NEW MEDICINE IS CREATED W/ AN ID: " + id);
+            if(medicine.getSchedules()!=null&&! medicine.getSchedules().isEmpty()){
+                medicine.getSchedules().forEach(string ->this.createMedicineSchedule(medicine.getUuid(),string));
+            }
             return id > 0;
         } catch (Exception e) {
             Log.d(TAG, ERROR + e);
@@ -198,9 +243,17 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
             values.put(KEY_TYPE, medicine.getType());
 
             values.put(KEY_TOTAL, medicine.getTotal());
+            values.put(KEY_ENABLED, medicine.isEnabled()?1:0);
             long id = db.update(TABLE_MEDICINE, values, KEY_ID + "= '" + medicine.getId() + "'", null);
             db.close();
             Log.d(TAG, " MEDICINE IS UPDATED WITH AN ID: " + id);
+            if(medicine.getSchedules()!=null&&! medicine.getSchedules().isEmpty()){
+                SQLiteDatabase db1 = this.getWritableDatabase();
+
+                db1.delete(TABLE_MEDICINE_SCHEDULE, KEY_MEDICINE_UUID + "= '" + medicine.getUuid() + "'", null);
+                db1.close();
+                medicine.getSchedules().forEach(string ->this.createMedicineSchedule(medicine.getUuid(),string));
+            }
             return id > 0;
         } catch (Exception e) {
             Log.d(TAG, ERROR + e.getMessage());
@@ -222,5 +275,49 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
         }
     }
 
+    public void createMedicineSchedule(String medicineUuid, String schedule) {
 
+        try {
+            Log.d(TAG, "medicine: " + medicineUuid + " & schedule: " + schedule);
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_MEDICINE_UUID, medicineUuid);
+            values.put(KEY_SCHEDULE, schedule);
+
+            long id = db.insert(TABLE_MEDICINE_SCHEDULE, null, values);
+            db.close();
+            Log.d(TAG, "NEW MEDICINE_SCHEDULE IS CREATED W/ AN ID: " + id);
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
+        }
+    }
+
+    public List<String> getAllMedicineSchedule(String medicineUuid) {
+
+        try {
+            List<String> stringList = new LinkedList<>();
+            String selectQuery = "SELECT  * FROM " + TABLE_MEDICINE_SCHEDULE + " where " + KEY_MEDICINE_UUID + "='" + medicineUuid + "' order by " + KEY_ID + " asc";
+
+            Log.d(TAG, "selectQuery: " + selectQuery);
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            if (cursor.moveToFirst()) {
+                while (!cursor.isAfterLast()) {
+                    Log.d(TAG, "get medicines uuid: " + cursor.getString(2));
+
+                    stringList.add(cursor.getString(1));
+                    cursor.moveToNext();
+                }
+            }
+            cursor.close();
+            db.close();
+            Log.d(TAG, "Fetching medicine schedule from database: " + stringList);
+            return stringList;
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+            return null;
+        }
+
+    }
 }

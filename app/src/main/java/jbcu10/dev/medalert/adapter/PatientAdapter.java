@@ -10,17 +10,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.PatientActivity;
 import jbcu10.dev.medalert.config.AppController;
+import jbcu10.dev.medalert.db.PatientRepository;
 import jbcu10.dev.medalert.model.Patient;
 
 public class PatientAdapter extends ArrayAdapter<Patient> {
 
     private final LayoutInflater mLayoutInflater;
+    PatientRepository patientRepository;
 
     public PatientAdapter(final Context context, final int textViewResourceId, final int imageViewResourceId) {
         super(context, textViewResourceId, imageViewResourceId);
@@ -39,6 +42,8 @@ public class PatientAdapter extends ArrayAdapter<Patient> {
             viewHolder.txt_contact_number = convertView.findViewById(R.id.txt_contact_number);
             viewHolder.txt_email = convertView.findViewById(R.id.txt_email);
             viewHolder.image_gender = convertView.findViewById(R.id.image_gender);
+            viewHolder.ch_enabled = convertView.findViewById(R.id.ch_enabled);
+
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -50,7 +55,8 @@ public class PatientAdapter extends ArrayAdapter<Patient> {
         viewHolder.txt_contact_number.setText(patient.getContactNumber());
         viewHolder.txt_email.setText(patient.getEmail());
         viewHolder.txt_gender.setText(patient.getGender());
-
+        viewHolder.ch_enabled.setChecked(patient.isEnabled());
+        Activity activity = (Activity) getContext();
         convertView.setOnClickListener(view -> {
                     try {
 
@@ -58,13 +64,21 @@ public class PatientAdapter extends ArrayAdapter<Patient> {
                         appController.setPatientId(patient.getId());
                         Intent intent = new Intent(getContext(), PatientActivity.class);
                         getContext().startActivity(intent);
-                        Activity activity = (Activity) getContext();
                         activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                     } catch (Exception e) {
                         Log.d("Error", e.getMessage());
                     }
                 }
         );
+        patientRepository = new PatientRepository(activity);
+        viewHolder.ch_enabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                patient.setEnabled(true);
+            } if (!isChecked){
+                patient.setEnabled(false);
+            }
+            patientRepository.update(patient);
+        });
 
         return convertView;
     }
@@ -80,6 +94,7 @@ public class PatientAdapter extends ArrayAdapter<Patient> {
     static class ViewHolder {
         TextView txt_name, txt_gender, txt_contact_number, txt_email;
         ImageView image_gender;
+        CheckBox ch_enabled;
 
     }
 

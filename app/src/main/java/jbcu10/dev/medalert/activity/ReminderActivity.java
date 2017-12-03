@@ -12,6 +12,8 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,16 +21,21 @@ import butterknife.BindView;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.MedicineRepository;
+import jbcu10.dev.medalert.db.PatientRepository;
 import jbcu10.dev.medalert.db.ReminderRepository;
 import jbcu10.dev.medalert.model.Medicine;
+import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Reminder;
 
 public class ReminderActivity extends AppCompatActivity {
     public MedicineRepository medicineRepository;
     public ReminderRepository reminderRepository;
+    public PatientRepository patientRepository;
     Reminder reminder = null;
+    Patient patient = null;
     LinearLayout ll_alarm_handler, ll_medicine_handler;
     EditText edit_description;
+    TextView txt_patient;
     @BindView(R.id.button_submit)
     Button button_submit;
     ArrayList<String> strings = new ArrayList<>();
@@ -39,6 +46,7 @@ public class ReminderActivity extends AppCompatActivity {
         setContentView(R.layout.activity_reminder);
         medicineRepository = new MedicineRepository(this);
         reminderRepository = new ReminderRepository(this);
+        patientRepository = new PatientRepository(this);
         initializedViews();
         AppController appController = AppController.getInstance();
         reminder = reminderRepository.getById(appController.getReminderId());
@@ -88,6 +96,11 @@ public class ReminderActivity extends AppCompatActivity {
                             LinearLayout.LayoutParams.WRAP_CONTENT));
             ll_alarm_handler.addView(txtAlarm);
         }
+
+        patient = patientRepository.getReminderPatientByReminderUuid(reminder.getUuid());
+        if(patient!=null){
+            txt_patient.setText(patient.toString());
+        }
     }
 
     @Override
@@ -122,5 +135,6 @@ public class ReminderActivity extends AppCompatActivity {
         ll_alarm_handler = findViewById(R.id.ll_alarm_handler);
         ll_medicine_handler = findViewById(R.id.ll_medicine_handler);
         edit_description = findViewById(R.id.edit_description);
+        txt_patient = findViewById(R.id.txt_patient);
     }
 }

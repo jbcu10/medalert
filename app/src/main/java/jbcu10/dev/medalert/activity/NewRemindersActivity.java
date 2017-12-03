@@ -66,7 +66,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         reminderRepository = new ReminderRepository(this);
         spinner = findViewById(R.id.spinner);
         ArrayList<Patient> patients = new ArrayList<>();
-        List<Patient> patientsList = patientRepository.getAll();
+        List<Patient> patientsList = patientRepository.getAllEnabledPatient();
 
         if (patientsList == null) {
             addPatient(this, "Create new Patient?");
@@ -96,7 +96,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         }
 
 
-        List<Medicine> medicines = medicineRepository.getAll();
+        List<Medicine> medicines = medicineRepository.getAllEnabledMedicine();
         if (patientsList != null && medicines == null) {
             addMedicine(this, "It seems that you don't have any medicine. Create a medicine to continue.");
         }

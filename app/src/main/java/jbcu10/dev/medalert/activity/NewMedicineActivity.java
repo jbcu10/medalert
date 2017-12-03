@@ -14,8 +14,13 @@ import com.fourmob.datetimepicker.date.DatePickerDialog;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -34,6 +39,8 @@ public class NewMedicineActivity extends BaseActivity implements DatePickerDialo
     EditText edit_expiration;
     @BindView(R.id.edit_type)
     EditText edit_type;
+    @BindView(R.id.edit_schedule)
+    EditText edit_schedule;
     @BindView(R.id.edit_name)
     EditText edit_name;
     @BindView(R.id.edit_generic_name)
@@ -93,6 +100,28 @@ public class NewMedicineActivity extends BaseActivity implements DatePickerDialo
                 .show();
 
     }
+    @OnClick(R.id.edit_schedule)
+    public void onClickEditSchedule(View view) {
+
+        new MaterialDialog.Builder(this)
+                .title("Select Schedule")
+                .items(R.array.schedule)
+                .itemsCallbackMultiChoice(null, (dialog, which, text) -> {
+
+                    StringBuffer stringBuffer = new StringBuffer();
+                    for (int i = 0; i < text.length; i++) {
+                        stringBuffer.append(text[i]);
+                        if(i!=text.length-1){
+                            stringBuffer.append(", ");
+                        }
+                    }
+                    edit_schedule.setText(stringBuffer);
+                    return true;
+                })
+                .positiveText("Choose")
+                .show();
+
+    }
 
     @OnClick(R.id.button_submit)
     public void onClickButtonSubmit(View view) {
@@ -119,7 +148,7 @@ public class NewMedicineActivity extends BaseActivity implements DatePickerDialo
 
                     try {
                         String uuid = UUID.randomUUID().toString();
-                        boolean isCreated = medicineRepository.create(new Medicine(uuid, edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString()));
+                        boolean isCreated = medicineRepository.create(new Medicine(uuid, edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(),true,getSchedule()));
 
                         if (isCreated) {
                             Intent intent = new Intent(NewMedicineActivity.this, MedicineActivity.class);
@@ -157,6 +186,13 @@ public class NewMedicineActivity extends BaseActivity implements DatePickerDialo
         edit_expiration.setText(sday + "-" + smonth + "-" + year);
     }
 
+    public List<String> getSchedule(){
+        String[] schedules = edit_schedule.getText().toString().split(", ");
+        List<String> scheduleString = new LinkedList<>();
+        scheduleString.addAll(Arrays.asList(schedules));
+        return scheduleString;
+
+    }
 
     public void initializedViews() {
         edit_expiration = findViewById(R.id.edit_expiration);
@@ -166,6 +202,7 @@ public class NewMedicineActivity extends BaseActivity implements DatePickerDialo
         edit_description = findViewById(R.id.edit_description);
         edit_diagnosis = findViewById(R.id.edit_diagnosis);
         edit_total = findViewById(R.id.edit_total);
+        edit_schedule = findViewById(R.id.edit_schedule);
 
     }
 }

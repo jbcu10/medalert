@@ -6,7 +6,8 @@ package jbcu10.dev.medalert.model;
 
 public class Patient extends Person {
 
-    public Patient(String uuid, String firstName, String middleName, String lastName, String contactNumber, String email, String gender) {
+    private boolean enabled;
+    public Patient(String uuid, String firstName, String middleName, String lastName, String contactNumber, String email, String gender,boolean enabled) {
         this.uuid = uuid;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -14,6 +15,7 @@ public class Patient extends Person {
         this.contactNumber = contactNumber;
         this.email = email;
         this.gender = gender;
+        this.enabled = enabled;
     }
 
     public Patient(int id, String uuid, String firstName, String middleName, String lastName, String contactNumber, String email, String gender) {
@@ -25,10 +27,19 @@ public class Patient extends Person {
         this.contactNumber = contactNumber;
         this.email = email;
         this.gender = gender;
+
     }
 
     public Patient() {
 
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     @Override

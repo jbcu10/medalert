@@ -14,8 +14,14 @@ import com.fourmob.datetimepicker.date.DatePickerDialog;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -47,6 +53,8 @@ public class EditMedicineActivity extends BaseActivity implements DatePickerDial
     EditText edit_total;
     @BindView(R.id.button_submit)
     Button button_submit;
+    @BindView(R.id.edit_schedule)
+    EditText edit_schedule;
     Calendar calendar;
     DatePickerDialog datePickerDialog;
     Medicine medicine = null;
@@ -84,6 +92,18 @@ public class EditMedicineActivity extends BaseActivity implements DatePickerDial
         edit_expiration.setText(df.format(date));
         edit_type.setText(medicine.getType());
         edit_total.setText(String.valueOf(medicine.getTotal()));
+        StringBuffer stringBuffer = new StringBuffer();
+        if( medicine.getSchedules()!=null) {
+            List<String> strings = new LinkedList<>();
+            strings.addAll(medicine.getSchedules());
+            for (int a = 0 ; a<strings.size();a++) {
+                stringBuffer.append(strings.get(a));
+                if(a!=strings.size()-1){
+                    stringBuffer.append(", ");
+                }
+            }
+            edit_schedule.setText(stringBuffer);
+        }
 
     }
 
@@ -126,6 +146,7 @@ public class EditMedicineActivity extends BaseActivity implements DatePickerDial
         edit_description = findViewById(R.id.edit_description);
         edit_diagnosis = findViewById(R.id.edit_diagnosis);
         edit_total = findViewById(R.id.edit_total);
+        edit_schedule = findViewById(R.id.edit_schedule);
 
     }
 
@@ -153,7 +174,7 @@ public class EditMedicineActivity extends BaseActivity implements DatePickerDial
 
 
                     try {
-                        boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(), UUID.randomUUID().toString(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString()));
+                        boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(), UUID.randomUUID().toString(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(),getSchedule()));
 
                         if (isCreated) {
                             Intent intent = new Intent(EditMedicineActivity.this, HomeActivity.class);
@@ -179,6 +200,34 @@ public class EditMedicineActivity extends BaseActivity implements DatePickerDial
     public void onPause() {
         super.onPause();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+    @OnClick(R.id.edit_schedule)
+    public void onClickEditSchedule(View view) {
+
+        new MaterialDialog.Builder(this)
+                .title("Select Schedule")
+                .items(R.array.schedule)
+                .itemsCallbackMultiChoice(null, (dialog, which, text) -> {
+
+                    StringBuffer stringBuffer = new StringBuffer();
+                    for (int i = 0; i < text.length; i++) {
+                        stringBuffer.append(text[i]);
+                        if(i!=text.length-1){
+                            stringBuffer.append(", ");
+                        }
+                    }
+                    edit_schedule.setText(stringBuffer);
+                    return true;
+                })
+                .positiveText("Choose")
+                .show();
+
+    }
+    public List<String> getSchedule(){
+        String[] schedules = edit_schedule.getText().toString().split(", ");
+        List<String> scheduleString = new LinkedList<>();
+        scheduleString.addAll(Arrays.asList(schedules));
+        return scheduleString;
 
     }
 }
