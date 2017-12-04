@@ -127,8 +127,6 @@ public class HomeActivity extends BaseActivity
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_new, fragment);
             ft.commit();
-        } else if (id == R.id.nav_share) {
-
         } else if (id == R.id.nav_exit) {
             exitApplication(this);
         }

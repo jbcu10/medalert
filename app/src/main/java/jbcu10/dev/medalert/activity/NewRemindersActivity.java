@@ -5,6 +5,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
@@ -63,7 +64,6 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
     Patient patient;
     private AlarmReceiver alarm;
     AlarmManager alarmManager;
-    private PendingIntent pending_intent;
 
     Context context;
     @Override
@@ -198,7 +198,10 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         final String time = shourOfDay + ":" + sMinute;
 
 
-        boolean match = timeStrings.stream().anyMatch(time::contains);
+        boolean match = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            match = timeStrings.stream().anyMatch(time::contains);
+        }
         if (match) {
             Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
         }
@@ -283,12 +286,9 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
     public void setAlarmFromTimer( Reminder reminder) {
         final Calendar calendar = Calendar.getInstance();
         final Intent myIntent = new Intent(this.context, AlarmReceiver.class);
-
+            int a =0;
         for(String time:timeStrings) {
             String[] timeArray= time.split(":");
-            calendar.add(Calendar.SECOND, 3);
-            //setAlarmText("You clicked a button");
-
             final int hour = Integer.parseInt(timeArray[0]);
             final int minute =  Integer.parseInt(timeArray[1]);
 
@@ -300,10 +300,10 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
             myIntent.putExtra("title", "Reminder for - "+ reminder.getPatient().getFirstName());
             myIntent.putExtra("content", reminder.getDescription());
             myIntent.putExtra("uuid", reminder.getUuid());
-            pending_intent = PendingIntent.getBroadcast(NewRemindersActivity.this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pending_intent = PendingIntent.getBroadcast(NewRemindersActivity.this, a, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
-
+            a++;
         }
     }
     public StringBuffer getSchedule(List<String> schedules) {

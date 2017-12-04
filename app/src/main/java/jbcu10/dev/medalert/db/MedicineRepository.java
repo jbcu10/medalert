@@ -218,7 +218,9 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
             db.close();
             Log.d(TAG, "NEW MEDICINE IS CREATED W/ AN ID: " + id);
             if(medicine.getSchedules()!=null&&! medicine.getSchedules().isEmpty()){
-                medicine.getSchedules().forEach(string ->this.createMedicineSchedule(medicine.getUuid(),string));
+                for (String string : medicine.getSchedules()) {
+                    this.createMedicineSchedule(medicine.getUuid(), string);
+                }
             }
             return id > 0;
         } catch (Exception e) {
@@ -253,7 +255,9 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
 
                 db1.delete(TABLE_MEDICINE_SCHEDULE, KEY_MEDICINE_UUID + "= '" + medicine.getUuid() + "'", null);
                 db1.close();
-                medicine.getSchedules().forEach(string ->this.createMedicineSchedule(medicine.getUuid(),string));
+                for (String string : medicine.getSchedules()) {
+                    this.createMedicineSchedule(medicine.getUuid(), string);
+                }
             }
             return id > 0;
         } catch (Exception e) {

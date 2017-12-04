@@ -92,9 +92,6 @@ public class RingtonePlayingService extends Service {
 
 
 
-        if(!this.isRunning ) {
-            Log.e("if there was not sound ", " and you want start");
-
 
            mMediaPlayer = MediaPlayer.create(this, R.raw.alarm);
 
@@ -104,18 +101,6 @@ public class RingtonePlayingService extends Service {
             mNM.notify(0, mNotify);
 
             this.isRunning = true;
-
-
-        }
-        else {
-            Log.e("if there is sound ", " and you want end");
-
-            mMediaPlayer.stop();
-            mMediaPlayer.reset();
-
-            this.isRunning = false;
-            this.startId = 0;
-        }
 
             Log.e("MyActivity", "In the service");
         if(relatives!=null) {
