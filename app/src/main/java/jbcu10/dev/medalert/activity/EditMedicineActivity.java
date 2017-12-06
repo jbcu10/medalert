@@ -2,12 +2,14 @@ package jbcu10.dev.medalert.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
@@ -157,40 +159,40 @@ public class EditMedicineActivity extends BaseActivity implements DatePickerDial
                 .content("Are you sure you want save this items?")
                 .positiveText("Save")
                 .negativeText("Cancel")
-                .onPositive((dialog, which) -> {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                    String expirationDateString = edit_expiration.getText().toString();
-                    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-                    Date expirationDate;
-                    long milliseconds = 0;
-                    try {
-                        expirationDate = df.parse(expirationDateString);
-                        milliseconds = expirationDate.getTime();
+                        String expirationDateString = edit_expiration.getText().toString();
+                        DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+                        Date expirationDate;
+                        long milliseconds = 0;
+                        try {
+                            expirationDate = df.parse(expirationDateString);
+                            milliseconds = expirationDate.getTime();
 
-                    } catch (ParseException e) {
-                        Log.d("Error", e.getMessage());
-                    }
-
-
-                    try {
-                        boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(),medicine.getUuid(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(),getSchedule()));
-
-                        if (isCreated) {
-                            Intent intent = new Intent(EditMedicineActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                        if (!isCreated) {
-                            Snackbar.make(findViewById(android.R.id.content), "Failed to Save Medicine!", Snackbar.LENGTH_LONG).show();
+                        } catch (ParseException e) {
+                            Log.d("Error", e.getMessage());
                         }
 
-                    } catch (Exception e) {
-                        Log.d("Error", e.getMessage());
+
+                        try {
+                            boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(), medicine.getUuid(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(), getSchedule()));
+
+                            if (isCreated) {
+                                Intent intent = new Intent(EditMedicineActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                            }
+                            if (!isCreated) {
+                                Snackbar.make(findViewById(android.R.id.content), "Failed to Save Medicine!", Snackbar.LENGTH_LONG).show();
+                            }
+
+                        } catch (Exception e) {
+                            Log.d("Error", e.getMessage());
+                        }
                     }
 
-
-                })
-                .onNegative((dialog, which) -> {
                 }).show();
 
     }
@@ -206,17 +208,19 @@ public class EditMedicineActivity extends BaseActivity implements DatePickerDial
         new MaterialDialog.Builder(this)
                 .title("Select Schedule")
                 .items(R.array.schedule)
-                .itemsCallbackMultiChoice(null, (dialog, which, text) -> {
-
-                    StringBuffer stringBuffer = new StringBuffer();
-                    for (int i = 0; i < text.length; i++) {
-                        stringBuffer.append(text[i]);
-                        if(i!=text.length-1){
-                            stringBuffer.append(", ");
+                .itemsCallbackMultiChoice(null, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                        StringBuffer stringBuffer = new StringBuffer();
+                        for (int i = 0; i < text.length; i++) {
+                            stringBuffer.append(text[i]);
+                            if(i!=text.length-1){
+                                stringBuffer.append(", ");
+                            }
                         }
+                        edit_schedule.setText(stringBuffer);
+                        return true;
                     }
-                    edit_schedule.setText(stringBuffer);
-                    return true;
                 })
                 .positiveText("Choose")
                 .show();

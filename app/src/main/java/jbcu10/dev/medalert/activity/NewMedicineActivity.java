@@ -2,12 +2,14 @@ package jbcu10.dev.medalert.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
@@ -131,7 +133,9 @@ public class NewMedicineActivity extends BaseActivity implements DatePickerDialo
                 .content("Are you sure you want save this items?")
                 .positiveText("Save")
                 .negativeText("Cancel")
-                .onPositive((dialog, which) -> {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                     String expirationDateString = edit_expiration.getText().toString();
                     DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -148,7 +152,7 @@ public class NewMedicineActivity extends BaseActivity implements DatePickerDialo
 
                     try {
                         String uuid = UUID.randomUUID().toString();
-                        boolean isCreated = medicineRepository.create(new Medicine(uuid, edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(),true,getSchedule()));
+                        boolean isCreated = medicineRepository.create(new Medicine(uuid, edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(), true, getSchedule()));
 
                         if (isCreated) {
                             Intent intent = new Intent(NewMedicineActivity.this, MedicineActivity.class);
@@ -165,9 +169,7 @@ public class NewMedicineActivity extends BaseActivity implements DatePickerDialo
                         Log.d("Error", e.getMessage());
                     }
 
-
-                })
-                .onNegative((dialog, which) -> {
+                }
                 }).show();
 
     }

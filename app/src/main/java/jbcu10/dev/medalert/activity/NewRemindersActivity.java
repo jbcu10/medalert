@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
 import com.sleepbot.datetimepicker.time.TimePickerDialog;
@@ -253,33 +255,33 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
                 .content("Are you sure you want save this items?")
                 .positiveText("Save")
                 .negativeText("Cancel")
-                .onPositive((dialog, which) -> {
-                    try {
-                        Reminder reminder = setReminder();
-                        Log.d("Reminder", reminder.getPatient().getUuid());
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        try {
+                            Reminder reminder = setReminder();
+                            Log.d("Reminder", reminder.getPatient().getUuid());
 
-                        boolean isCreated = reminderRepository.create(reminder);
+                            boolean isCreated = reminderRepository.create(reminder);
 
-                        if (isCreated) {
-                            setAlarmFromTimer(reminder);
-                            Intent intent = new Intent(NewRemindersActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-                        }
-                        if (!isCreated) {
+                            if (isCreated) {
+                                setAlarmFromTimer(reminder);
+                                Intent intent = new Intent(NewRemindersActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                            }
+                            if (!isCreated) {
+                                Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Log.d("Error", e.getMessage());
                             Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
+
+
                         }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.d("Error", e.getMessage());
-                        Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
-
-
                     }
-                })
-                .onNegative((dialog, which) -> {
-                })
-                .show();
+                }).show();
 
     }
 

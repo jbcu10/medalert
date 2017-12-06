@@ -2,8 +2,10 @@ package jbcu10.dev.medalert.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import jbcu10.dev.medalert.R;
@@ -25,16 +27,17 @@ public class BaseActivity extends AppCompatActivity {
                 .title("Exit Application")
                 .content("Are you sure you want to Exit?")
                 .positiveText("Exit")
-                .onPositive((dialog, which) -> {
-                    Intent startMain = new Intent(Intent.ACTION_MAIN);
-                    startMain.addCategory(Intent.CATEGORY_HOME);
-                    startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(startMain);
-                    finish();
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        Intent startMain = new Intent(Intent.ACTION_MAIN);
+                        startMain.addCategory(Intent.CATEGORY_HOME);
+                        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(startMain);
+                        finish();
+                    }
                 }).negativeText("Cancel")
-                .onNegative((dialog, which) -> {
-                    // Do nothing here
-                })
                 .show();
     }
 
@@ -43,16 +46,15 @@ public class BaseActivity extends AppCompatActivity {
                 .title("Add Medicine")
                 .content(contentMedicine)
                 .positiveText("Create")
-                .onPositive((dialog, which) -> {
-                    Intent intent = new Intent(activity, NewMedicineActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                }).negativeText("Cancel")
-                .onNegative((dialog, which) -> {
-                    Intent intent = new Intent(activity, HomeActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+
+                        Intent intent = new Intent(activity, NewMedicineActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
                 })
                 .cancelable(false)
                 .show();
@@ -64,16 +66,24 @@ public class BaseActivity extends AppCompatActivity {
                 .title("Add Patient")
                 .content(contentPatient)
                 .positiveText("Create")
-                .onPositive((dialog, which) -> {
-                    Intent intent = new Intent(activity, NewPatientActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
+
+                        Intent intent = new Intent(activity, NewPatientActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
                 }).negativeText("Cancel")
-                .onNegative((dialog, which) -> {
-                    Intent intent = new Intent(activity, HomeActivity.class);
-                    startActivity(intent);
-                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                        Intent intent = new Intent(activity, HomeActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                    }
                 })
                 .cancelable(false)
                 .show();

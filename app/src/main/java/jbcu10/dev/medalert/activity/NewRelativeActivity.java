@@ -2,12 +2,14 @@ package jbcu10.dev.medalert.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.util.UUID;
@@ -87,7 +89,9 @@ public class NewRelativeActivity extends BaseActivity {
                 .content("Are you sure you want save this items?")
                 .positiveText("Save")
                 .negativeText("Cancel")
-                .onPositive((dialog, which) -> {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                     try {
                         String uuid = UUID.randomUUID().toString();
                         boolean isCreated = relativeRepository.createPatientRelative(PatientActivity.patientUuid, new Relative(uuid,
@@ -109,11 +113,9 @@ public class NewRelativeActivity extends BaseActivity {
                     } catch (Exception e) {
                         Log.d("Error", e.getMessage());
                     }
+                }
 
-
-                })
-                .onNegative((dialog, which) -> {
-                }).show();
+                }) .show();
 
     }
 

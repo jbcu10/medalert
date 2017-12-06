@@ -2,6 +2,7 @@ package jbcu10.dev.medalert.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
@@ -9,6 +10,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import java.text.DateFormat;
@@ -104,7 +106,7 @@ public class MedicineActivity extends BaseActivity {
                 .content("Are you sure you want delete this items?")
                 .positiveText("Delete")
                 .negativeText("Cancel")
-                .onPositive((dialog, which) -> {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {                    @Override                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
                     try {
                         boolean isDeleted = medicineRepository.deleteById(medicine.getId());
@@ -124,8 +126,7 @@ public class MedicineActivity extends BaseActivity {
                     }
 
 
-                })
-                .onNegative((dialog, which) -> {
+                }
                 }).show();
 
 
