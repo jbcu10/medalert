@@ -22,15 +22,19 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
+/*
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
-import com.sleepbot.datetimepicker.time.TimePickerDialog;
+import com.sleepbot.datetimepicker.time.TimePickerDialog;*/
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -39,7 +43,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.db.PatientRepository;
 import jbcu10.dev.medalert.db.ReminderRepository;
@@ -47,7 +50,6 @@ import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Reminder;
 import jbcu10.dev.medalert.notification.AlarmReceiver;
-import jbcu10.dev.medalert.notification.NotificationHelper;
 
 public class NewRemindersActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
     public static final String TIMEPICKER_TAG = "Time Picker";
@@ -117,9 +119,9 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
             addMedicine(this, "It seems that you don't have any medicine. Create a medicine to continue.");
         }
         Calendar calendar = Calendar.getInstance();
-        timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true, false);
+        timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), false);
         if (patientsList != null && medicines != null) {
-            timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
+            timePickerDialog.show(getFragmentManager(), TIMEPICKER_TAG);
             for (Medicine medicine : medicines) {
                 final CheckBox checkBoxMedicine = new CheckBox(this);
                 checkBoxMedicine.setText(medicine.getName());
@@ -187,7 +189,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
 
     }
 
-    @Override
+   /* @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
         String sMinute = minute + "";
         String shourOfDay = hourOfDay + "";
@@ -222,7 +224,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
 
 
     }
-
+*/
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -236,7 +238,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         switch (item.getItemId()) {
 
             case R.id.add_alarm:
-                timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
+                timePickerDialog.show(getFragmentManager(), TIMEPICKER_TAG);
 
                 return true;
             case R.id.add_medicine:
@@ -302,9 +304,16 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
             myIntent.putExtra("title", "Reminder for - "+ reminder.getPatient().getFirstName());
             myIntent.putExtra("content", reminder.getDescription());
             myIntent.putExtra("uuid", reminder.getUuid());
-            PendingIntent pending_intent = PendingIntent.getBroadcast(NewRemindersActivity.this, a, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
 
+            Log.d("time", String.valueOf(new Date(calendar.getTimeInMillis())));
+            PendingIntent pending_intent = PendingIntent.getBroadcast(NewRemindersActivity.this, a, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            if(Build.VERSION.SDK_INT >= 19) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+
+            }
             a++;
         }
     }
@@ -317,5 +326,34 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
             }
         }
             return stringBuffer;
+    }
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        String hourString = hourOfDay < 10 ? "0"+hourOfDay : ""+hourOfDay;
+        String minuteString = minute < 10 ? "0"+minute : ""+minute;
+        //String secondString = second < 10 ? "0"+second : ""+second;
+        final String time = hourString + ":" + minuteString;
+
+
+        boolean match = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            match = timeStrings.stream().anyMatch(time::contains);
+        }
+        if (match) {
+            Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
+        }
+        if (!match) {
+            timeStrings.add(time);
+            TextView txtAlarm = new TextView(this);
+            txtAlarm.setText(time);
+            txtAlarm.setId(a++);
+            txtAlarm.setTextColor(Color.BLACK);
+            txtAlarm.setLayoutParams(
+                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT));
+            ll_alarm_handler.addView(txtAlarm);
+
+        }
     }
 }
