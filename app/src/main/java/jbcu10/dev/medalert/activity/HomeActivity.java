@@ -12,8 +12,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.config.AppController;
+import jbcu10.dev.medalert.activity.helper.BaseActivity;
 import jbcu10.dev.medalert.fragments.FirstAidFragments;
+import jbcu10.dev.medalert.fragments.MapFragments;
 import jbcu10.dev.medalert.fragments.MedicineFragments;
 import jbcu10.dev.medalert.fragments.PatientFragments;
 import jbcu10.dev.medalert.fragments.ReminderFragments;
@@ -127,9 +128,13 @@ public class HomeActivity extends BaseActivity
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_new, fragment);
             ft.commit();
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_exit) {
+        }
+        else if (id == R.id.map) {
+            fragment = new MapFragments();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_new, fragment);
+            ft.commit();
+        }else if (id == R.id.nav_exit) {
             exitApplication(this);
         }
 

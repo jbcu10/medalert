@@ -55,7 +55,15 @@ public class MedicineAdapter extends ArrayAdapter<Medicine> {
         }
         final Medicine medicine = getItem(position);
         if (medicine.getType() != null && medicine.getType().equals("Tablet")) {
-            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.pill));
+            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_lozenge));
+        }
+        if (medicine.getType() != null && medicine.getType().equals("Injectible")) {
+            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_syringe));
+        }
+        if (medicine.getType() != null && medicine.getType().equals("Capsule")) {
+            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pill));
+        }if (medicine.getType() != null && medicine.getType().equals("Ointment")) {
+            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_ointment));
         }
         viewHolder.txt_name.setText(medicine.getName());
         viewHolder.txt_diagnosis.setText(medicine.getDiagnosis());

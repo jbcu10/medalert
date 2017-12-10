@@ -41,6 +41,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_TOTAL = "total";
     protected static final String KEY_EXPIRATION = "expiration";
     protected static final String KEY_TYPE = "type";
+    protected static final String KEY_DOSAGE = "dosage";
 
     //person
     protected static final String KEY_FIRST_NAME = "firstName";
@@ -61,8 +62,6 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_PATIENT_UUID = "patient_uuid";
     protected static final String KEY_RELATIVE_UUID = "relative_uuid";
     protected static final String KEY_TIME = "time";
-    protected static final String KEY_SCHEDULE = "schedule";
-
     protected static final String KEY_ENABLED = "enabled";
 
 
@@ -83,7 +82,6 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
         this.createPatientTable(db);
         this.createPatientRelativeTable(db);
         this.createReminderPatient(db);
-        this.createMedicineSchedule(db);
 
     }
 
@@ -109,8 +107,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
         try {
 
             Log.d(TAG, "CREATING TABLE_MEDICINE...");
-            String createMedicinesTable = "CREATE TABLE " +
-                    TABLE_MEDICINE + "("
+            String createMedicinesTable = "CREATE TABLE " + TABLE_MEDICINE + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_UUID + TEXT
                     + KEY_NAME + TEXT
@@ -120,11 +117,11 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_DOCTOR_ID + TEXT
                     + KEY_EXPIRATION + TEXT
                     + KEY_TYPE + " INTEGER,"
-
                     + KEY_TOTAL + " INTEGER,"
-                    + KEY_ENABLED + " INTEGER" + ")";
+                    + KEY_ENABLED + " INTEGER,"
+                    + KEY_DOSAGE +  " TEXT)";
             db.execSQL(createMedicinesTable);
-            Log.d(TAG, "TABLE_MEDICINE IS CREATED ...");
+            Log.d(TAG, "TABLE_MEDICINE IS CREATED  - " + createMedicinesTable);
 
         } catch (Exception e) {
             Log.d(TAG, "ERROR --------------- " + e.getMessage());
@@ -306,21 +303,6 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
         }
     }
 
-    private void createMedicineSchedule(SQLiteDatabase db) {
-        try {
 
-            Log.d(TAG, "CREATING TABLE_MEDICINE_SCHEDULE...");
-            String createMedicineSchedule = "CREATE TABLE " +
-                    TABLE_MEDICINE_SCHEDULE + "("
-                    + KEY_ID + " INTEGER PRIMARY KEY,"
-                    + KEY_SCHEDULE + TEXT
-                    + KEY_MEDICINE_UUID + " TEXT" + ")";
-            db.execSQL(createMedicineSchedule);
-            Log.d(TAG, "TABLE_REMINDER_PATIENT IS CREATED ...");
-
-        } catch (Exception e) {
-            Log.d(TAG, "ERROR --------------- " + e.getMessage());
-        }
-    }
 
 }

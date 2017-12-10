@@ -3,6 +3,7 @@ package jbcu10.dev.medalert.activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
@@ -11,13 +12,14 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.ButterKnife;
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.activity.helper.BaseActivity;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.RelativeRepository;
-import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Relative;
 
 public class RelativeActivity extends BaseActivity {
@@ -117,28 +119,28 @@ public class RelativeActivity extends BaseActivity {
                 .content("Are you sure you want delete this items?")
                 .positiveText("Delete")
                 .negativeText("Cancel")
-                .onPositive((dialog, which) -> {
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-                    try {
-                        boolean isDeleted = relativeRepository.deleteById(relative.getId());
-                        if (isDeleted) {
-                            Snackbar.make(findViewById(android.R.id.content), "Successfully Deleted Medicine!", Snackbar.LENGTH_LONG).show();
-                            Intent intent = new Intent(RelativeActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                        try {
+                            boolean isDeleted = relativeRepository.deleteById(relative.getId());
+                            if (isDeleted) {
+                                Snackbar.make(findViewById(android.R.id.content), "Successfully Deleted Medicine!", Snackbar.LENGTH_LONG).show();
+                                Intent intent = new Intent(RelativeActivity.this, HomeActivity.class);
+                                startActivity(intent);
+                                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
+                            }
+                            if (!isDeleted) {
+                                Snackbar.make(findViewById(android.R.id.content), "Failed to Delete Medicine!", Snackbar.LENGTH_LONG).show();
+                            }
+
+                        } catch (Exception e) {
+                            Log.d("Error", e.getMessage());
                         }
-                        if (!isDeleted) {
-                            Snackbar.make(findViewById(android.R.id.content), "Failed to Delete Medicine!", Snackbar.LENGTH_LONG).show();
-                        }
-
-                    } catch (Exception e) {
-                        Log.d("Error", e.getMessage());
                     }
 
-
-                })
-                .onNegative((dialog, which) -> {
                 }).show();
 
 

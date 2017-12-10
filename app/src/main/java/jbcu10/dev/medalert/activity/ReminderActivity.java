@@ -127,7 +127,7 @@ public class ReminderActivity extends AppCompatActivity {
         inflater.inflate(R.menu.reminder, menu);
         return true;
     }
-
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
@@ -140,7 +140,7 @@ public class ReminderActivity extends AppCompatActivity {
             default:
                 return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
     public void initializedViews() {
         ll_alarm_handler = findViewById(R.id.ll_alarm_handler);

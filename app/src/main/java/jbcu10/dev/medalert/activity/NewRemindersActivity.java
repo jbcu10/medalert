@@ -5,8 +5,11 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,17 +20,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
-
+/*
+import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.sleepbot.datetimepicker.time.RadialPickerLayout;
-import com.sleepbot.datetimepicker.time.TimePickerDialog;
+import com.sleepbot.datetimepicker.time.TimePickerDialog;*/
+
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -36,7 +46,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.config.AppController;
+import jbcu10.dev.medalert.activity.helper.BaseActivity;
 import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.db.PatientRepository;
 import jbcu10.dev.medalert.db.ReminderRepository;
@@ -44,7 +54,6 @@ import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Reminder;
 import jbcu10.dev.medalert.notification.AlarmReceiver;
-import jbcu10.dev.medalert.notification.NotificationHelper;
 
 public class NewRemindersActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
     public static final String TIMEPICKER_TAG = "Time Picker";
@@ -53,6 +62,9 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
     public PatientRepository patientRepository;
     @BindView(R.id.button_submit_reminder)
     Button button_submit_reminder;
+    @BindView(R.id.button_alarm)
+    ImageButton button_alarm;
+
     LinearLayout ll_alarm_handler, ll_medicine_handler;
     EditText edit_description;
     TimePickerDialog timePickerDialog;
@@ -63,25 +75,19 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
     Patient patient;
     private AlarmReceiver alarm;
     AlarmManager alarmManager;
-    private PendingIntent pending_intent;
 
     Context context;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_reminders);
-        ButterKnife.bind(this);
         initializedViews();
-        this.context = this;
 
 
-        medicineRepository = new MedicineRepository(this);
-        patientRepository = new PatientRepository(this);
-        reminderRepository = new ReminderRepository(this);
-        spinner = findViewById(R.id.spinner);
         ArrayList<Patient> patients = new ArrayList<>();
         List<Patient> patientsList = patientRepository.getAllEnabledPatient();
-        HomeActivity.selectedItem =0;
+        HomeActivity.selectedItem = 0;
         if (patientsList == null) {
             addPatient(this, "Create new Patient?");
         }
@@ -89,7 +95,6 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
             patients.addAll(patientsList);
 
             ArrayAdapter<Patient> patientAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, patients);
-            patientAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item);
             spinner.setAdapter(patientAdapter);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -115,12 +120,12 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
             addMedicine(this, "It seems that you don't have any medicine. Create a medicine to continue.");
         }
         Calendar calendar = Calendar.getInstance();
-        timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), true, false);
+        timePickerDialog = TimePickerDialog.newInstance(this, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), calendar.get(Calendar.SECOND), false);
         if (patientsList != null && medicines != null) {
-            timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
+            timePickerDialog.show(getFragmentManager(), TIMEPICKER_TAG);
             for (Medicine medicine : medicines) {
                 final CheckBox checkBoxMedicine = new CheckBox(this);
-                checkBoxMedicine.setText(medicine.getName());
+                checkBoxMedicine.setText(medicine.getName()+" - "+medicine.getDosage()+" - "+medicine.getTotal());
                 checkBoxMedicine.setId(medicine.getId());
                 checkBoxMedicine.setHint(medicine.getUuid());
                 checkBoxMedicine.setLayoutParams(
@@ -128,12 +133,6 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
                                 LinearLayout.LayoutParams.WRAP_CONTENT));
                 checkBoxMedicine.setOnCheckedChangeListener((buttonView, isChecked) -> {
                     if (isChecked) {
-                        new MaterialDialog.Builder(this)
-                                .title(medicine.getName())
-                                .content(this.getSchedule(medicine.getSchedules()))
-                                .positiveText("Ok")
-                                .show();
-
                         strings.add(checkBoxMedicine.getHint().toString());
                     } else {
                         strings.remove(checkBoxMedicine.getHint().toString());
@@ -152,6 +151,12 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         ll_medicine_handler = findViewById(R.id.ll_medicine_handler);
         edit_description = findViewById(R.id.edit_description);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        medicineRepository = new MedicineRepository(this);
+        patientRepository = new PatientRepository(this);
+        reminderRepository = new ReminderRepository(this);
+        spinner = findViewById(R.id.spinner);
+        this.context = this;
+        ButterKnife.bind(this);
 
     }
 
@@ -159,7 +164,10 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         Reminder reminder = new Reminder();
         reminder.setDescription(edit_description.getText().toString());
         reminder.setUuid(UUID.randomUUID().toString());
-        if (!strings.isEmpty()) {
+
+        if (strings != null || !strings.isEmpty()) {
+            Log.d("medicines", strings.size() + "");
+
             List<Medicine> medicines = new LinkedList<>();
             for (String uuid : strings) {
                 Medicine medicine = medicineRepository.getByUuid(uuid);
@@ -186,39 +194,6 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
     }
 
     @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
-        String sMinute = minute + "";
-        String shourOfDay = hourOfDay + "";
-        if (hourOfDay < 10) {
-            shourOfDay = "0" + hourOfDay;
-        }
-        if (minute < 10) {
-            sMinute = "0" + minute;
-        }
-        final String time = shourOfDay + ":" + sMinute;
-
-
-        boolean match = timeStrings.stream().anyMatch(time::contains);
-        if (match) {
-            Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
-        }
-        if (!match) {
-            timeStrings.add(time);
-            TextView txtAlarm = new TextView(this);
-            txtAlarm.setText(time);
-            txtAlarm.setId(a++);
-            txtAlarm.setTextColor(Color.BLACK);
-            txtAlarm.setLayoutParams(
-                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT));
-            ll_alarm_handler.addView(txtAlarm);
-
-        }
-
-
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.reminder, menu);
@@ -230,10 +205,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         // Handle item selection
         switch (item.getItemId()) {
 
-            case R.id.add_alarm:
-                timePickerDialog.show(getSupportFragmentManager(), TIMEPICKER_TAG);
 
-                return true;
             case R.id.add_medicine:
                 addMedicine(this, "Create New Medicine?");
                 return true;
@@ -242,78 +214,164 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         }
     }
 
+    @OnClick(R.id.button_alarm)
+    public void onClickButtonAlarm(View view) {
+        timePickerDialog.show(getFragmentManager(), TIMEPICKER_TAG);
+    }
+
     @OnClick(R.id.button_submit_reminder)
     public void onClickButtonSubmit(View view) {
+        Reminder reminder = setReminder();
+        Log.d("medicines", reminder.getMedicineList().size() + "");
 
-        new MaterialDialog.Builder(NewRemindersActivity.this)
-                .title("Save Reminder?")
-                .content("Are you sure you want save this items?")
-                .positiveText("Save")
-                .negativeText("Cancel")
-                .onPositive((dialog, which) -> {
-                    try {
-                        Reminder reminder = setReminder();
-                        Log.d("Reminder", reminder.getPatient().getUuid());
+        if (isReminderValid(reminder)) {
 
-                        boolean isCreated = reminderRepository.create(reminder);
+            new MaterialDialog.Builder(NewRemindersActivity.this)
+                    .title("Save Reminder?")
+                    .content("Are you sure you want save this items?")
+                    .positiveText("Save")
+                    .negativeText("Cancel")
+                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        @Override
+                        public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                            try {
+                                boolean isCreated = reminderRepository.create(reminder);
+                                if (isCreated) {
+                                    setAlarmFromTimer(reminder);
+                                    Intent intent = new Intent(NewRemindersActivity.this, HomeActivity.class);
+                                    startActivity(intent);
+                                    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
 
-                        if (isCreated) {
-                            setAlarmFromTimer(reminder);
-                            Intent intent = new Intent(NewRemindersActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+                                    if (!isCreated) {
+                                        Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                Log.d("Error", e.getMessage());
+                                Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
+
+
+                            }
                         }
-                        if (!isCreated) {
-                            Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        Log.d("Error", e.getMessage());
-                        Snackbar.make(findViewById(android.R.id.content), "Failed to Save Reminder!", Snackbar.LENGTH_LONG).show();
-
-
-                    }
-                })
-                .onNegative((dialog, which) -> {
-                })
-                .show();
-
+                    }).show();
+        }
     }
 
-    public void setAlarmFromTimer( Reminder reminder) {
+    private boolean isReminderValid(Reminder reminder) {
+
+        if (reminder.getPatient() == null) {
+            Snackbar.make(findViewById(android.R.id.content), "Please select a patient for reminder!", Snackbar.LENGTH_LONG).show();
+            return false;
+        }
+        if (reminder.getMedicineList() == null || reminder.getMedicineList().isEmpty()) {
+            Snackbar.make(findViewById(android.R.id.content), "Please select a medicine for reminder!", Snackbar.LENGTH_LONG).show();
+            return false;
+
+        }
+        if (reminder.getTime() == null) {
+            Snackbar.make(findViewById(android.R.id.content), "Please add time for reminder!", Snackbar.LENGTH_LONG).show();
+            return false;
+
+        }
+
+        return true;
+    }
+
+
+    public void setAlarmFromTimer(Reminder reminder) {
         final Calendar calendar = Calendar.getInstance();
         final Intent myIntent = new Intent(this.context, AlarmReceiver.class);
+        int i = 0;
+        for (String time : timeStrings) {
+            if(!time.equals("removed")) {
+                String[] timeArray = time.split(":");
+                final int hour = Integer.parseInt(timeArray[0]);
+                final int minute = Integer.parseInt(timeArray[1]);
 
-        for(String time:timeStrings) {
-            String[] timeArray= time.split(":");
-            calendar.add(Calendar.SECOND, 3);
-            //setAlarmText("You clicked a button");
-
-            final int hour = Integer.parseInt(timeArray[0]);
-            final int minute =  Integer.parseInt(timeArray[1]);
-
-            Log.e("MyActivity", "In the receiver with " + hour + " and " + minute);
+                Log.e("MyActivity", "In the receiver with " + hour + " and " + minute);
 
 
-            calendar.set(Calendar.HOUR_OF_DAY, hour);
-            calendar.set(Calendar.MINUTE, minute);
-            myIntent.putExtra("title", "Reminder for - "+ reminder.getPatient().getFirstName());
-            myIntent.putExtra("content", reminder.getDescription());
-            myIntent.putExtra("uuid", reminder.getUuid());
-            pending_intent = PendingIntent.getBroadcast(NewRemindersActivity.this, 0, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                calendar.set(Calendar.HOUR_OF_DAY, hour);
+                calendar.set(Calendar.MINUTE, minute);
+                myIntent.putExtra("title", "Reminder for Patient - " + reminder.getPatient().getFirstName()+" "+reminder.getPatient().getLastName());
+                myIntent.putExtra("content", reminder.getDescription());
+                myIntent.putExtra("uuid", reminder.getUuid());
 
-            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+                Log.d("time", String.valueOf(new Date(calendar.getTimeInMillis())));
+                PendingIntent pending_intent = PendingIntent.getBroadcast(NewRemindersActivity.this, i, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                if (Build.VERSION.SDK_INT >= 19) {
+                    alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+
+                } else {
+                    alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
+
+                }
+                i++;
+            }
+        }
+    }
+
+
+    @Override
+    public void onTimeSet(TimePickerDialog view, int hourOfDay, int minute, int second) {
+        String hourString = hourOfDay < 10 ? "0" + hourOfDay : "" + hourOfDay;
+        String minuteString = minute < 10 ? "0" + minute : "" + minute;
+        //String secondString = second < 10 ? "0"+second : ""+second;
+        final String time = hourString + ":" + minuteString;
+
+
+        boolean match = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            match = timeStrings.stream().anyMatch(time::contains);
+        }
+        if (match) {
+            Snackbar.make(findViewById(android.R.id.content), "Time Already Exist!", Snackbar.LENGTH_LONG).setActionTextColor(Color.RED).show();
+        }
+        if (!match) {
+            timeStrings.add(time);
+            setTimeView(time);
 
         }
     }
-    public StringBuffer getSchedule(List<String> schedules) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < schedules.size(); i++) {
-            stringBuffer.append(schedules.get(i));
-            if(i!=schedules.size()-1){
-                stringBuffer.append(", ");
+    private void setTimeView(String time){
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+        linearLayout.setWeightSum(4);
+        int id = a;
+        TextView txtAlarm = new TextView(this);
+        txtAlarm.setText(time);
+        txtAlarm.setId(id);
+        txtAlarm.setTextColor(Color.BLACK);
+        txtAlarm.setLayoutParams(
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,1));
+
+
+        ImageView image_delete = new ImageView(this);
+        image_delete.setImageDrawable(getResources().getDrawable(R.drawable.ic_delete_red));
+        image_delete.setId(id);
+        image_delete.setLayoutParams(
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,3));
+        image_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ll_alarm_handler.removeView((View) image_delete.getParent( ));
+                if(image_delete.getId()<timeStrings.size()-1) {
+                    timeStrings.set(image_delete.getId(), "removed");
+                }
+                if(image_delete.getId()==timeStrings.size()-1) {
+                    timeStrings.remove(image_delete.getId());
+                    a--;
+                }
+
             }
-        }
-            return stringBuffer;
+        });
+        linearLayout.addView(txtAlarm);
+        linearLayout.addView(image_delete);
+        ll_alarm_handler.addView(linearLayout);
+        a++;
     }
 }
