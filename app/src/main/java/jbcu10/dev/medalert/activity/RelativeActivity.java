@@ -17,9 +17,9 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.ButterKnife;
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.activity.helper.BaseActivity;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.RelativeRepository;
-import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Relative;
 
 public class RelativeActivity extends BaseActivity {

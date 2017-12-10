@@ -3,6 +3,9 @@
     <array name="type">
         <item>Syrup</item>
         <item>Tablet</item>
+        <item>Capsule</item>
+        <item>Ointment</item>
+        <item>Injectible</item>
     </array>
 
     <array name="relation">
@@ -14,11 +17,7 @@
         <item>Grand Mother</item>
     </array>
 
-    <array name="schedule">
-        <item>Breakfast</item>
-        <item>Lunch</item>
-        <item>Dinner</item>
-    </array>
+
 
     <array name="gender">
         <item>Male</item>

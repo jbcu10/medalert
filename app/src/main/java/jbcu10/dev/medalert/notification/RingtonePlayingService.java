@@ -12,10 +12,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
@@ -50,10 +48,8 @@ public class RingtonePlayingService extends Service {
     }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public int onStartCommand(Intent intent, int flags, int startId)
-    {
+    public int onStartCommand(Intent intent, int flags, int startId) {
 
         final NotificationManager mNM = (NotificationManager)
                 getSystemService(NOTIFICATION_SERVICE);
@@ -62,50 +58,54 @@ public class RingtonePlayingService extends Service {
         Log.e("uuid ",uuid);
         AppController appController = AppController.getInstance();
         appController.setReminderUuid(uuid);
+        ReminderRepository reminderRepository = new ReminderRepository(getApplicationContext());
         MedicineRepository medicineRepository = new MedicineRepository(getApplicationContext());
         PatientRepository patientRepository = new PatientRepository(getApplicationContext());
         RelativeRepository relativeRepository = new RelativeRepository(getApplicationContext());
+
+        Reminder reminder =reminderRepository.getByUuid(uuid);
+
         List<Medicine> medicines =medicineRepository.getAllReminderMedicine(uuid);
 
         StringBuffer stringBuffer = new StringBuffer();
-
         for(Medicine medicine:medicines){
-            stringBuffer.append(medicine.getName()+" - "+getSchedule(medicine.getSchedules())+"\n\n");
+            stringBuffer.append(medicine.getName()+" - "+medicine.getDosage() +" - "+medicine.getType() +"\n");
         }
-
+        stringBuffer.append(reminder.getDescription());
         Patient patient = patientRepository.getReminderPatientByReminderUuid(intent.getExtras().getString("uuid"));
         List<Relative> relatives = relativeRepository.getAllRelativeByPatienUuid(patient.getUuid());
         String sms =intent.getExtras().getString("title")+ "\n\n"+intent.getExtras().getString("content")+"\n\n"+stringBuffer;
 
         Intent intent1 = new Intent(this.getApplicationContext(), ReminderActivity.class);
-        intent1.putExtra("uuid",intent.getExtras().getString("uuid"));
+        intent1.putExtra("uuid", intent.getExtras().getString("uuid"));
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent1, 0);
 
-        Notification mNotify  = new Notification.Builder(this)
+        Notification.Style style  = new Notification.BigTextStyle()
+                .setBigContentTitle(intent.getExtras().getString("title"))
+                .bigText(stringBuffer);
 
+        Notification builder  = new Notification.Builder(this)
                 .setContentTitle(intent.getExtras().getString("title"))
-                .setContentText(intent.getExtras().getString("content"))
+                .setContentText(sms)
                 .setSmallIcon(R.drawable.ic_alert)
                 .setContentIntent(pIntent)
                 .setAutoCancel(true)
+                .setStyle(style)
                 .build();
 
+        mMediaPlayer = MediaPlayer.create(this, R.raw.alarm);
+
+        mMediaPlayer.start();
 
 
+        mNM.notify(0, builder);
 
-           mMediaPlayer = MediaPlayer.create(this, R.raw.alarm);
+        this.isRunning = true;
 
-            mMediaPlayer.start();
+        Log.e("MyActivity", "In the service");
+        if (relatives != null) {
 
-
-            mNM.notify(0, mNotify);
-
-            this.isRunning = true;
-
-            Log.e("MyActivity", "In the service");
-        if(relatives!=null) {
-
-            sendSms(relatives,sms);
+            sendSms(relatives, sms);
         }
         return START_NOT_STICKY;
 
@@ -121,12 +121,11 @@ public class RingtonePlayingService extends Service {
     }
 
 
-
-    public void sendSms(List<Relative> relatives, String sms){
+    public void sendSms(List<Relative> relatives, String sms) {
         for (Relative relative : relatives) {
             try {
                 SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(relative.getContactNumber(), null,sms, null, null);
+                smsManager.sendTextMessage(relative.getContactNumber(), null, sms, null, null);
                 Toast.makeText(getApplicationContext(), "SMS Sent!",
                         Toast.LENGTH_LONG).show();
             } catch (Exception e) {
@@ -138,15 +137,5 @@ public class RingtonePlayingService extends Service {
         }
     }
 
-    public StringBuffer getSchedule(List<String> schedules) {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < schedules.size(); i++) {
-            stringBuffer.append(schedules.get(i));
-            if(i!=schedules.size()-1){
-                stringBuffer.append(", ");
-            }
-        }
-        return stringBuffer;
-    }
 
 }

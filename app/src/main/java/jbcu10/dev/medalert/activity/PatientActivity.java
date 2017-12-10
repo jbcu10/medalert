@@ -19,10 +19,10 @@ import com.afollestad.materialdialogs.MaterialDialog;
 
 import butterknife.ButterKnife;
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.activity.helper.BaseActivity;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.PatientRepository;
 import jbcu10.dev.medalert.fragments.RelativeFragments;
-import jbcu10.dev.medalert.fragments.ReminderFragments;
 import jbcu10.dev.medalert.model.Patient;
 
 public class PatientActivity extends BaseActivity {

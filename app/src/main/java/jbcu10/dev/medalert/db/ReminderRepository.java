@@ -177,9 +177,17 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
     }
 
     @Override
-    public boolean deleteById(int id) {
-        return false;
-    }
+    public boolean deleteById(int reminderId) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            long id = db.delete(TABLE_REMINDER, KEY_ID + "= '" + reminderId + "'", null);
+            db.close();
+            Log.d(TAG, "Reminder is deleted: " + id);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
+            return false;
+        }    }
 
     private void createReminderMedicine(String reminderUuid, String medicineUuid) {
         try {

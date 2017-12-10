@@ -3,11 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.MedicineActivity">
 
-    <item
-        android:id="@+id/add_alarm"
-        android:icon="@drawable/ic_add_alarm"
-        android:title="Add Alarm"
-        app:showAsAction="ifRoom" />
+
     <item
         android:id="@+id/add_medicine"
         android:icon="@drawable/ic_add"

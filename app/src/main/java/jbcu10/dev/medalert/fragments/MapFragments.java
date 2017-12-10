@@ -58,8 +58,7 @@ public class MapFragments extends Fragment implements OnMapReadyCallback {
         options.position(point);
         options.title("Mercury Drug");
         options.snippet("Maharlika Highway corner Mabini Street, 3100, Pan-Philippine Hwy, Cabanatuan City, Nueva Ecija");
-        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.pharmacy));
-
+        options.icon(BitmapDescriptorFactory.fromResource(R.drawable.placeholder));
         mMap.addMarker(options);
 
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));

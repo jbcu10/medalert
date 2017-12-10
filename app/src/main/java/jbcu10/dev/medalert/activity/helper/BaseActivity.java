@@ -1,14 +1,18 @@
-package jbcu10.dev.medalert.activity;
+package jbcu10.dev.medalert.activity.helper;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.activity.HomeActivity;
+import jbcu10.dev.medalert.activity.NewMedicineActivity;
+import jbcu10.dev.medalert.activity.NewPatientActivity;
 
 /**
  * Created by jb on 25/09/2017.
@@ -89,5 +93,10 @@ public class BaseActivity extends AppCompatActivity {
                 .show();
     }
 
-
+    public boolean isValid(String string){
+        return  string!=null&&!string.isEmpty();
+    }
+    public void showError(String field){
+        Snackbar.make(findViewById(android.R.id.content), field+" is missing!", Snackbar.LENGTH_LONG).show();
+    }
 }

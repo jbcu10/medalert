@@ -12,7 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.config.AppController;
+import jbcu10.dev.medalert.activity.helper.BaseActivity;
 import jbcu10.dev.medalert.fragments.FirstAidFragments;
 import jbcu10.dev.medalert.fragments.MapFragments;
 import jbcu10.dev.medalert.fragments.MedicineFragments;

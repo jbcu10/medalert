@@ -19,40 +19,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.activity.helper.RelativeHelperActivity;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.RelativeRepository;
 import jbcu10.dev.medalert.model.Relative;
 
-public class EditRelativeActivity extends AppCompatActivity {
-    public RelativeRepository relativeRepository;
-    Relative relative;
-    @BindView(R.id.edit_first_name)
-    EditText edit_first_name;
-    @BindView(R.id.edit_middle_name)
-    EditText edit_middle_name;
-    @BindView(R.id.edit_last_name)
-    EditText edit_last_name;
-    @BindView(R.id.edit_contact_number)
-    EditText edit_contact_number;
-    @BindView(R.id.edit_email)
-    EditText edit_email;
-    @BindView(R.id.edit_relationship)
-    EditText edit_relationship;
-    @BindView(R.id.button_submit)
-    Button button_submit;
+public class EditRelativeActivity extends RelativeHelperActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_relative);
-
-        ButterKnife.bind(this);
-        relativeRepository = new RelativeRepository(EditRelativeActivity.this);
-
-
         AppController appController = AppController.getInstance();
         relative = appController.getRelative();
         initializedViews();
+        setRelativeValue(relative);
     }
 
     @Override
@@ -62,13 +43,8 @@ public class EditRelativeActivity extends AppCompatActivity {
         PatientActivity.destination=0;
     }
 
-    public void initializedViews() {
-        edit_first_name = findViewById(R.id.edit_first_name);
-        edit_middle_name = findViewById(R.id.edit_middle_name);
-        edit_last_name = findViewById(R.id.edit_last_name);
-        edit_contact_number = findViewById(R.id.edit_contact_number);
-        edit_email = findViewById(R.id.edit_email);
-        edit_relationship = findViewById(R.id.edit_relationship);
+
+    private void setRelativeValue(Relative relative){
         edit_first_name.setText(relative.getFirstName());
         edit_middle_name.setText(relative.getMiddleName());
         edit_last_name.setText(relative.getLastName());
@@ -76,23 +52,6 @@ public class EditRelativeActivity extends AppCompatActivity {
         edit_email.setText(relative.getEmail());
         edit_relationship.setText(relative.getRelationship());
     }
-
-    @OnClick(R.id.edit_relationship)
-    public void onClickEditType(View view) {
-
-        new MaterialDialog.Builder(this)
-                .title("Select Relationship")
-                .items(R.array.relation)
-                .itemsCallbackSingleChoice(-1, (dialog, view1, which, text) -> {
-
-                    edit_relationship.setText(text);
-                    return true;
-                })
-                .positiveText("Select")
-                .show();
-
-    }
-
     @OnClick(R.id.button_submit)
     public void onClickButtonSubmit(View view) {
 
