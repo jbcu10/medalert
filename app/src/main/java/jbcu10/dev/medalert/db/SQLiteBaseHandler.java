@@ -62,6 +62,8 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_PATIENT_UUID = "patient_uuid";
     protected static final String KEY_RELATIVE_UUID = "relative_uuid";
     protected static final String KEY_TIME = "time";
+    protected static final String KEY_TIME_UUID = "time_uuid";
+    protected static final String KEY_INTENT_ID = "intent_id";
     protected static final String KEY_ENABLED = "enabled";
 
 
@@ -192,7 +194,9 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     TABLE_REMINDER_TIME + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_REMINDER_UUID + TEXT
-                    + KEY_TIME + " TEXT" + ")";
+                    + KEY_TIME_UUID + TEXT
+                    + KEY_TIME + TEXT
+                    + KEY_INTENT_ID + " INTEGER" + ")";
             db.execSQL(createReminderTimeTable);
             Log.d(TAG, "TABLE_REMINDER_TIME IS CREATED ...");
 

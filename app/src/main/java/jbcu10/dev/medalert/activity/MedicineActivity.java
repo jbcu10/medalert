@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ import jbcu10.dev.medalert.model.Medicine;
 public class MedicineActivity extends BaseActivity {
     public MedicineRepository medicineRepository;
     TextView txt_name, txt_generic_name, txt_description, txt_diagnosis, txt_expiration, txt_doctor_name;
+    CheckBox ch_enabled;
     Medicine medicine = null;
     ImageView image_type;
 
@@ -47,10 +49,12 @@ public class MedicineActivity extends BaseActivity {
         txt_expiration = findViewById(R.id.txt_expiration);
         txt_doctor_name = findViewById(R.id.txt_doctor_name);
         image_type = findViewById(R.id.image_type);
+        ch_enabled = findViewById(R.id.ch_enabled);
         medicineRepository = new MedicineRepository(MedicineActivity.this);
         HomeActivity.selectedItem = 1;
         AppController appController = AppController.getInstance();
         medicine = medicineRepository.getById(appController.getMedicineId());
+
 
     }
 
@@ -76,7 +80,16 @@ public class MedicineActivity extends BaseActivity {
         DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
         txt_expiration.setText(df.format(date));
         txt_doctor_name.setText(medicine.getDoctor() != null ? medicine.getDoctor().getFirstName() + " " + medicine.getDoctor().getFirstName() : "Not Available..");
+        ch_enabled.setChecked(medicine.isEnabled());
 
+        ch_enabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                medicine.setEnabled(true);
+            } if (!isChecked){
+                medicine.setEnabled(false);
+            }
+            medicineRepository.update(medicine);
+        });
     }
 
     @Override

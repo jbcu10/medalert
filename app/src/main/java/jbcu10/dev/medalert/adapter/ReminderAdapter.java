@@ -57,7 +57,6 @@ public class ReminderAdapter extends ArrayAdapter<Reminder> {
             viewHolder = new ReminderAdapter.ViewHolder();
             viewHolder.txt_description = convertView.findViewById(R.id.txt_description);
             viewHolder.txt_name = convertView.findViewById(R.id.txt_name);
-            viewHolder.image_delete = convertView.findViewById(R.id.image_delete);
 
             convertView.setTag(viewHolder);
         } else {
@@ -69,26 +68,6 @@ public class ReminderAdapter extends ArrayAdapter<Reminder> {
         reminderRepository = new ReminderRepository(activity);
         viewHolder.txt_name.setText("Reminder for: " + patientRepository.getReminderPatientByReminderUuid(reminder.getUuid()).toString());
         viewHolder.txt_description.setText(reminder.getDescription());
-
-   /*     convertView.setOnClickListener(view -> {
-                    try {
-                        Log.d("id", "first aid " + reminder.getId());
-
-                        AppController appController = AppController.getInstance();
-                        appController.setReminderId(reminder.getId());
-                        Intent intent = new Intent(getContext(), ReminderActivity.class);
-                        getContext().startActivity(intent);
-
-                        activity.overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-                    } catch (Exception e) {
-                        Log.d("Error", e.getMessage());
-                    }
-                }
-        );*/
-
-
-
-
         return convertView;
     }
 
