@@ -7,19 +7,17 @@
     tools:context="jbcu10.dev.medalert.activity.NewRemindersActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:background="@color/floralwhite"
         android:orientation="vertical"
         android:padding="10dp"
         android:weightSum="3"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/button_submit_reminder"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -38,7 +36,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <TextView
@@ -48,10 +45,9 @@
 
                         android:fontFamily="sans-serif-smallcaps"
                         android:text="Patient"
-                        android:textAllCaps="true"
+                        android:textAllCaps="false"
                         android:textColor="@color/teal"
                         android:textSize="16sp"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -79,10 +75,9 @@
 
                         android:fontFamily="sans-serif-smallcaps"
                         android:text="Medicine"
-                        android:textAllCaps="true"
+                        android:textAllCaps="false"
                         android:textColor="@color/teal"
                         android:textSize="16sp"
-                        android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"
@@ -104,6 +99,7 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -119,10 +115,9 @@
                             android:layout_weight="1"
                             android:fontFamily="sans-serif-smallcaps"
                             android:text="Alarm"
-                            android:textAllCaps="true"
+                            android:textAllCaps="false"
                             android:textColor="@color/teal"
                             android:textSize="16sp"
-                            android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintLeft_toLeftOf="parent"
                             app:layout_constraintRight_toRightOf="parent"
@@ -171,15 +166,22 @@
                     </android.support.design.widget.TextInputLayout>
                 </LinearLayout>
 
-                <Button
-                    android:id="@+id/button_submit_reminder"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/skyblue"
-                    android:text="Submit"
-                    android:textColor="@color/white" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
+
+    <Button
+        android:id="@+id/button_submit_reminder"
+        android:layout_width="match_parent"
+        android:layout_height="49dp"
+        android:layout_margin="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@color/skyblue"
+        android:text="Submit"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>

@@ -9,7 +9,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
-import android.text.Layout;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,11 +24,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-/*
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.sleepbot.datetimepicker.time.RadialPickerLayout;
-import com.sleepbot.datetimepicker.time.TimePickerDialog;*/
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -40,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -53,7 +48,14 @@ import jbcu10.dev.medalert.db.ReminderRepository;
 import jbcu10.dev.medalert.model.Medicine;
 import jbcu10.dev.medalert.model.Patient;
 import jbcu10.dev.medalert.model.Reminder;
+import jbcu10.dev.medalert.model.Time;
 import jbcu10.dev.medalert.notification.AlarmReceiver;
+
+/*
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.sleepbot.datetimepicker.time.RadialPickerLayout;
+import com.sleepbot.datetimepicker.time.TimePickerDialog;*/
 
 public class NewRemindersActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
     public static final String TIMEPICKER_TAG = "Time Picker";
@@ -108,10 +110,6 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
                 }
 
             });
-
-            // patient = (Patient) spinner.getSelectedItem();
-
-            //Log.d("uuid",patient.getUuid());
         }
 
 
@@ -125,7 +123,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
             timePickerDialog.show(getFragmentManager(), TIMEPICKER_TAG);
             for (Medicine medicine : medicines) {
                 final CheckBox checkBoxMedicine = new CheckBox(this);
-                checkBoxMedicine.setText(medicine.getName()+" - "+medicine.getDosage()+" - "+medicine.getTotal());
+                checkBoxMedicine.setText(medicine.getName() + " - " + medicine.getDosage() + " - " + medicine.getTotal());
                 checkBoxMedicine.setId(medicine.getId());
                 checkBoxMedicine.setHint(medicine.getUuid());
                 checkBoxMedicine.setLayoutParams(
@@ -151,11 +149,12 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         ll_medicine_handler = findViewById(R.id.ll_medicine_handler);
         edit_description = findViewById(R.id.edit_description);
         alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        this.context = this;
         medicineRepository = new MedicineRepository(this);
         patientRepository = new PatientRepository(this);
         reminderRepository = new ReminderRepository(this);
         spinner = findViewById(R.id.spinner);
-        this.context = this;
+
         ButterKnife.bind(this);
 
     }
@@ -177,7 +176,11 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         }
         if (!timeStrings.isEmpty()) {
 
-            reminder.setTime(timeStrings);
+            List<Time> times = new LinkedList<>();
+            for (String time : timeStrings) {
+                times.add(new Time(UUID.randomUUID().toString(), time, new Random().nextInt(6)));
+            }
+            reminder.setTime(times);
         }
         //if(patient!=null) {
         reminder.setPatient((Patient) spinner.getSelectedItem());
@@ -282,24 +285,21 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
     public void setAlarmFromTimer(Reminder reminder) {
         final Calendar calendar = Calendar.getInstance();
         final Intent myIntent = new Intent(this.context, AlarmReceiver.class);
-        int i = 0;
-        for (String time : timeStrings) {
-            if(!time.equals("removed")) {
-                String[] timeArray = time.split(":");
+        for (Time time : reminder.getTime()) {
+
+            if (!time.equals("removed")) {
+                String[] timeArray = time.getTime().split(":");
                 final int hour = Integer.parseInt(timeArray[0]);
                 final int minute = Integer.parseInt(timeArray[1]);
 
                 Log.e("MyActivity", "In the receiver with " + hour + " and " + minute);
-
-
                 calendar.set(Calendar.HOUR_OF_DAY, hour);
                 calendar.set(Calendar.MINUTE, minute);
-                myIntent.putExtra("title", "Reminder for Patient - " + reminder.getPatient().getFirstName()+" "+reminder.getPatient().getLastName());
+                myIntent.putExtra("title", "Reminder for Patient - " + reminder.getPatient().getFirstName() + " " + reminder.getPatient().getLastName());
                 myIntent.putExtra("content", reminder.getDescription());
                 myIntent.putExtra("uuid", reminder.getUuid());
-
                 Log.d("time", String.valueOf(new Date(calendar.getTimeInMillis())));
-                PendingIntent pending_intent = PendingIntent.getBroadcast(NewRemindersActivity.this, i, myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                PendingIntent pending_intent = PendingIntent.getBroadcast(getApplicationContext(), time.getIntentId(), myIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                 if (Build.VERSION.SDK_INT >= 19) {
                     alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
 
@@ -307,8 +307,8 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
                     alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pending_intent);
 
                 }
-                i++;
             }
+            //alarmManager.cancel();
         }
     }
 
@@ -334,7 +334,8 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
 
         }
     }
-    private void setTimeView(String time){
+
+    private void setTimeView(String time) {
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         linearLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -346,7 +347,7 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         txtAlarm.setTextColor(Color.BLACK);
         txtAlarm.setLayoutParams(
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,1));
+                        LinearLayout.LayoutParams.WRAP_CONTENT, 1));
 
 
         ImageView image_delete = new ImageView(this);
@@ -354,19 +355,18 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
         image_delete.setId(id);
         image_delete.setLayoutParams(
                 new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT,3));
+                        LinearLayout.LayoutParams.WRAP_CONTENT, 3));
         image_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ll_alarm_handler.removeView((View) image_delete.getParent( ));
-                if(image_delete.getId()<timeStrings.size()-1) {
+                ll_alarm_handler.removeView((View) image_delete.getParent());
+                if (image_delete.getId() < timeStrings.size() - 1) {
                     timeStrings.set(image_delete.getId(), "removed");
                 }
-                if(image_delete.getId()==timeStrings.size()-1) {
+                if (image_delete.getId() == timeStrings.size() - 1) {
                     timeStrings.remove(image_delete.getId());
                     a--;
                 }
-
             }
         });
         linearLayout.addView(txtAlarm);

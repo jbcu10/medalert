@@ -65,7 +65,7 @@
                         android:weightSum="4">
 
                         <CheckBox
-                            android:id="@+id/ch_enabled4"
+                            android:id="@+id/ch_enabled"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="3" />
@@ -84,10 +84,9 @@
                                 android:fontFamily="sans-serif-smallcaps"
 
                                 android:text="Medicine 2"
-                                android:textAllCaps="true"
+                                android:textAllCaps="false"
                                 android:textColor="@color/teal"
-                                android:textSize="24sp"
-                                android:textStyle="bold"
+                                android:textSize="18sp"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintLeft_toLeftOf="parent"
                                 app:layout_constraintRight_toRightOf="parent"

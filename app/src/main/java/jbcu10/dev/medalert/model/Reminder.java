@@ -12,14 +12,14 @@ public class Reminder {
     private String uuid;
     private String description;
     private List<Medicine> medicineList;
-    private List<String> time;
+    private List<Time> time;
     private Patient patient;
 
     public Reminder() {
 
     }
 
-    public Reminder(String uuid, String description, List<Medicine> medicineList, List<String> time, Patient patient) {
+    public Reminder(String uuid, String description, List<Medicine> medicineList, List<Time> time, Patient patient) {
         this.uuid = uuid;
         this.description = description;
         this.medicineList = medicineList;
@@ -51,11 +51,11 @@ public class Reminder {
         this.medicineList = medicineList;
     }
 
-    public List<String> getTime() {
+    public List<Time> getTime() {
         return time;
     }
 
-    public void setTime(List<String> time) {
+    public void setTime(List<Time> time) {
         this.time = time;
     }
 
@@ -81,7 +81,6 @@ public class Reminder {
                 "uuid='" + uuid + '\'' +
                 ", description='" + description + '\'' +
                 ", medicineList=" + medicineList +
-                ", time=" + time +
                 ", patient=" + patient +
                 '}';
     }

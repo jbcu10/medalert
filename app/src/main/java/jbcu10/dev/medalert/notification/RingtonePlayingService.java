@@ -20,8 +20,8 @@ import android.widget.Toast;
 
 import java.util.List;
 
+import jbcu10.dev.medalert.activity.DialogActivity;
 import jbcu10.dev.medalert.R;
-import jbcu10.dev.medalert.activity.ReminderActivity;
 import jbcu10.dev.medalert.config.AppController;
 import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.db.PatientRepository;
@@ -68,16 +68,19 @@ public class RingtonePlayingService extends Service {
         List<Medicine> medicines =medicineRepository.getAllReminderMedicine(uuid);
 
         StringBuffer stringBuffer = new StringBuffer();
+        int a = 1;
         for(Medicine medicine:medicines){
-            stringBuffer.append(medicine.getName()+" - "+medicine.getDosage() +" - "+medicine.getType() +"\n");
+            stringBuffer.append(a+". "+medicine.getName()+" - "+medicine.getDosage() +" - "+medicine.getType() +"\n");
+            a++;
         }
         stringBuffer.append(reminder.getDescription());
         Patient patient = patientRepository.getReminderPatientByReminderUuid(intent.getExtras().getString("uuid"));
         List<Relative> relatives = relativeRepository.getAllRelativeByPatienUuid(patient.getUuid());
         String sms =intent.getExtras().getString("title")+ "\n\n"+intent.getExtras().getString("content")+"\n\n"+stringBuffer;
 
-        Intent intent1 = new Intent(this.getApplicationContext(), ReminderActivity.class);
-        intent1.putExtra("uuid", intent.getExtras().getString("uuid"));
+        Intent intent1 = new Intent(this.getApplicationContext(), DialogActivity.class);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
         PendingIntent pIntent = PendingIntent.getActivity(this, 0, intent1, 0);
 
         Notification.Style style  = new Notification.BigTextStyle()

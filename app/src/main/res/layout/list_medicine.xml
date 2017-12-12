@@ -51,10 +51,9 @@
                         android:fontFamily="sans-serif-smallcaps"
 
                         android:text="Medicine 2"
-                        android:textAllCaps="true"
+                        android:textAllCaps="false"
                         android:textColor="@color/teal"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/txt_generic_name"
