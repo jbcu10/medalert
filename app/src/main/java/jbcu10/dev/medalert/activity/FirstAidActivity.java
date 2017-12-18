@@ -34,9 +34,10 @@ public class FirstAidActivity extends BaseActivity {
             TextView txt_instruction = new TextView(this);
             txt_instruction.setText(instruction.getInstruction());
             txt_instruction.setId(instruction.getId());
-            txt_instruction.setLayoutParams(
-                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT));
+            LinearLayout.LayoutParams ll =   new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            ll.setMargins(10,0,10,10);
+            txt_instruction.setLayoutParams(ll);
             ll_instruction_handler.addView(txt_instruction);
         }
 

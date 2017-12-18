@@ -71,7 +71,7 @@ public class FirstAidRepository extends SQLiteBaseHandler implements CrudReposit
     public List<FirstAid> getAll() {
         try {
             List<FirstAid> firstAids = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_FIRST_AID + " order by " + KEY_ID + " desc";
+            String selectQuery = "SELECT  * FROM " + TABLE_FIRST_AID + " order by " + KEY_NAME + " asc";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {

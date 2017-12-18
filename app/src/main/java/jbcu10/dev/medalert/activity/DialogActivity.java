@@ -64,20 +64,21 @@ public class DialogActivity extends Activity {
     private void setView(Reminder reminder) {
         txt_title.setText("Reminder for: " + patientRepository.getReminderPatientByReminderUuid(reminder.getUuid()).toString());
 
-        List<Medicine> medicines = medicineRepository.getAll();
+        List<Medicine> medicines = medicineRepository.getAllReminderMedicine(reminder.getUuid());
         int a = 1;
         for (Medicine medicine : medicines) {
-            TextView textView = new TextView(this);
-            textView.setText(a+". "+ medicine.getName() +" - "+medicine.getDosage()+" - "+medicine.getTotal());
-            textView.setId(medicine.getId());
-            textView.setTextColor(Color.BLACK);
-            LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT);
-            ll.setMargins(10,10,10,10);
-            textView.setLayoutParams(ll);
+                 TextView textView = new TextView(this);
+                textView.setText(a + ". " + medicine.getName() + " - " + medicine.getDosage() + " - " + medicine.getTotal());
+                textView.setId(medicine.getId());
+                textView.setTextColor(Color.BLACK);
+                LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                ll.setMargins(10, 10, 10, 10);
+                textView.setLayoutParams(ll);
 
-            ll_view.addView(textView);
-            a++;
+                ll_view.addView(textView);
+                a++;
+
         }
         TextView textView = new TextView(this);
         textView.setText(reminder.getDescription());

@@ -17,6 +17,16 @@ public abstract class Person {
 
     protected Person() {
     }
+    protected Person(String email, String firstName, String lastName) {
+    this.email = email;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    }protected Person(int id,String email, String firstName, String lastName) {
+    this.id = id;
+    this.email = email;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    }
 
     public int getId() {
         return id;

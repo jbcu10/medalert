@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -28,6 +29,7 @@ public class RelativeActivity extends BaseActivity {
     TextView txt_name, txt_relation, txt_contact_number, txt_email;
     ImageView image_relation;
     Relative relative;
+    CheckBox ch_enabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +55,7 @@ public class RelativeActivity extends BaseActivity {
         txt_contact_number = findViewById(R.id.txt_contact_number);
         txt_email = findViewById(R.id.txt_email);
         image_relation = findViewById(R.id.image_relation);
+        ch_enabled = findViewById(R.id.ch_enabled);
         txt_name.setText(relative.getFirstName() + " " + relative.getMiddleName() + " " + relative.getLastName());
         txt_contact_number.setText(relative.getContactNumber());
         txt_email.setText(relative.getEmail());

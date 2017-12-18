@@ -6,8 +6,9 @@ package jbcu10.dev.medalert.model;
 
 public class Relative extends Person {
     private String relationship;
+    private boolean notify;
 
-    public Relative(String uuid, String firstName, String middleName, String lastName, String contactNumber, String email, String relationship) {
+    public Relative(String uuid, String firstName, String middleName, String lastName, String contactNumber, String email, String relationship,boolean notify) {
         this.uuid = uuid;
         this.firstName = firstName;
         this.middleName = middleName;
@@ -15,9 +16,10 @@ public class Relative extends Person {
         this.contactNumber = contactNumber;
         this.email = email;
         this.relationship = relationship;
+        this.notify = notify;
     }
 
-    public Relative(int id, String uuid, String firstName, String middleName, String lastName, String contactNumber, String email, String relationship) {
+    public Relative(int id, String uuid, String firstName, String middleName, String lastName, String contactNumber, String email, String relationship,boolean notify) {
         this.id = id;
         this.uuid = uuid;
         this.firstName = firstName;
@@ -26,6 +28,7 @@ public class Relative extends Person {
         this.contactNumber = contactNumber;
         this.email = email;
         this.relationship = relationship;
+        this.notify = notify;
     }
 
     public Relative() {
@@ -38,5 +41,13 @@ public class Relative extends Person {
 
     public void setRelationship(String relationship) {
         this.relationship = relationship;
+    }
+
+    public boolean isNotify() {
+        return notify;
+    }
+
+    public void setNotify(boolean notify) {
+        this.notify = notify;
     }
 }

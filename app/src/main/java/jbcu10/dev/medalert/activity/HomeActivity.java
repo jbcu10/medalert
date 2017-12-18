@@ -10,17 +10,23 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.helper.BaseActivity;
+import jbcu10.dev.medalert.db.UserRepository;
 import jbcu10.dev.medalert.fragments.FirstAidFragments;
 import jbcu10.dev.medalert.fragments.MapFragments;
 import jbcu10.dev.medalert.fragments.MedicineFragments;
 import jbcu10.dev.medalert.fragments.PatientFragments;
 import jbcu10.dev.medalert.fragments.ReminderFragments;
+import jbcu10.dev.medalert.model.User;
+
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    UserRepository userRepository ;
     Fragment fragment;
     public static int selectedItem = 0;
     @Override
@@ -36,7 +42,7 @@ public class HomeActivity extends BaseActivity
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
+        userRepository = new UserRepository(HomeActivity.this);
 
         if(selectedItem==0) {
             fragment = new ReminderFragments();
@@ -66,6 +72,20 @@ public class HomeActivity extends BaseActivity
             navigationView.setCheckedItem( R.id.firstaid);
 
         }
+
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = hView.findViewById(R.id.nav_name);
+        TextView nav_email = hView.findViewById(R.id.nav_email);
+
+        User user = userRepository.getById(1);
+        if(user.getFirstName()!=null){
+            nav_user.setText(user.getFirstName()+" "+user.getLastName());
+            nav_email.setText(user.getEmail());
+
+        }
+
+
+
 
     }
 

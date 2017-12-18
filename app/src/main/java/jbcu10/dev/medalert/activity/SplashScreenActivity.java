@@ -12,6 +12,7 @@ import android.widget.ProgressBar;
 import java.util.UUID;
 
 import jbcu10.dev.medalert.R;
+import jbcu10.dev.medalert.config.FirstAidConstant;
 import jbcu10.dev.medalert.config.Permission;
 import jbcu10.dev.medalert.db.FirstAidRepository;
 import jbcu10.dev.medalert.location.GPSTracker;
@@ -31,35 +32,28 @@ public class SplashScreenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splashscreen);
 
+
+
         firstAidRepository = new FirstAidRepository(SplashScreenActivity.this);
         if (firstAidRepository.getAll() == null) {
-            for (int a = 0; a < 10; a++) {
+            for (int a = 0; a < 8; a++) {
                 String firstAidUuid = UUID.randomUUID().toString();
                 FirstAid firstAid = new FirstAid();
-                firstAid.setName("FirstAid: " + a);
-                firstAid.setDescription("Lorem Ipsum Dolorsit amit");
+                firstAid.setName(FirstAidConstant.firstaid[a][0]);
+                firstAid.setDescription("First aid for "+FirstAidConstant.firstaid[a][0]+".");
                 firstAid.setUuid(firstAidUuid);
-                for (int b = 0; b < 3; b++) {
-                    Instructions instructions = new Instructions();
-                    instructions.setInstruction((b + 1) + ". Lorem Ipsum Dolorsit amit.");
-                    instructions.setUuid(UUID.randomUUID().toString());
-                    firstAidRepository.createInstruction(firstAidUuid, instructions);
+                for(int b =1;b<5;b++) {
+                    if (FirstAidConstant.firstaid[a][b] != null&& !FirstAidConstant.firstaid[a][b].equals("")) {
+                        Instructions instructions = new Instructions();
+                        instructions.setInstruction(b +". "+ FirstAidConstant.firstaid[a][b]);
+                        instructions.setUuid(UUID.randomUUID().toString());
+                        firstAidRepository.createInstruction(firstAidUuid, instructions);
+                    }
                 }
                 firstAidRepository.create(firstAid);
+
             }
         }
-
-
-        progressbar = findViewById(R.id.progressBar2);
-        final Handler handler = new Handler();
-        Runnable r = () -> {
-
-            intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-            finish();
-        };
-        handler.postDelayed(r, 3000);
 
 
         changePermission();
@@ -74,17 +68,33 @@ public class SplashScreenActivity extends AppCompatActivity {
         } else
 
         {
-             gps.showSettingsAlert();
+            gps.showSettingsAlert();
         }
+        progressbar = findViewById(R.id.progressBar2);
+        final Handler handler = new Handler();
+        Runnable r = () -> {
+            intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            finish();
+        };
+        handler.postDelayed(r, 3000);
+
+
     }
-
     public void changePermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE,Manifest.permission.SEND_SMS}, 0);
-
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);
+        }if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.SEND_SMS}, 0);
+        }if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, 0);
         }
     }
 }
