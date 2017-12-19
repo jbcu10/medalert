@@ -73,7 +73,7 @@ public class SplashScreenActivity extends AppCompatActivity {
         progressbar = findViewById(R.id.progressBar2);
         final Handler handler = new Handler();
         Runnable r = () -> {
-            intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
+            intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             finish();
@@ -85,6 +85,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     public void changePermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 0);
+        }if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
+                requestPermissions(new String[]{Manifest.permission.INTERNET}, 0);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && checkSelfPermission(android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION}, 0);

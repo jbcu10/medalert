@@ -89,7 +89,12 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
         Reminder reminder =((Reminder) adapterView.getItemAtPosition(i));
-        new MaterialDialog.Builder(getContext())
+        AppController appController = AppController.getInstance();
+        appController.setReminderId(reminder.getId());
+        Intent intent = new Intent(getContext(), ReminderActivity.class);
+        getContext().startActivity(intent);
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        /*new MaterialDialog.Builder(getContext())
                 .title("Reminder for: " + patientRepository.getReminderPatientByReminderUuid(reminder.getUuid()).toString())
                 .content("What do you want to do with this item?")
                 .positiveText("View")
@@ -130,7 +135,7 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
 
 
                     }
-                }).show();
+                }).show();*/
     }
 
     @Override

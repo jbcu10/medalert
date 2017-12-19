@@ -14,6 +14,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 import com.etsy.android.grid.StaggeredGridView;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -58,9 +59,11 @@ public class RelativeFragments extends ListFragment implements AbsListView.OnScr
         relativeRepository = new RelativeRepository(getActivity());
         pDialog = new ProgressDialog(getActivity());
 
-       // getActivity().setTitle("Relatives");
-
-        List<Relative> relatives = relativeRepository.getAllRelativeByPatienUuid(PatientActivity.patientUuid);
+        getActivity().setTitle("Relatives");
+        List<Relative> relatives = relativeRepository.getAll();
+        if(PatientActivity.patientUuid !=null) {
+            relatives = relativeRepository.getAllRelativeByPatienUuid(PatientActivity.patientUuid);
+        }
         initializeGridView();
         if (relatives != null) {
             onLoadMoreItems(relatives);

@@ -25,12 +25,17 @@
 
     </group>
 
-    <item android:title="">
+    <item android:title="Other">
         <menu>
+            <item
+                android:id="@+id/relative"
+                android:icon="@drawable/ic_people"
+                android:title="Relatives" />
             <item
                 android:id="@+id/map"
                 android:icon="@drawable/ic_map"
                 android:title="Drug Stores" />
+
             <item
                 android:id="@+id/nav_exit"
                 android:icon="@drawable/ic_exit"

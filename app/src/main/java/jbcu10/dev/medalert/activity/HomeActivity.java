@@ -20,13 +20,14 @@ import jbcu10.dev.medalert.fragments.FirstAidFragments;
 import jbcu10.dev.medalert.fragments.MapFragments;
 import jbcu10.dev.medalert.fragments.MedicineFragments;
 import jbcu10.dev.medalert.fragments.PatientFragments;
+import jbcu10.dev.medalert.fragments.RelativeFragments;
 import jbcu10.dev.medalert.fragments.ReminderFragments;
 import jbcu10.dev.medalert.model.User;
 
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    UserRepository userRepository ;
+    //UserRepository userRepository ;
     Fragment fragment;
     public static int selectedItem = 0;
     @Override
@@ -42,7 +43,7 @@ public class HomeActivity extends BaseActivity
         toggle.syncState();
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        userRepository = new UserRepository(HomeActivity.this);
+        //userRepository = new UserRepository(HomeActivity.this);
 
         if(selectedItem==0) {
             fragment = new ReminderFragments();
@@ -64,7 +65,8 @@ public class HomeActivity extends BaseActivity
             ft.commit();
             navigationView.setCheckedItem( R.id.patients);
 
-        }if(selectedItem==3) {
+        }
+        if(selectedItem==3) {
             fragment = new FirstAidFragments();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_new, fragment);
@@ -77,12 +79,12 @@ public class HomeActivity extends BaseActivity
         TextView nav_user = hView.findViewById(R.id.nav_name);
         TextView nav_email = hView.findViewById(R.id.nav_email);
 
-        User user = userRepository.getById(1);
+       /* User user = userRepository.getById(1);
         if(user.getFirstName()!=null){
             nav_user.setText(user.getFirstName()+" "+user.getLastName());
             nav_email.setText(user.getEmail());
 
-        }
+        }*/
 
 
 
@@ -151,6 +153,11 @@ public class HomeActivity extends BaseActivity
         }
         else if (id == R.id.map) {
             fragment = new MapFragments();
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.container_new, fragment);
+            ft.commit();
+        }else if (id == R.id.relative) {
+            fragment = new RelativeFragments();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_new, fragment);
             ft.commit();
