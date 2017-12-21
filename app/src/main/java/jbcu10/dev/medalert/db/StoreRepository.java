@@ -16,7 +16,7 @@ import jbcu10.dev.medalert.model.Store;
  */
 
 public class StoreRepository extends SQLiteBaseHandler implements CrudRepository<Store> {
-    StoreRepository(Context context) {
+    public StoreRepository(Context context) {
         super(context);
     }
 

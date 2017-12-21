@@ -70,7 +70,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_ENABLED = "enabled";
 
     protected static final String KEY_LON = "lon";
-    protected static final String KEY_LAT = "lon";
+    protected static final String KEY_LAT = "lat";
     protected static final String KEY_ADDRESS = "address";
 
 

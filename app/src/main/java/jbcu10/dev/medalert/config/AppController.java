@@ -18,6 +18,7 @@ public class AppController extends Application {
     private int firstAidId;
     private int relativeId;
     private int reminderId;
+    private int storeId;
     private int patientId;
     private String reminderUuid;
     private int selectedIndex;
@@ -111,5 +112,13 @@ public class AppController extends Application {
 
     public void setReminderUuid(String reminderUuid) {
         this.reminderUuid = reminderUuid;
+    }
+
+    public int getStoreId() {
+        return storeId;
+    }
+
+    public void setStoreId(int storeId) {
+        this.storeId = storeId;
     }
 }

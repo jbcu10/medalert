@@ -20,6 +20,7 @@ import jbcu10.dev.medalert.fragments.FirstAidFragments;
 import jbcu10.dev.medalert.fragments.MapFragments;
 import jbcu10.dev.medalert.fragments.MedicineFragments;
 import jbcu10.dev.medalert.fragments.PatientFragments;
+import jbcu10.dev.medalert.fragments.PharmacyFragment;
 import jbcu10.dev.medalert.fragments.RelativeFragments;
 import jbcu10.dev.medalert.fragments.ReminderFragments;
 import jbcu10.dev.medalert.model.User;
@@ -152,7 +153,7 @@ public class HomeActivity extends BaseActivity
             ft.commit();
         }
         else if (id == R.id.map) {
-            fragment = new MapFragments();
+            fragment = new PharmacyFragment();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.container_new, fragment);
             ft.commit();
