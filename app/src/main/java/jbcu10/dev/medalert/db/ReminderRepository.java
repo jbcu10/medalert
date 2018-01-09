@@ -177,7 +177,35 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
 
     @Override
     public boolean update(Reminder reminder) {
-        return false;
+        try {
+            Log.d(TAG, reminder.toString());
+            SQLiteDatabase db = this.getWritableDatabase();
+            ContentValues values = new ContentValues();
+            values.put(KEY_DESCRIPTION, reminder.getDescription());
+            long id = db.update(TABLE_REMINDER, values, KEY_ID + "= '" + reminder.getId() + "'", null);
+            db.close();
+            Log.d(TAG, "NEW TABLE_STORE IS UPDATED W/ AN ID: " + id);
+            if (reminder.getMedicineList() != null) {
+                this.deleteReminderMedicine(reminder.getUuid());
+                for (Medicine medicine : reminder.getMedicineList()) {
+                    this.createReminderMedicine(reminder.getUuid(), medicine.getUuid());
+                }
+            }
+            if (reminder.getTime() != null) {
+
+                this.deleteReminderTime(reminder.getUuid());
+
+                for (Time time : reminder.getTime()) {
+                    if(!time.getTime().equals("removed")) {
+                        this.createReminderTime(reminder.getUuid(), time);
+                    }
+                }
+            }
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e);
+            return     false;
+        }
     }
 
     @Override
@@ -206,6 +234,19 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
             Log.d(TAG, "NEW TABLE_REMINDER_MEDICINE IS CREATED W/ AN ID: " + id);
         } catch (Exception e) {
             Log.d(TAG, ERROR + e);
+        }
+    }
+
+    private boolean deleteReminderMedicine(String uuid ) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            long id = db.delete(TABLE_REMINDER_MEDICINE, KEY_REMINDER_UUID + "= '" + uuid + "'", null);
+            db.close();
+            Log.d(TAG, "Reminder time is deleted: " + uuid);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
+            return false;
         }
     }
 
@@ -243,6 +284,18 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
         }
     }
 
+    private boolean deleteReminderTime(String uuid ) {
+        try {
+            SQLiteDatabase db = this.getWritableDatabase();
+            long id = db.delete(TABLE_REMINDER_TIME, KEY_REMINDER_UUID + "= '" + uuid + "'", null);
+            db.close();
+            Log.d(TAG, "Reminder time is deleted: " + uuid);
+            return id > 0;
+        } catch (Exception e) {
+            Log.d(TAG, ERROR + e.getMessage());
+            return false;
+        }
+    }
     public boolean deleteTimeByUuid(String uuid){
         try {
             SQLiteDatabase db = this.getWritableDatabase();

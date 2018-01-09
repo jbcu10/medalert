@@ -89,8 +89,8 @@
 
             <ImageView
                 android:id="@+id/image_relation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="400dp"
+                android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/father" />

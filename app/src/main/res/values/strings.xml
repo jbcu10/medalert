@@ -47,4 +47,6 @@
         completions."
     </string>
     <string name="title_activity_register">Register</string>
+    <string name="save">Use Image</string>
+    <string name="retry">Retry</string>
 </resources>

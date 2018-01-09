@@ -45,6 +45,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_EXPIRATION = "expiration";
     protected static final String KEY_TYPE = "type";
     protected static final String KEY_DOSAGE = "dosage";
+    protected static final String KEY_STOCK = "stock";
 
     //person
     protected static final String KEY_FIRST_NAME = "firstName";
@@ -54,6 +55,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_EMAIL = "email";
     protected static final String KEY_GENDER = "gender";
     protected static final String KEY_RELATIONSHIP = "relationship";
+    protected static final String KEY_IMAGE_URI = "imageUri";
 
     //first aid
     protected static final String KEY_FIRST_AID_UUID = "firstAidUuid";
@@ -68,6 +70,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_TIME_UUID = "time_uuid";
     protected static final String KEY_INTENT_ID = "intent_id";
     protected static final String KEY_ENABLED = "enabled";
+    protected static final String KEY_NOTIFY = "notify";
 
     protected static final String KEY_LON = "lon";
     protected static final String KEY_LAT = "lat";
@@ -75,7 +78,8 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
 
 
     protected static final String KEY_TOKEN="token";
-    
+    protected static final String KEY_LINK="link";
+
 
 
 
@@ -138,7 +142,8 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_TYPE + " INTEGER,"
                     + KEY_TOTAL + " INTEGER,"
                     + KEY_ENABLED + " INTEGER,"
-                    + KEY_DOSAGE +  " TEXT)";
+                    + KEY_DOSAGE +  TEXT
+                    + KEY_STOCK +  " INTEGER)";
             db.execSQL(createMedicinesTable);
             Log.d(TAG, "TABLE_MEDICINE IS CREATED  - " + createMedicinesTable);
 
@@ -150,14 +155,14 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     // Table First Aid Handler
     private void createFirstAidTable(SQLiteDatabase db) {
         try {
-
             Log.d(TAG, "CREATING TABLE_FIRST_AID...");
             String createFirstAidTable = "CREATE TABLE " +
                     TABLE_FIRST_AID + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_UUID + TEXT
                     + KEY_NAME + TEXT
-                    + KEY_DESCRIPTION + " TEXT" + ")";
+                    + KEY_DESCRIPTION +TEXT
+                    + KEY_LINK + " TEXT" + ")";
             db.execSQL(createFirstAidTable);
             Log.d(TAG, "TABLE_FIRST_AID IS CREATED ...");
 
@@ -255,7 +260,10 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_LAST_NAME + TEXT
                     + KEY_CONTACT_NUMBER + TEXT
                     + KEY_EMAIL + TEXT
-                    + KEY_RELATIONSHIP + " TEXT" + ")";
+                    + KEY_RELATIONSHIP + TEXT
+                    + KEY_NOTIFY + " INTEGER,"
+                    + KEY_IMAGE_URI + " TEXT" + ")";
+
             db.execSQL(createRelativeTable);
             Log.d(TAG, "TABLE_MEDICINE IS CREATED ...");
 
@@ -279,7 +287,9 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_CONTACT_NUMBER + TEXT
                     + KEY_GENDER + TEXT
                     + KEY_EMAIL + TEXT
-                    + KEY_ENABLED + " INTEGER" + ")";
+                    + KEY_ENABLED + " INTEGER,"
+                    + KEY_IMAGE_URI + " TEXT" + ")";
+
             db.execSQL(createPatientTable);
             Log.d(TAG, "TABLE_PATIENT IS CREATED ...");
 

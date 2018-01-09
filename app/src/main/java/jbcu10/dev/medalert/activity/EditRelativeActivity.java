@@ -67,7 +67,7 @@ public class EditRelativeActivity extends RelativeHelperActivity {
                             boolean isCreated = relativeRepository.update(new Relative(relative.getId(), relative.getUuid().toString(),
                                     edit_first_name.getText().toString(), edit_middle_name.getText().toString()
                                     , edit_last_name.getText().toString(), edit_contact_number.getText().toString()
-                                    , edit_email.getText().toString(), edit_relationship.getText().toString(),true));
+                                    , edit_email.getText().toString(), edit_relationship.getText().toString(),true,""));
 
                             if (isCreated) {
                                 Intent intent = new Intent(EditRelativeActivity.this, RelativeActivity.class);

@@ -49,7 +49,7 @@ public class NewRelativeActivity extends RelativeHelperActivity {
                         boolean isCreated = relativeRepository.createPatientRelative(PatientActivity.patientUuid, new Relative(uuid,
                                 edit_first_name.getText().toString(), edit_middle_name.getText().toString()
                                 , edit_last_name.getText().toString(), edit_contact_number.getText().toString()
-                                , edit_email.getText().toString(), edit_relationship.getText().toString(),true));
+                                , edit_email.getText().toString(), edit_relationship.getText().toString(),true,""));
 
                         if (isCreated) {
                             Intent intent = new Intent(NewRelativeActivity.this, RelativeActivity.class);

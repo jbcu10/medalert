@@ -40,6 +40,7 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
                     patient.setGender(cursor.getString(6));
                     patient.setEmail(cursor.getString(7));
                     patient.setEnabled(cursor.getInt(8)>0);
+                    patient.setImageUri(cursor.getString(9) );
                     patients.add(patient);
                     cursor.moveToNext();
                 }
@@ -72,6 +73,7 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
                     patient.setGender(cursor.getString(6));
                     patient.setEmail(cursor.getString(7));
                     patient.setEnabled(cursor.getInt(8)>0);
+                    patient.setImageUri(cursor.getString(9) );
                     patients.add(patient);
                     cursor.moveToNext();
                 }
@@ -104,6 +106,8 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
                 patient.setGender(cursor.getString(6));
                 patient.setEmail(cursor.getString(7));
                 patient.setEnabled(cursor.getInt(8)>0);
+                patient.setImageUri(cursor.getString(9) );
+
 
             }
             cursor.close();
@@ -137,6 +141,7 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
                 patient.setGender(cursor.getString(6));
                 patient.setEmail(cursor.getString(7));
                 patient.setEnabled(cursor.getInt(8)>0);
+                patient.setImageUri(cursor.getString(9) );
 
             }
             cursor.close();
@@ -169,6 +174,7 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
                 patient.setGender(cursor.getString(6));
                 patient.setEmail(cursor.getString(7));
                 patient.setEnabled(cursor.getInt(8)>0);
+                patient.setImageUri(cursor.getString(9) );
 
             }
             cursor.close();
@@ -198,6 +204,7 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
             values.put(KEY_EMAIL, patient.getEmail());
             values.put(KEY_GENDER, patient.getGender());
             values.put(KEY_ENABLED, patient.isEnabled()?1:0);
+            values.put(KEY_IMAGE_URI, patient.getImageUri());
             long id = db.insert(TABLE_PATIENT, null, values);
             db.close();
             Log.d(TAG, "NEW PATIENT IS CREATED W/ AN ID: " + id);
@@ -222,6 +229,8 @@ public class PatientRepository extends SQLiteBaseHandler implements CrudReposito
             values.put(KEY_EMAIL, patient.getEmail());
             values.put(KEY_GENDER, patient.getGender());
             values.put(KEY_ENABLED, patient.isEnabled()?1:0);
+            values.put(KEY_IMAGE_URI, patient.getImageUri());
+
             long id = db.update(TABLE_PATIENT, values, KEY_ID + "= '" + patient.getId() + "'", null);
             db.close();
             Log.d(TAG, "NEW TABLE_PATIENT IS UPDATED W/ AN ID: " + id);

@@ -32,7 +32,7 @@ public class BaseActivity extends AppCompatActivity {
         new MaterialDialog.Builder(activity)
                 .title("Exit Application")
                 .content("Are you sure you want to Exit?")
-                .positiveText("Logout")
+                /*.positiveText("Logout")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -44,8 +44,8 @@ public class BaseActivity extends AppCompatActivity {
                         startActivity(startMain);
                         finish();
                     }
-                }).neutralText("Exit without Logging Out")
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                })*/.positiveText("Exit")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 

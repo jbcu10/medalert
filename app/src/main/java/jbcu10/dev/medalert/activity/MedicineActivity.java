@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +22,9 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.helper.BaseActivity;
 import jbcu10.dev.medalert.config.AppController;
@@ -32,6 +37,8 @@ public class MedicineActivity extends BaseActivity {
     CheckBox ch_enabled;
     Medicine medicine = null;
     ImageView image_type;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +49,8 @@ public class MedicineActivity extends BaseActivity {
     }
 
     private void initialize() {
+        ButterKnife.bind(this);
+
         txt_diagnosis = findViewById(R.id.txt_diagnosis);
         txt_name = findViewById(R.id.txt_name);
         txt_generic_name = findViewById(R.id.txt_generic_name);
@@ -121,7 +130,13 @@ public class MedicineActivity extends BaseActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    @OnClick(R.id.fab)
+    public void onClickFAB(View view) {
+        Intent intent = new Intent(MedicineActivity.this, NewRemindersActivity.class);
+        startActivity(intent);
+         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
 
+    }
     private void editMedicine() {
         AppController appController = AppController.getInstance();
         appController.setMedicine(medicine);

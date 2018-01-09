@@ -33,6 +33,8 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
             values.put(KEY_CONTACT_NUMBER, relative.getContactNumber());
             values.put(KEY_EMAIL, relative.getEmail());
             values.put(KEY_RELATIONSHIP, relative.getRelationship());
+            values.put(KEY_NOTIFY, relative.isNotify()?1:0);
+            values.put(KEY_IMAGE_URI,relative.getImageUri());
 
             long id = db.insert(TABLE_RELATIVE, null, values);
             db.close();
@@ -55,6 +57,9 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
             values.put(KEY_CONTACT_NUMBER, relative.getContactNumber());
             values.put(KEY_EMAIL, relative.getEmail());
             values.put(KEY_RELATIONSHIP, relative.getRelationship());
+            values.put(KEY_NOTIFY, relative.isNotify()?1:0);
+            values.put(KEY_IMAGE_URI,relative.getImageUri());
+
             long id = db.insert(TABLE_RELATIVE, null, values);
             db.close();
             this.createPatientRelative(patientUuid,relative.getUuid());
@@ -79,6 +84,8 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
             values.put(KEY_CONTACT_NUMBER, relative.getContactNumber());
             values.put(KEY_EMAIL, relative.getEmail());
             values.put(KEY_RELATIONSHIP, relative.getRelationship());
+            values.put(KEY_NOTIFY, relative.isNotify()?1:0);
+            values.put(KEY_IMAGE_URI,relative.getImageUri());
 
             long id = db.update(TABLE_RELATIVE, values, KEY_ID + "= '" + relative.getId() + "'", null);
             db.close();
@@ -108,6 +115,8 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
                     relative.setContactNumber(cursor.getString(5));
                     relative.setEmail(cursor.getString(6));
                     relative.setRelationship(cursor.getString(7));
+                    relative.setNotify(cursor.getInt(8)>0);
+                    relative.setImageUri(cursor.getString(9));
                     relatives.add(relative);
                     cursor.moveToNext();
                 }
@@ -177,6 +186,9 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
                 relative.setContactNumber(cursor.getString(5));
                 relative.setEmail(cursor.getString(6));
                 relative.setRelationship(cursor.getString(7));
+                relative.setNotify(cursor.getInt(8)>0);
+                relative.setImageUri(cursor.getString(9));
+
             }
             cursor.close();
             db.close();
@@ -208,6 +220,9 @@ public class RelativeRepository extends SQLiteBaseHandler implements CrudReposit
                 relative.setContactNumber(cursor.getString(5));
                 relative.setEmail(cursor.getString(6));
                 relative.setRelationship(cursor.getString(7));
+                relative.setNotify(cursor.getInt(8)>0);
+                relative.setImageUri(cursor.getString(9));
+
             }
             cursor.close();
             db.close();

@@ -14,6 +14,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.PatientActivity;
 import jbcu10.dev.medalert.config.AppController;
@@ -50,7 +52,24 @@ public class PatientAdapter extends ArrayAdapter<Patient> {
         }
         final Patient patient = getItem(position);
 
-        viewHolder.image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getContext().getResources().getDrawable(R.drawable.male));
+
+        try {
+
+            Log.d("set",patient.getImageUri());
+            if(!patient.getImageUri().equals("")){
+                // Uri uri = Uri.parse(patient.getImageUri());
+                Picasso.with(getContext()).invalidate(patient.getImageUri());
+                Picasso.with(getContext()).load(patient.getImageUri()).into( viewHolder.image_gender);
+
+            }
+            viewHolder.image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getContext().getResources().getDrawable(R.drawable.male));
+
+        }
+        catch (Exception e){
+            viewHolder.image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getContext().getResources().getDrawable(R.drawable.male));
+
+        }
+
         viewHolder.txt_name.setText(patient.getFirstName() + " " + patient.getMiddleName() + " " + patient.getLastName());
         viewHolder.txt_contact_number.setText(patient.getContactNumber());
         viewHolder.txt_email.setText(patient.getEmail());

@@ -50,6 +50,7 @@ public class EditMedicineActivity extends MedicineHelperActivity implements Date
         edit_type.setText(medicine.getType());
         edit_total.setText(String.valueOf(medicine.getTotal()));
         edit_dosage.setText(medicine.getDosage());
+        edit_stock.setText(medicine.getStock());
     }
 
     @OnClick(R.id.button_submit)
@@ -78,8 +79,7 @@ public class EditMedicineActivity extends MedicineHelperActivity implements Date
 
 
                             try {
-                                boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(), medicine.getUuid(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(), medicine.isEnabled(),edit_dosage.getText().toString()));
-
+                                boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(), medicine.getUuid(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(), medicine.isEnabled(),edit_dosage.getText().toString(),Integer.parseInt(edit_stock.getText().toString())));
                                 if (isCreated) {
                                     Intent intent = new Intent(EditMedicineActivity.this, HomeActivity.class);
                                     startActivity(intent);

@@ -36,7 +36,7 @@ public class StoreRepository extends SQLiteBaseHandler implements CrudRepository
                     store.setName(cursor.getString(2));
                     store.setAddress(cursor.getString(3));
                     store.setLon(cursor.getDouble(4));
-                    store.setLon(cursor.getDouble(5));
+                    store.setLat(cursor.getDouble(5));
 
                     stores.add(store);
                     cursor.moveToNext();
@@ -66,7 +66,7 @@ public class StoreRepository extends SQLiteBaseHandler implements CrudRepository
                 store.setName(cursor.getString(2));
                 store.setAddress(cursor.getString(3));
                 store.setLon(cursor.getDouble(4));
-                store.setLon(cursor.getDouble(5));
+                store.setLat(cursor.getDouble(5));
 
             }
             cursor.close();
@@ -96,7 +96,7 @@ public class StoreRepository extends SQLiteBaseHandler implements CrudRepository
                 store.setName(cursor.getString(2));
                 store.setAddress(cursor.getString(3));
                 store.setLon(cursor.getDouble(4));
-                store.setLon(cursor.getDouble(5));
+                store.setLat(cursor.getDouble(5));
 
             }
             cursor.close();

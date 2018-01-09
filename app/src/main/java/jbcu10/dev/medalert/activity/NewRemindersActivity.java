@@ -51,11 +51,6 @@ import jbcu10.dev.medalert.model.Reminder;
 import jbcu10.dev.medalert.model.Time;
 import jbcu10.dev.medalert.notification.AlarmReceiver;
 
-/*
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
-import com.sleepbot.datetimepicker.time.RadialPickerLayout;
-import com.sleepbot.datetimepicker.time.TimePickerDialog;*/
 
 public class NewRemindersActivity extends BaseActivity implements TimePickerDialog.OnTimeSetListener {
     public static final String TIMEPICKER_TAG = "Time Picker";

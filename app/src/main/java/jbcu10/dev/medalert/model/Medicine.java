@@ -19,12 +19,15 @@ public class Medicine {
     private String description;
     private long expiration;
     private int total;
+    private int stock;
     private String type;
     private Doctor doctor;
     private String dosage;
     private boolean enabled;
 
-    public Medicine(String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type, boolean enabled,String dosage ) {
+
+
+    public Medicine(String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type, boolean enabled, String dosage,int stock ) {
         this.uuid = uuid;
         this.name = name;
         this.genericName = genericName;
@@ -36,10 +39,11 @@ public class Medicine {
         this.type = type;
         this.enabled = enabled;
         this.dosage = dosage;
+        this.stock = stock;
 
     }
 
-    public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type,boolean enabled, String dosage) {
+    public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type,boolean enabled, String dosage,int stock) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
@@ -52,6 +56,7 @@ public class Medicine {
         this.type = type;
         this.enabled = enabled;
         this.dosage = dosage;
+        this.stock = stock;
 
 
     }
@@ -60,7 +65,13 @@ public class Medicine {
 
     }
 
+    public int getStock() {
+        return stock;
+    }
 
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
     public int getId() {
         return id;
     }
@@ -168,6 +179,7 @@ public class Medicine {
                 ", description='" + description + '\'' +
                 ", expiration=" + expiration +
                 ", total=" + total +
+                ", total=" + stock +
                 ", type='" + type + '\'' +
                 '}';
     }

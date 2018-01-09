@@ -38,6 +38,8 @@ public class MedicineHelperActivity extends BaseActivity implements DatePickerDi
     protected EditText edit_total;
     @BindView(R.id.edit_dosage)
     protected EditText edit_dosage;
+    @BindView(R.id.edit_stock)
+    protected EditText edit_stock;
     @BindView(R.id.button_submit)
 
 
@@ -57,6 +59,7 @@ public class MedicineHelperActivity extends BaseActivity implements DatePickerDi
         edit_diagnosis = findViewById(R.id.edit_diagnosis);
         edit_total = findViewById(R.id.edit_total);
         edit_dosage = findViewById(R.id.edit_dosage);
+        edit_stock = findViewById(R.id.edit_stock);
         medicineRepository = new MedicineRepository(this);
         calendar = Calendar.getInstance();
         datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
@@ -95,6 +98,9 @@ public class MedicineHelperActivity extends BaseActivity implements DatePickerDi
         }
         if (!isValid(edit_total.getText().toString())) {
             showError("Total");
+            return false;
+        }if (!isValid(edit_stock.getText().toString())) {
+            showError("Stock");
             return false;
         }
 

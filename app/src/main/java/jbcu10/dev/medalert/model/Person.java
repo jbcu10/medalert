@@ -13,6 +13,7 @@ public abstract class Person {
     protected String contactNumber;
     protected String email;
     protected String gender;
+    protected String imageUri;
 
 
     protected Person() {
@@ -21,11 +22,12 @@ public abstract class Person {
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
-    }protected Person(int id,String email, String firstName, String lastName) {
+    }protected Person(int id,String email, String firstName, String lastName, String imageUri) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
+    this.imageUri = imageUri;
     }
 
     public int getId() {
@@ -90,5 +92,13 @@ public abstract class Person {
 
     public void setGender(String gender) {
         this.gender = gender;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 }

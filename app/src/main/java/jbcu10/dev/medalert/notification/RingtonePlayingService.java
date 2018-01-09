@@ -18,6 +18,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jbcu10.dev.medalert.activity.DialogActivity;
@@ -70,7 +71,7 @@ public class RingtonePlayingService extends Service {
         StringBuffer stringBuffer = new StringBuffer();
         int a = 1;
         for(Medicine medicine:medicines){
-            stringBuffer.append(a+". "+medicine.getName()+" - "+medicine.getDosage() +" - "+medicine.getType() +"\n");
+            stringBuffer.append(a+". "+medicine.getName()+" - "+medicine.getDosage() +" - "+medicine.getTotal() +"\n");
             a++;
         }
         stringBuffer.append(reminder.getDescription());
@@ -126,16 +127,23 @@ public class RingtonePlayingService extends Service {
 
     public void sendSms(List<Relative> relatives, String sms) {
         for (Relative relative : relatives) {
-            try {
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(relative.getContactNumber(), null, sms, null, null);
-                Toast.makeText(getApplicationContext(), "SMS Sent!",
-                        Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(),
-                        "SMS faild, please try again later!",
-                        Toast.LENGTH_LONG).show();
-                e.printStackTrace();
+            if(relative.isNotify()) {
+                try {
+                    Log.d("sms", sms);
+                    Log.d("relative", relative.getContactNumber());
+
+                    SmsManager smsManager = SmsManager.getDefault();
+                    ArrayList<String> msgArray = smsManager.divideMessage(sms);
+
+                    smsManager.sendMultipartTextMessage(relative.getContactNumber(), null, msgArray, null, null);
+                    Toast.makeText(getApplicationContext(), "SMS Sent!",
+                            Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(),
+                            "SMS faild, please try again later!",
+                            Toast.LENGTH_LONG).show();
+                    Log.e("sms error", e.getMessage());
+                }
             }
         }
     }

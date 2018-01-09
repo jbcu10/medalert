@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ListFragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.etsy.android.grid.StaggeredGridView;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,15 +44,16 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
     private static final String TAG = HomeActivity.class.getSimpleName();
     private static final String LOADING_PLOTS = "Loading Medicines...";
     private static final String ERROR = "Error:";
-    public  ReminderRepository reminderRepository;
+    public static ReminderRepository reminderRepository;
     public  PatientRepository patientRepository;
     ProgressDialog pDialog;
     @BindView(R.id.fab)
     FloatingActionButton fab;
     View rootView;
     private StaggeredGridView mGridView;
-    public  boolean mHasRequestedMore;
-    public  ReminderAdapter mAdapter;
+    public static  boolean mHasRequestedMore;
+    public static  ReminderAdapter mAdapter;
+    private SwipeRefreshLayout swipeContainer;
 
     public ReminderFragments() {
         // Required empty public constructor
@@ -71,6 +74,21 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
         if (reminders != null) {
             onLoadMoreItems(reminders);
         }
+        swipeContainer = rootView.findViewById(R.id.swipeContainer);
+        // Setup refresh listener which triggers new data loading
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                List<Reminder> reminders = reminderRepository.getAll();
+                initializeGridView();
+                if (reminders != null) {
+                    onLoadMoreItems(reminders);
+                }
+                swipeContainer.setRefreshing(false);
+
+            }
+        });
+
         return rootView;
 
     }
@@ -153,7 +171,8 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
             pDialog.dismiss();
     }
 
-    public void initializeGridView() {
+
+    public  void initializeGridView() {
         mAdapter = new ReminderAdapter(getActivity(), R.id.txt_name, R.id.imageView);
         getActivity().runOnUiThread(new Runnable() {
             public void run() {
@@ -164,14 +183,13 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
     }
 
 
-    private void onLoadMoreItems(List<Reminder> reminders) {
+    private static void onLoadMoreItems(List<Reminder> reminders) {
         for (Reminder data : reminders) {
             Log.d("reminders", reminders.toString());
             mAdapter.add(data);
         }
         mAdapter.notifyDataSetChanged();
         mHasRequestedMore = false;
-        hideDialog();
     }
 
     @Override
@@ -186,6 +204,11 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
         Intent intent = new Intent(getActivity(), NewRemindersActivity.class);
         startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+
+    }
+    public static void reloadItem( List<Reminder> reminders){
+        mAdapter.clear();
+        onLoadMoreItems(reminders);
 
     }
 }

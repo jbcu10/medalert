@@ -61,7 +61,11 @@ public class NewMedicineActivity extends MedicineHelperActivity {
 
                             try {
                                 String uuid = UUID.randomUUID().toString();
-                                boolean isCreated = medicineRepository.create(new Medicine(uuid, edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(), true,edit_dosage.getText().toString()));
+                                boolean isCreated = medicineRepository.create(new Medicine(uuid, edit_name.getText().toString(),
+                                        edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(),
+                                        edit_description.getText().toString(), milliseconds,
+                                        Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(),
+                                        true,edit_dosage.getText().toString(),Integer.parseInt(edit_stock.getText().toString())));
 
                                 if (isCreated) {
                                     Intent intent = new Intent(NewMedicineActivity.this, MedicineActivity.class);

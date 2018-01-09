@@ -11,6 +11,6 @@ public class User extends Person {
     public User(String email, String firstName, String lastName) {
     super(email, firstName, lastName);
     }public User( int id,String email, String firstName, String lastName) {
-    super(id,email, firstName, lastName);
+    super(id,email, firstName, lastName,"");
     }
 }
