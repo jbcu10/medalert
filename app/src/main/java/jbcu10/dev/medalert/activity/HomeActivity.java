@@ -42,10 +42,36 @@ public class HomeActivity extends BaseActivity
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
         //userRepository = new UserRepository(HomeActivity.this);
 
+        init();
+
+
+       /* User user = userRepository.getById(1);
+        if(user.getFirstName()!=null){
+            nav_user.setText(user.getFirstName()+" "+user.getLastName());
+            nav_email.setText(user.getEmail());
+
+        }*/
+
+
+
+
+    }
+    @Override
+    public void onResume(){
+        super.onResume();
+        init();
+    }
+
+
+    private void init(){
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        View hView =  navigationView.getHeaderView(0);
+        TextView nav_user = hView.findViewById(R.id.nav_name);
+        TextView nav_email = hView.findViewById(R.id.nav_email);
         if(selectedItem==0) {
             fragment = new ReminderFragments();
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
@@ -75,22 +101,8 @@ public class HomeActivity extends BaseActivity
             navigationView.setCheckedItem( R.id.firstaid);
 
         }
-
-        View hView =  navigationView.getHeaderView(0);
-        TextView nav_user = hView.findViewById(R.id.nav_name);
-        TextView nav_email = hView.findViewById(R.id.nav_email);
-
-       /* User user = userRepository.getById(1);
-        if(user.getFirstName()!=null){
-            nav_user.setText(user.getFirstName()+" "+user.getLastName());
-            nav_email.setText(user.getEmail());
-
-        }*/
-
-
-
-
     }
+
 
     @Override
     public void onBackPressed() {

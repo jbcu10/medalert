@@ -9,7 +9,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.text.InputType;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -101,8 +103,15 @@ public class ReminderActivity extends BaseActivity  implements TimePickerDialog.
                     }
                 }
             }
+            LinearLayout ll_horizontalHandler = new LinearLayout(this);
+            ll_horizontalHandler.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT));
+            ll_horizontalHandler.setWeightSum(4);
+            LinearLayout.LayoutParams params =new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            params.weight = 3;
             final CheckBox checkBoxMedicine = new CheckBox(this);
-            checkBoxMedicine.setText(medicine.getName());
+            checkBoxMedicine.setText(medicine.getName()+" - "+medicine.getDosage() +" - "+medicine.getStock() +" remaining");
             checkBoxMedicine.setId(medicine.getId());
             checkBoxMedicine.setHint(medicine.getUuid());
             if (sameUuid > 0) {
@@ -110,9 +119,8 @@ public class ReminderActivity extends BaseActivity  implements TimePickerDialog.
                 strings.add(checkBoxMedicine.getHint().toString());
 
             }
-            checkBoxMedicine.setLayoutParams(
-                    new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT));
+            checkBoxMedicine.setLayoutParams(params);
+
             checkBoxMedicine.setOnCheckedChangeListener((buttonView, isChecked) -> {
                 if (isChecked) {
                     strings.add(checkBoxMedicine.getHint().toString());
@@ -121,7 +129,32 @@ public class ReminderActivity extends BaseActivity  implements TimePickerDialog.
                 }
 
             });
-            ll_medicine_handler.addView(checkBoxMedicine);
+            EditText editText = new EditText(this);
+            editText.setId(medicine.getId());
+            editText.setText(String.valueOf(medicine.getTotal()));
+            editText.setOnKeyListener(new View.OnKeyListener() {
+                @Override
+                public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                    String total = editText.getText().toString();
+                    if (total.equals("")||total.equals("0")){
+                        total = "1";
+                        editText.setText(total);
+
+                    }
+                    medicine.setTotal(Integer.parseInt(total));
+                    medicineRepository.update(medicine);
+                    return false;
+                }
+            });
+            params.weight = 1;
+
+            editText.setLayoutParams(params);
+            editText.setInputType(InputType.TYPE_CLASS_NUMBER);
+
+            ll_horizontalHandler.addView(checkBoxMedicine);
+            ll_horizontalHandler.addView(editText);
+
+            ll_medicine_handler.addView(ll_horizontalHandler);
             sameUuid = 0;
         }
         if (reminder.getTime() != null) {
@@ -358,6 +391,16 @@ public class ReminderActivity extends BaseActivity  implements TimePickerDialog.
             Snackbar.make(findViewById(android.R.id.content), "Please select a medicine for reminder!", Snackbar.LENGTH_LONG).show();
             return false;
 
+        }
+        for(Medicine medicine: reminder.getMedicineList()){
+            if(medicine.getStock()<=0){
+                Snackbar.make(findViewById(android.R.id.content), medicine.getName()+"  is out of stock !", Snackbar.LENGTH_LONG).show();
+                return false;
+            }
+            if(medicine.getTotal()>medicine.getStock()){
+                Snackbar.make(findViewById(android.R.id.content), "You set "+medicine.getName()+" number of times to take higher than its stock !", Snackbar.LENGTH_LONG).show();
+                return false;
+            }
         }
         if (reminder.getTime() == null) {
             Snackbar.make(findViewById(android.R.id.content), "Please add time for reminder!", Snackbar.LENGTH_LONG).show();

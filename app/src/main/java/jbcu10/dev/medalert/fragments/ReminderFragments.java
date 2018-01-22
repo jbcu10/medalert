@@ -112,48 +112,6 @@ public class ReminderFragments extends ListFragment implements AbsListView.OnScr
         Intent intent = new Intent(getContext(), ReminderActivity.class);
         getContext().startActivity(intent);
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        /*new MaterialDialog.Builder(getContext())
-                .title("Reminder for: " + patientRepository.getReminderPatientByReminderUuid(reminder.getUuid()).toString())
-                .content("What do you want to do with this item?")
-                .positiveText("View")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        AppController appController = AppController.getInstance();
-                        appController.setReminderId(reminder.getId());
-                        Intent intent = new Intent(getContext(), ReminderActivity.class);
-                        getContext().startActivity(intent);
-                        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
-                    }
-                })
-                .negativeText("Delete")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-
-                        try {
-
-                            boolean isDeleted = reminderRepository.deleteById(reminder.getId());
-                            if (isDeleted) {
-
-                                List<Reminder> reminders = reminderRepository.getAll();
-                                initializeGridView();
-                                if (reminders != null) {
-                                    onLoadMoreItems(reminders);
-                                }
-                            }
-                            if (!isDeleted) {
-                                Snackbar.make(getActivity().findViewById(android.R.id.content), "Failed to Delete Medicine!", Snackbar.LENGTH_LONG).show();
-                            }
-
-                        } catch (Exception e) {
-                            Log.d("Error", e.getMessage());
-                        }
-
-
-                    }
-                }).show();*/
     }
 
     @Override

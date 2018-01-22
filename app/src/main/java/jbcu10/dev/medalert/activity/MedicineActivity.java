@@ -45,7 +45,6 @@ public class MedicineActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_medicine);
         initialize();
-        setMedicineValue(medicine);
     }
 
     private void initialize() {
@@ -63,7 +62,7 @@ public class MedicineActivity extends BaseActivity {
         HomeActivity.selectedItem = 1;
         AppController appController = AppController.getInstance();
         medicine = medicineRepository.getById(appController.getMedicineId());
-
+        setMedicineValue(medicine);
 
     }
 

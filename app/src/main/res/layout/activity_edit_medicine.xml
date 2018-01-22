@@ -142,7 +142,7 @@
                         android:id="@+id/edit_total"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Total"
+                        android:hint="Number of times to take"
                         android:inputType="number" />
 
                 </android.support.design.widget.TextInputLayout>

@@ -35,6 +35,7 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
                 reminder.setId(cursor.getInt(0));
                 reminder.setUuid(cursor.getString(1));
                 reminder.setDescription(cursor.getString(2));
+                reminder.setTurnOn(cursor.getInt(3)>0);
 
 
             }
@@ -63,6 +64,7 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
                 reminder.setId(cursor.getInt(0));
                 reminder.setUuid(cursor.getString(1));
                 reminder.setDescription(cursor.getString(2));
+                reminder.setTurnOn(cursor.getInt(3)>0);
 
 
             }
@@ -92,6 +94,7 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
                     reminder.setId(cursor.getInt(0));
                     reminder.setUuid(cursor.getString(1));
                     reminder.setDescription(cursor.getString(2));
+                    reminder.setTurnOn(cursor.getInt(3)>0);
 
                     reminders.add(reminder);
                     cursor.moveToNext();
@@ -147,6 +150,7 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
             ContentValues values = new ContentValues();
             values.put(KEY_UUID, reminder.getUuid());
             values.put(KEY_DESCRIPTION, reminder.getDescription());
+            values.put(KEY_SWITCH, reminder.isTurnOn()?1:0);
 
             long id = db.insert(TABLE_REMINDER, null, values);
             db.close();
@@ -182,6 +186,7 @@ public class ReminderRepository extends SQLiteBaseHandler implements CrudReposit
             SQLiteDatabase db = this.getWritableDatabase();
             ContentValues values = new ContentValues();
             values.put(KEY_DESCRIPTION, reminder.getDescription());
+            values.put(KEY_SWITCH, reminder.isTurnOn()?1:0);
             long id = db.update(TABLE_REMINDER, values, KEY_ID + "= '" + reminder.getId() + "'", null);
             db.close();
             Log.d(TAG, "NEW TABLE_STORE IS UPDATED W/ AN ID: " + id);

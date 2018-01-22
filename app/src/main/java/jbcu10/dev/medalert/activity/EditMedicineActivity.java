@@ -50,7 +50,7 @@ public class EditMedicineActivity extends MedicineHelperActivity implements Date
         edit_type.setText(medicine.getType());
         edit_total.setText(String.valueOf(medicine.getTotal()));
         edit_dosage.setText(medicine.getDosage());
-        edit_stock.setText(medicine.getStock());
+        edit_stock.setText(String.valueOf(medicine.getStock()));
     }
 
     @OnClick(R.id.button_submit)

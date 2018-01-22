@@ -14,17 +14,19 @@ public class Reminder {
     private List<Medicine> medicineList;
     private List<Time> time;
     private Patient patient;
+    private boolean turnOn;
 
     public Reminder() {
 
     }
 
-    public Reminder(String uuid, String description, List<Medicine> medicineList, List<Time> time, Patient patient) {
+    public Reminder(String uuid, String description, List<Medicine> medicineList, List<Time> time, Patient patient,boolean turnOn) {
         this.uuid = uuid;
         this.description = description;
         this.medicineList = medicineList;
         this.time = time;
         this.patient = patient;
+        this.turnOn = turnOn;
     }
 
     public String getDescription() {
@@ -73,6 +75,14 @@ public class Reminder {
 
     public void setPatient(Patient patient) {
         this.patient = patient;
+    }
+
+    public boolean isTurnOn() {
+        return turnOn;
+    }
+
+    public void setTurnOn(boolean turnOn) {
+        this.turnOn = turnOn;
     }
 
     @Override

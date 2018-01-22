@@ -12,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
@@ -59,6 +61,7 @@ public class ReminderAdapter extends ArrayAdapter<Reminder> {
             viewHolder.txt_description = convertView.findViewById(R.id.txt_description);
             viewHolder.txt_name = convertView.findViewById(R.id.txt_name);
             viewHolder.image_delete = convertView.findViewById(R.id.image_delete);
+            viewHolder.switch1 = convertView.findViewById(R.id.switch1);
 
             convertView.setTag(viewHolder);
         } else {
@@ -70,6 +73,13 @@ public class ReminderAdapter extends ArrayAdapter<Reminder> {
         reminderRepository = new ReminderRepository(activity);
         viewHolder.txt_name.setText("Reminder for: " + patientRepository.getReminderPatientByReminderUuid(reminder.getUuid()).toString());
         viewHolder.txt_description.setText(reminder.getDescription());
+        viewHolder.switch1.setChecked(reminder.isTurnOn());
+        viewHolder.switch1.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            reminder.setTurnOn(isChecked);
+            reminderRepository.update(reminder);
+            Log.v("Switch State=", ""+isChecked);}
+
+        );
 
         convertView.setOnClickListener(view -> {
                     try {
@@ -101,6 +111,7 @@ public class ReminderAdapter extends ArrayAdapter<Reminder> {
     static class ViewHolder {
         TextView txt_name, txt_description;
         ImageView image_delete;
+        Switch switch1;
 
     }
 

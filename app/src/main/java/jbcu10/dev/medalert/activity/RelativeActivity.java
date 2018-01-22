@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.afollestad.materialcamera.MaterialCamera;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -89,18 +90,36 @@ public class RelativeActivity extends BaseActivity {
             Log.d("set",relative.getImageUri());
             if(!relative.getImageUri().equals("")){
                 // Uri uri = Uri.parse(patient.getImageUri());
-                Picasso.with(this).invalidate(relative.getImageUri());
-                Picasso.with(this).load(relative.getImageUri()).into(image_relation);
-
+                Glide.with(this).load(relative.getImageUri()).into(image_relation);
             }
-            image_relation.setImageDrawable(this.getImageRelation(relative) != null ? this.getImageRelation(relative) : getResources().getDrawable(R.drawable.relative));
+            if(relative.getImageUri().equals("")) {
 
+                image_relation.setImageDrawable(this.getImageRelation(relative) != null ? this.getImageRelation(relative) : getResources().getDrawable(R.drawable.relative));
+            }
         }
         catch (Exception e){
             image_relation.setImageDrawable(this.getImageRelation(relative) != null ? this.getImageRelation(relative) : getResources().getDrawable(R.drawable.relative));
 
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+            int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case CAMERA_PERMISSIONS_REQUEST:
+                if (PermissionUtils.permissionGranted(requestCode, CAMERA_PERMISSIONS_REQUEST, grantResults)) {
+                    startCamera();
+                }
+                break;
+            case GALLERY_PERMISSIONS_REQUEST:
+                if (PermissionUtils.permissionGranted(requestCode, GALLERY_PERMISSIONS_REQUEST, grantResults)) {
+                    startGalleryChooser();
+                }
+                break;
+        }
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -269,8 +288,8 @@ public class RelativeActivity extends BaseActivity {
                                 1200);
 
                image_gender.setImageBitmap(bitmap);*/
-            Picasso.with(this).invalidate(file);
-            Picasso.with(this).load(file).into(image_relation);
+            Glide.with(this).load(file).into(image_relation);
+
 
             relative.setImageUri(file);
             relativeRepository.update(relative);

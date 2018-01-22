@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import jbcu10.dev.medalert.R;
@@ -60,12 +61,12 @@ public class RelativeAdapter extends ArrayAdapter<Relative> {
             Log.d("set",relative.getImageUri());
             if(!relative.getImageUri().equals("")){
                 // Uri uri = Uri.parse(patient.getImageUri());
-                Picasso.with(getContext()).invalidate(relative.getImageUri());
-                Picasso.with(getContext()).load(relative.getImageUri()).into( viewHolder.image_relation);
+                Glide.with(getContext()).load(relative.getImageUri()).into(viewHolder.image_relation);
 
             }
-            viewHolder.image_relation.setImageDrawable(this.getImageRelation(relative) != null ? this.getImageRelation(relative) : getContext().getResources().getDrawable(R.drawable.relative));
-
+            if(relative.getImageUri().equals("")) {
+                viewHolder.image_relation.setImageDrawable(this.getImageRelation(relative) != null ? this.getImageRelation(relative) : getContext().getResources().getDrawable(R.drawable.relative));
+            }
         }
         catch (Exception e){
             viewHolder.image_relation.setImageDrawable(this.getImageRelation(relative) != null ? this.getImageRelation(relative) : getContext().getResources().getDrawable(R.drawable.relative));

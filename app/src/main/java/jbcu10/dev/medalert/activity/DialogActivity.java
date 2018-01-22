@@ -66,6 +66,8 @@ public class DialogActivity extends Activity {
         relativeRepository = new RelativeRepository(this);
         AppController appController = AppController.getInstance();
         reminder = reminderRepository.getById(appController.getReminderId());
+
+
         patient = patientRepository.getReminderPatientByReminderUuid(reminder.getUuid());
 
         if(reminder ==null){
@@ -80,7 +82,8 @@ public class DialogActivity extends Activity {
         int a = 1;
         for (Medicine medicine : medicines) {
                  TextView textView = new TextView(this);
-                textView.setText(a + ". " + medicine.getName() + " - " + medicine.getDosage() + " - " + medicine.getTotal());
+                textView.setText(a + ". " + medicine.getName() + " - " + medicine.getDosage() + " - " +
+                        medicine.getStock()+" remaining - "+medicine.getTotal());
                 textView.setId(medicine.getId());
                 textView.setTextColor(Color.BLACK);
                 LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
@@ -106,7 +109,6 @@ public class DialogActivity extends Activity {
 
     public void exitApplication() {
 
-        sendCurrentStock();
         Intent startMain = new Intent(Intent.ACTION_MAIN);
                         startMain.addCategory(Intent.CATEGORY_HOME);
                         startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -129,18 +131,18 @@ public class DialogActivity extends Activity {
 
     public void sendCurrentStock(){
         List<Relative> relatives = relativeRepository.getAllRelativeByPatienUuid(patient.getUuid());
-        StringBuffer stringBuffer = new StringBuffer();
+        StringBuilder stringBuffer = new StringBuilder();
         int a = 1;
         List<Medicine> medicines =medicineRepository.getAllReminderMedicine(reminder.getUuid());
         for(Medicine medicine:medicines){
             medicine.setStock(medicine.getStock()-medicine.getTotal());
             medicineRepository.update(medicine);
-            String medicineString = medicine.getName() + " - " + medicine.getDosage() + " - " + medicine.getStock();
+            String medicineString = medicine.getName() + " - " + medicine.getDosage() + " - " + medicine.getStock()+" remaining";
 
-            if(medicine.getStock()==1) {
+            if(medicine.getStock()<=2) {
                 sendSms(relatives,"Medicine is almost out of stock.\n\n"+medicineString);
             }
-            stringBuffer.append(a+". "+medicineString+"\n");
+            stringBuffer.append(a).append(". ").append(medicineString).append("\n");
             a++;
         }
         stringBuffer.append(reminder.getDescription());

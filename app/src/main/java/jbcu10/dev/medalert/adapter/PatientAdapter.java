@@ -14,6 +14,7 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import jbcu10.dev.medalert.R;
@@ -57,13 +58,11 @@ public class PatientAdapter extends ArrayAdapter<Patient> {
 
             Log.d("set",patient.getImageUri());
             if(!patient.getImageUri().equals("")){
-                // Uri uri = Uri.parse(patient.getImageUri());
-                Picasso.with(getContext()).invalidate(patient.getImageUri());
-                Picasso.with(getContext()).load(patient.getImageUri()).into( viewHolder.image_gender);
-
+                 Glide.with(getContext()).load(patient.getImageUri()).into(viewHolder.image_gender);
             }
-            viewHolder.image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getContext().getResources().getDrawable(R.drawable.male));
-
+            if(patient.getImageUri().equals("")) {
+                viewHolder.image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getContext().getResources().getDrawable(R.drawable.male));
+            }
         }
         catch (Exception e){
             viewHolder.image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getContext().getResources().getDrawable(R.drawable.male));

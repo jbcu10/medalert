@@ -79,6 +79,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
 
     protected static final String KEY_TOKEN="token";
     protected static final String KEY_LINK="link";
+    protected static final String KEY_SWITCH="switch";
 
 
 
@@ -180,7 +181,8 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     TABLE_REMINDER + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_UUID + TEXT
-                    + KEY_DESCRIPTION + " TEXT" + ")";
+                    + KEY_DESCRIPTION +TEXT
+                    + KEY_SWITCH + " INTEGER" + ")";
             db.execSQL(createReminderTable);
             Log.d(TAG, "TABLE_REMINDER IS CREATED ...");
 

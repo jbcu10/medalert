@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.afollestad.materialcamera.MaterialCamera;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -40,6 +41,7 @@ import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.helper.BaseActivity;
 import jbcu10.dev.medalert.config.AppController;
+import jbcu10.dev.medalert.config.ImageFilePath;
 import jbcu10.dev.medalert.config.PermissionUtils;
 import jbcu10.dev.medalert.db.PatientRepository;
 import jbcu10.dev.medalert.fragments.RelativeFragments;
@@ -76,10 +78,7 @@ public class PatientActivity extends BaseActivity {
 
         patientUuid = patient.getUuid();
         initializeView();
-        fragment = new RelativeFragments();
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.container_patient, fragment);
-        ft.commit();
+
     }
 
     @Override
@@ -88,6 +87,10 @@ public class PatientActivity extends BaseActivity {
         if(destination==0) {
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
         }
+    }@Override
+    public void onResume() {
+        super.onResume();
+        initializeView();
     }
 
 
@@ -101,10 +104,11 @@ public class PatientActivity extends BaseActivity {
         txt_contact_number.setText(patient.getContactNumber());
         txt_email.setText(patient.getEmail());
         txt_relation.setText(patient.getGender());
-
-
         setImage();
-
+        fragment = new RelativeFragments();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.container_patient, fragment);
+        ft.commit();
     }
 
     private void setImage(){
@@ -112,13 +116,12 @@ public class PatientActivity extends BaseActivity {
 
             Log.d("set",patient.getImageUri());
             if(!patient.getImageUri().equals("")){
-               // Uri uri = Uri.parse(patient.getImageUri());
-                Picasso.with(this).invalidate(patient.getImageUri());
-                Picasso.with(this).load(patient.getImageUri()).into(image_gender);
+                Glide.with(this).load(patient.getImageUri()).into(image_gender);
 
             }
-            image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getResources().getDrawable(R.drawable.male));
-
+            if(patient.getImageUri().equals("")) {
+                image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getResources().getDrawable(R.drawable.male));
+            }
         }
         catch (Exception e){
             image_gender.setImageDrawable(this.getImageGender(patient) != null ? this.getImageGender(patient) : getResources().getDrawable(R.drawable.male));
@@ -214,9 +217,14 @@ public class PatientActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == GALLERY_IMAGE_REQUEST && resultCode == RESULT_OK && data != null) {
-            uploadImage(data.getDataString());
+           String realPath = ImageFilePath.getPath(this, data.getData());
+
+            uploadImage(realPath);
         } else if (requestCode == CAMERA_RQ && resultCode == RESULT_OK) {
-            //Uri photoUri = FileProvider.getUriForFile(this, getApplicationContext().getPackageName() + ".provider", getCameraFile());
+
+
+
+
             uploadImage(data.getDataString());
         }
     }
@@ -233,8 +241,8 @@ public class PatientActivity extends BaseActivity {
                                 1200);
 
                image_gender.setImageBitmap(bitmap);*/
-            Picasso.with(this).invalidate(file);
-            Picasso.with(this).load(file).into(image_gender);
+            Glide.with(this).load(file).into(image_gender);
+
 
             patient.setImageUri(file);
             patientRepository.update(patient);
@@ -283,6 +291,7 @@ public class PatientActivity extends BaseActivity {
                 break;
         }
     }
+
     private void deletePatient() {
         new MaterialDialog.Builder(PatientActivity.this)
                 .title("Delete Patient?")
