@@ -151,23 +151,25 @@ public class DialogActivity extends Activity {
     }
 
     public void sendSms(List<Relative> relatives, String sms) {
-        for (Relative relative : relatives) {
-            if(relative.isNotify()) {
-                try {
-                    Log.d("sms", sms);
-                    Log.d("relative", relative.getContactNumber());
+        if(relatives!=null) {
+            for (Relative relative : relatives) {
+                if (relative.isNotify()) {
+                    try {
+                        Log.d("sms", sms);
+                        Log.d("relative", relative.getContactNumber());
 
-                    SmsManager smsManager = SmsManager.getDefault();
-                    ArrayList<String> msgArray = smsManager.divideMessage(sms);
+                        SmsManager smsManager = SmsManager.getDefault();
+                        ArrayList<String> msgArray = smsManager.divideMessage(sms);
 
-                    smsManager.sendMultipartTextMessage(relative.getContactNumber(), null, msgArray, null, null);
-                    Toast.makeText(getApplicationContext(), "SMS Sent!",
-                            Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),
-                            "SMS faild, please try again later!",
-                            Toast.LENGTH_LONG).show();
-                    Log.e("sms error", e.getMessage());
+                        smsManager.sendMultipartTextMessage(relative.getContactNumber(), null, msgArray, null, null);
+                        Toast.makeText(getApplicationContext(), "SMS Sent!",
+                                Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(),
+                                "SMS failed, please try again later!",
+                                Toast.LENGTH_LONG).show();
+                        Log.e("sms error", e.getMessage());
+                    }
                 }
             }
         }

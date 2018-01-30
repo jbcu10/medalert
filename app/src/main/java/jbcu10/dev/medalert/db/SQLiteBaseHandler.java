@@ -144,7 +144,9 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_TOTAL + " INTEGER,"
                     + KEY_ENABLED + " INTEGER,"
                     + KEY_DOSAGE +  TEXT
-                    + KEY_STOCK +  " INTEGER)";
+                    + KEY_STOCK +  " INTEGER,"
+                    + KEY_IMAGE_URI + " TEXT" + ")";
+
             db.execSQL(createMedicinesTable);
             Log.d(TAG, "TABLE_MEDICINE IS CREATED  - " + createMedicinesTable);
 

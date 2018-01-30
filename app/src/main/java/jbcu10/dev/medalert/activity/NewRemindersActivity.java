@@ -167,7 +167,6 @@ public class NewRemindersActivity extends BaseActivity implements TimePickerDial
 
             }
         }
-
     }
 
     public void initializedViews() {

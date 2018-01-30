@@ -330,7 +330,6 @@ public class PatientActivity extends BaseActivity {
         Intent intent = new Intent(PatientActivity.this, EditPatientActivity.class);
         startActivity(intent);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-
     }
 
 

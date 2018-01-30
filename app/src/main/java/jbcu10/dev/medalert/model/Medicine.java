@@ -24,10 +24,11 @@ public class Medicine {
     private Doctor doctor;
     private String dosage;
     private boolean enabled;
+    protected String imageUri;
 
 
 
-    public Medicine(String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type, boolean enabled, String dosage,int stock ) {
+    public Medicine(String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type, boolean enabled, String dosage,int stock,   String imageUri) {
         this.uuid = uuid;
         this.name = name;
         this.genericName = genericName;
@@ -40,10 +41,11 @@ public class Medicine {
         this.enabled = enabled;
         this.dosage = dosage;
         this.stock = stock;
+        this.imageUri = imageUri;
 
     }
 
-    public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type,boolean enabled, String dosage,int stock) {
+    public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type,boolean enabled, String dosage,int stock,   String imageUri) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
@@ -57,6 +59,7 @@ public class Medicine {
         this.enabled = enabled;
         this.dosage = dosage;
         this.stock = stock;
+        this.imageUri = imageUri;
 
 
     }
@@ -166,6 +169,14 @@ public class Medicine {
 
     public void setDosage(String dosage) {
         this.dosage = dosage;
+    }
+
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
     }
 
     @Override

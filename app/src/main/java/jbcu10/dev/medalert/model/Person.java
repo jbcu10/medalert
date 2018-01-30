@@ -22,7 +22,8 @@ public abstract class Person {
     this.email = email;
     this.firstName = firstName;
     this.lastName = lastName;
-    }protected Person(int id,String email, String firstName, String lastName, String imageUri) {
+    }
+    protected Person(int id,String email, String firstName, String lastName, String imageUri) {
     this.id = id;
     this.email = email;
     this.firstName = firstName;

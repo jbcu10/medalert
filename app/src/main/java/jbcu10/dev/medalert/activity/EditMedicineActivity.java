@@ -79,7 +79,7 @@ public class EditMedicineActivity extends MedicineHelperActivity implements Date
 
 
                             try {
-                                boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(), medicine.getUuid(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(), medicine.isEnabled(),edit_dosage.getText().toString(),Integer.parseInt(edit_stock.getText().toString())));
+                                boolean isCreated = medicineRepository.update(new Medicine(medicine.getId(), medicine.getUuid(), edit_name.getText().toString(), edit_generic_name.getText().toString(), edit_diagnosis.getText().toString(), edit_description.getText().toString(), milliseconds, Integer.parseInt(edit_total.getText().toString()), null, edit_type.getText().toString(), medicine.isEnabled(),edit_dosage.getText().toString(),Integer.parseInt(edit_stock.getText().toString()),medicine.getImageUri()));
                                 if (isCreated) {
                                     Intent intent = new Intent(EditMedicineActivity.this, HomeActivity.class);
                                     startActivity(intent);

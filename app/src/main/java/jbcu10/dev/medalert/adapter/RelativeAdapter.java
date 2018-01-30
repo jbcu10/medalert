@@ -58,21 +58,19 @@ public class RelativeAdapter extends ArrayAdapter<Relative> {
 
         try {
 
-            Log.d("set",relative.getImageUri());
-            if(!relative.getImageUri().equals("")){
+            Log.d("set", relative.getImageUri());
+            if (!relative.getImageUri().equals("")) {
                 // Uri uri = Uri.parse(patient.getImageUri());
                 Glide.with(getContext()).load(relative.getImageUri()).into(viewHolder.image_relation);
 
             }
-            if(relative.getImageUri().equals("")) {
+            if (relative.getImageUri().equals("")) {
                 viewHolder.image_relation.setImageDrawable(this.getImageRelation(relative) != null ? this.getImageRelation(relative) : getContext().getResources().getDrawable(R.drawable.relative));
             }
-        }
-        catch (Exception e){
+        } catch (Exception e) {
             viewHolder.image_relation.setImageDrawable(this.getImageRelation(relative) != null ? this.getImageRelation(relative) : getContext().getResources().getDrawable(R.drawable.relative));
 
         }
-
 
 
         viewHolder.txt_name.setText(relative.getFirstName() + " " + relative.getMiddleName() + " " + relative.getLastName());
@@ -85,16 +83,17 @@ public class RelativeAdapter extends ArrayAdapter<Relative> {
         relativeRepository = new RelativeRepository(activity);
 
         viewHolder.ch_enabled.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked){
+            if (isChecked) {
                 relative.setNotify(true);
-            } if (!isChecked){
+            }
+            if (!isChecked) {
                 relative.setNotify(false);
             }
             relativeRepository.update(relative);
-             });
+        });
         convertView.setOnClickListener(view -> {
                     try {
-                        PatientActivity.destination =1;
+                        PatientActivity.destination = 1;
                         AppController appController = AppController.getInstance();
                         appController.setRelativeId(relative.getId());
                         Intent intent = new Intent(getContext(), RelativeActivity.class);
