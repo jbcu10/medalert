@@ -47,11 +47,11 @@ public class MedicineActivity extends BaseActivity {
     TextView txt_name, txt_generic_name, txt_description, txt_diagnosis, txt_expiration, txt_doctor_name;
     CheckBox ch_enabled;
     Medicine medicine = null;
-    @BindView(R.id.image_type)
-    ImageView image_type;
     @BindView(R.id.fab)
     FloatingActionButton fab;
     private static final String TAG = PatientActivity.class.getSimpleName();
+    @BindView(R.id.image_type)
+    ImageView image_type;
 
     private static final int CAMERA_RQ = 6969;
     File saveFolder = new File(Environment.getExternalStorageDirectory(), "medalert");

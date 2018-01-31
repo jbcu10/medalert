@@ -34,6 +34,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <ImageView
+                    android:id="@+id/image_type"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_weight="1"
+                    app:srcCompat="@android:drawable/ic_menu_upload" />
+
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
