@@ -19,12 +19,16 @@ public class Medicine {
     private String description;
     private long expiration;
     private int total;
+    private int stock;
     private String type;
     private Doctor doctor;
     private String dosage;
     private boolean enabled;
+    protected String imageUri;
 
-    public Medicine(String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type, boolean enabled,String dosage ) {
+
+
+    public Medicine(String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type, boolean enabled, String dosage,int stock,   String imageUri) {
         this.uuid = uuid;
         this.name = name;
         this.genericName = genericName;
@@ -36,10 +40,12 @@ public class Medicine {
         this.type = type;
         this.enabled = enabled;
         this.dosage = dosage;
+        this.stock = stock;
+        this.imageUri = imageUri;
 
     }
 
-    public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type,boolean enabled, String dosage) {
+    public Medicine(int id, String uuid, String name, String genericName, String diagnosis, String description, long expiration, int total, Doctor doctor, String type,boolean enabled, String dosage,int stock,   String imageUri) {
         this.id = id;
         this.uuid = uuid;
         this.name = name;
@@ -52,6 +58,8 @@ public class Medicine {
         this.type = type;
         this.enabled = enabled;
         this.dosage = dosage;
+        this.stock = stock;
+        this.imageUri = imageUri;
 
 
     }
@@ -60,7 +68,13 @@ public class Medicine {
 
     }
 
+    public int getStock() {
+        return stock;
+    }
 
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
     public int getId() {
         return id;
     }
@@ -157,6 +171,14 @@ public class Medicine {
         this.dosage = dosage;
     }
 
+    public String getImageUri() {
+        return imageUri;
+    }
+
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
     @Override
     public String toString() {
         return "Medicine{" +
@@ -168,6 +190,7 @@ public class Medicine {
                 ", description='" + description + '\'' +
                 ", expiration=" + expiration +
                 ", total=" + total +
+                ", total=" + stock +
                 ", type='" + type + '\'' +
                 '}';
     }

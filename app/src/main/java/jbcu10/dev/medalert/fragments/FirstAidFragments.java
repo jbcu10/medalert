@@ -34,8 +34,7 @@ public class FirstAidFragments extends ListFragment implements AbsListView.OnScr
     private static final String ERROR = "Error:";
     public FirstAidRepository firstAidRepository;
     ProgressDialog pDialog;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
+
     View rootView;
     private StaggeredGridView mGridView;
     private boolean mHasRequestedMore;

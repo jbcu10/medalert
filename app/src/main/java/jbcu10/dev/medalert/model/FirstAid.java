@@ -11,6 +11,7 @@ public class FirstAid {
     private String uuid;
     private String name;
     private String description;
+    private String link;
     private List<Instructions> instructionsList;
 
     public String getUuid() {
@@ -51,5 +52,13 @@ public class FirstAid {
 
     public void setInstructionsList(List<Instructions> instructionsList) {
         this.instructionsList = instructionsList;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
     }
 }

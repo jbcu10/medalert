@@ -71,7 +71,7 @@ public class FirstAidRepository extends SQLiteBaseHandler implements CrudReposit
     public List<FirstAid> getAll() {
         try {
             List<FirstAid> firstAids = new LinkedList<>();
-            String selectQuery = "SELECT  * FROM " + TABLE_FIRST_AID + " order by " + KEY_ID + " desc";
+            String selectQuery = "SELECT  * FROM " + TABLE_FIRST_AID + " order by " + KEY_NAME + " asc";
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor = db.rawQuery(selectQuery, null);
             if (cursor.moveToFirst()) {
@@ -81,6 +81,7 @@ public class FirstAidRepository extends SQLiteBaseHandler implements CrudReposit
                     firstAid.setUuid(cursor.getString(1));
                     firstAid.setName(cursor.getString(2));
                     firstAid.setDescription(cursor.getString(3));
+                    firstAid.setLink(cursor.getString(4));
                     firstAids.add(firstAid);
                     cursor.moveToNext();
                 }
@@ -109,6 +110,8 @@ public class FirstAidRepository extends SQLiteBaseHandler implements CrudReposit
                 firstAid.setUuid(uuid);
                 firstAid.setName(cursor.getString(2));
                 firstAid.setDescription(cursor.getString(3));
+                firstAid.setLink(cursor.getString(4));
+
                 firstAid.setInstructionsList(getInstructions(uuid));
             }
             cursor.close();
@@ -138,6 +141,7 @@ public class FirstAidRepository extends SQLiteBaseHandler implements CrudReposit
             values.put(KEY_UUID, firstAid.getUuid());
             values.put(KEY_NAME, firstAid.getName());
             values.put(KEY_DESCRIPTION, firstAid.getDescription());
+            values.put(KEY_LINK, firstAid.getLink());
             long id = db.insert(TABLE_FIRST_AID, null, values);
             db.close();
             Log.d(TAG, "NEW FIRST AID IS CREATED W/ AN ID: " + id);

@@ -45,7 +45,7 @@ public class NewPatientActivity extends PatientHelperActivity {
                                 boolean isCreated = patientRepository.create(new Patient(uuid,
                                         edit_first_name.getText().toString(), edit_middle_name.getText().toString()
                                         , edit_last_name.getText().toString(), edit_contact_number.getText().toString()
-                                        , edit_email.getText().toString(), edit_gender.getText().toString(), true));
+                                        , edit_email.getText().toString(), edit_gender.getText().toString(), true,""));
 
                                 if (isCreated) {
                                     Intent intent = new Intent(NewPatientActivity.this, PatientActivity.class);

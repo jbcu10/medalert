@@ -26,6 +26,9 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String TABLE_REMINDER_MEDICINE = "reminder_medicine";
     protected static final String TABLE_REMINDER_TIME = "reminder_time";
     protected static final String TABLE_REMINDER_PATIENT = "reminder_patient";
+    protected static final String TABLE_STORE = "store";
+    protected static final String TABLE_TOKEN = "token";
+    protected static final String TABLE_USER= "user";
     //all
     protected static final String KEY_ID = "id";
     protected static final String KEY_UUID = "uuid";
@@ -42,6 +45,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_EXPIRATION = "expiration";
     protected static final String KEY_TYPE = "type";
     protected static final String KEY_DOSAGE = "dosage";
+    protected static final String KEY_STOCK = "stock";
 
     //person
     protected static final String KEY_FIRST_NAME = "firstName";
@@ -51,6 +55,7 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_EMAIL = "email";
     protected static final String KEY_GENDER = "gender";
     protected static final String KEY_RELATIONSHIP = "relationship";
+    protected static final String KEY_IMAGE_URI = "imageUri";
 
     //first aid
     protected static final String KEY_FIRST_AID_UUID = "firstAidUuid";
@@ -65,6 +70,17 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     protected static final String KEY_TIME_UUID = "time_uuid";
     protected static final String KEY_INTENT_ID = "intent_id";
     protected static final String KEY_ENABLED = "enabled";
+    protected static final String KEY_NOTIFY = "notify";
+
+    protected static final String KEY_LON = "lon";
+    protected static final String KEY_LAT = "lat";
+    protected static final String KEY_ADDRESS = "address";
+
+
+    protected static final String KEY_TOKEN="token";
+    protected static final String KEY_LINK="link";
+    protected static final String KEY_SWITCH="switch";
+
 
 
 
@@ -84,6 +100,9 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
         this.createPatientTable(db);
         this.createPatientRelativeTable(db);
         this.createReminderPatient(db);
+        this.createStore(db);
+        this.createTokenTable(db);
+        this.createUserTable(db);
 
     }
 
@@ -100,6 +119,9 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PATIENT_RELATIVE);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REMINDER_PATIENT);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MEDICINE_SCHEDULE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_STORE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TOKEN);
         Log.d(TAG, "Database tables deleted");
         onCreate(db);
     }
@@ -121,7 +143,10 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_TYPE + " INTEGER,"
                     + KEY_TOTAL + " INTEGER,"
                     + KEY_ENABLED + " INTEGER,"
-                    + KEY_DOSAGE +  " TEXT)";
+                    + KEY_DOSAGE +  TEXT
+                    + KEY_STOCK +  " INTEGER,"
+                    + KEY_IMAGE_URI + " TEXT" + ")";
+
             db.execSQL(createMedicinesTable);
             Log.d(TAG, "TABLE_MEDICINE IS CREATED  - " + createMedicinesTable);
 
@@ -133,14 +158,14 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
     // Table First Aid Handler
     private void createFirstAidTable(SQLiteDatabase db) {
         try {
-
             Log.d(TAG, "CREATING TABLE_FIRST_AID...");
             String createFirstAidTable = "CREATE TABLE " +
                     TABLE_FIRST_AID + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_UUID + TEXT
                     + KEY_NAME + TEXT
-                    + KEY_DESCRIPTION + " TEXT" + ")";
+                    + KEY_DESCRIPTION +TEXT
+                    + KEY_LINK + " TEXT" + ")";
             db.execSQL(createFirstAidTable);
             Log.d(TAG, "TABLE_FIRST_AID IS CREATED ...");
 
@@ -158,7 +183,8 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     TABLE_REMINDER + "("
                     + KEY_ID + " INTEGER PRIMARY KEY,"
                     + KEY_UUID + TEXT
-                    + KEY_DESCRIPTION + " TEXT" + ")";
+                    + KEY_DESCRIPTION +TEXT
+                    + KEY_SWITCH + " INTEGER" + ")";
             db.execSQL(createReminderTable);
             Log.d(TAG, "TABLE_REMINDER IS CREATED ...");
 
@@ -238,7 +264,10 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_LAST_NAME + TEXT
                     + KEY_CONTACT_NUMBER + TEXT
                     + KEY_EMAIL + TEXT
-                    + KEY_RELATIONSHIP + " TEXT" + ")";
+                    + KEY_RELATIONSHIP + TEXT
+                    + KEY_NOTIFY + " INTEGER,"
+                    + KEY_IMAGE_URI + " TEXT" + ")";
+
             db.execSQL(createRelativeTable);
             Log.d(TAG, "TABLE_MEDICINE IS CREATED ...");
 
@@ -262,7 +291,9 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
                     + KEY_CONTACT_NUMBER + TEXT
                     + KEY_GENDER + TEXT
                     + KEY_EMAIL + TEXT
-                    + KEY_ENABLED + " INTEGER" + ")";
+                    + KEY_ENABLED + " INTEGER,"
+                    + KEY_IMAGE_URI + " TEXT" + ")";
+
             db.execSQL(createPatientTable);
             Log.d(TAG, "TABLE_PATIENT IS CREATED ...");
 
@@ -305,8 +336,58 @@ public class SQLiteBaseHandler extends SQLiteOpenHelper {
         } catch (Exception e) {
             Log.d(TAG, "ERROR --------------- " + e.getMessage());
         }
-    }
+    }// Table Reminder Patient Handler
+    
+    private void createStore(SQLiteDatabase db) {
+        try {
 
+            Log.d(TAG, "CREATING TABLE_STORE...");
+            String createStore = "CREATE TABLE " +
+                    TABLE_STORE + "("
+                    + KEY_ID + " INTEGER PRIMARY KEY,"
+                    + KEY_UUID + TEXT
+                    + KEY_NAME + TEXT
+                    + KEY_ADDRESS + TEXT
+                    + KEY_LON + " REAL,"
+                    + KEY_LAT + " REAL)";
+            db.execSQL(createStore);
+            Log.d(TAG, "TABLE_STORE IS CREATED ...");
+
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+        }
+    }
+    private void createTokenTable(SQLiteDatabase db) {
+        try {
+            Log.d(TAG, "CREATING TABLE_TOKEN...");
+            String createStore = "CREATE TABLE " +
+                    TABLE_TOKEN + "("
+                    + KEY_ID + " INTEGER PRIMARY KEY,"
+                    + KEY_TOKEN + " TEXT" + ")";
+            db.execSQL(createStore);
+            Log.d(TAG, "TABLE_TOKEN IS CREATED ...");
+
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+        }
+    }
+    private void createUserTable(SQLiteDatabase db) {
+        try {
+
+            Log.d(TAG, "CREATING TABLE_USER...");
+            String createPatientTable = "CREATE TABLE " +
+                    TABLE_USER + "("
+                    + KEY_ID + " INTEGER PRIMARY KEY,"
+                     + KEY_FIRST_NAME + TEXT
+                     + KEY_LAST_NAME + TEXT
+                     + KEY_EMAIL + " TEXT" + ")";
+            db.execSQL(createPatientTable);
+            Log.d(TAG, "TABLE_USER IS CREATED ...");
+
+        } catch (Exception e) {
+            Log.d(TAG, "ERROR --------------- " + e.getMessage());
+        }
+    }
 
 
 }

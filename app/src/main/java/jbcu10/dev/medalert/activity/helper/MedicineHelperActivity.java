@@ -1,18 +1,23 @@
 package jbcu10.dev.medalert.activity.helper;
 
+import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.fourmob.datetimepicker.date.DatePickerDialog;
 
+import java.io.File;
 import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
+import jbcu10.dev.medalert.activity.PatientActivity;
 import jbcu10.dev.medalert.db.MedicineRepository;
 import jbcu10.dev.medalert.model.Medicine;
 
@@ -38,6 +43,8 @@ public class MedicineHelperActivity extends BaseActivity implements DatePickerDi
     protected EditText edit_total;
     @BindView(R.id.edit_dosage)
     protected EditText edit_dosage;
+    @BindView(R.id.edit_stock)
+    protected EditText edit_stock;
     @BindView(R.id.button_submit)
 
 
@@ -47,7 +54,21 @@ public class MedicineHelperActivity extends BaseActivity implements DatePickerDi
     protected DatePickerDialog datePickerDialog;
     protected MedicineRepository medicineRepository;
     protected Medicine medicine = null;
+    protected static final String TAG = PatientActivity.class.getSimpleName();
+    @BindView(R.id.image_type)
+    protected ImageView image_type;
+    protected String imageUri = "";
 
+    protected static final int CAMERA_RQ = 6969;
+    protected File saveFolder = new File(Environment.getExternalStorageDirectory(), "medalert");
+    protected static int destination = 0;
+    protected static String patientUuid = "";
+    protected static final String FILE_NAME = "temp.jpg";
+
+    protected static final int GALLERY_PERMISSIONS_REQUEST = 0;
+    protected static final int GALLERY_IMAGE_REQUEST = 1;
+    protected static final int CAMERA_PERMISSIONS_REQUEST = 2;
+    protected static final int CAMERA_IMAGE_REQUEST = 3;
     protected void initializedViews() {
         edit_expiration = findViewById(R.id.edit_expiration);
         edit_type = findViewById(R.id.edit_type);
@@ -57,6 +78,7 @@ public class MedicineHelperActivity extends BaseActivity implements DatePickerDi
         edit_diagnosis = findViewById(R.id.edit_diagnosis);
         edit_total = findViewById(R.id.edit_total);
         edit_dosage = findViewById(R.id.edit_dosage);
+        edit_stock = findViewById(R.id.edit_stock);
         medicineRepository = new MedicineRepository(this);
         calendar = Calendar.getInstance();
         datePickerDialog = DatePickerDialog.newInstance(this, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH), false);
@@ -95,6 +117,9 @@ public class MedicineHelperActivity extends BaseActivity implements DatePickerDi
         }
         if (!isValid(edit_total.getText().toString())) {
             showError("Total");
+            return false;
+        }if (!isValid(edit_stock.getText().toString())) {
+            showError("Stock");
             return false;
         }
 

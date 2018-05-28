@@ -6,7 +6,9 @@ package jbcu10.dev.medalert.config;
 
 public class Routes {
 
-    public static String DOMAIN = "https://med.acalux.com/v1";
-    public static String AUTH = DOMAIN + "/";
+    public static String DOMAIN = "http://35.198.206.11:8080/api/";
+    public static String AUTH = DOMAIN + "/authenticate";
+    public static String ACCOUNT = DOMAIN + "/account";
+    public static String REGISTER = DOMAIN + "/register";
 
 }

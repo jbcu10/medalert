@@ -11,6 +11,8 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.MANAGE_DOCUMENTS"/>
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -18,6 +20,11 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:name=".config.AppController"
@@ -47,7 +54,6 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
-
         </activity>
         <activity
             android:name=".activity.MedicineActivity"
@@ -158,9 +164,31 @@
 
         <activity
             android:name=".activity.DialogActivity"
-            android:theme="@android:style/Theme.Holo.Light.Dialog"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"> </activity>
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Holo.Light.Dialog" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:label="@string/title_activity_register">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.LoginActivity" />
+        </activity>
+        <activity
+            android:name=".activity.MapsActivity"
+            android:label="@string/title_activity_maps"></activity>
+
+        <activity
+            android:name="com.afollestad.materialcamera.CaptureActivity"
+            android:theme="@style/MaterialCamera.CaptureActivity" />
+        <activity
+            android:name="com.afollestad.materialcamera.CaptureActivity2"
+            android:theme="@style/MaterialCamera.CaptureActivity" />
     </application>
+
+
 
 </manifest>

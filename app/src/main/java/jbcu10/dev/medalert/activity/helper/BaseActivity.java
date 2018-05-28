@@ -13,6 +13,8 @@ import jbcu10.dev.medalert.R;
 import jbcu10.dev.medalert.activity.HomeActivity;
 import jbcu10.dev.medalert.activity.NewMedicineActivity;
 import jbcu10.dev.medalert.activity.NewPatientActivity;
+import jbcu10.dev.medalert.db.TokenRepository;
+import jbcu10.dev.medalert.model.Token;
 
 /**
  * Created by jb on 25/09/2017.
@@ -30,7 +32,19 @@ public class BaseActivity extends AppCompatActivity {
         new MaterialDialog.Builder(activity)
                 .title("Exit Application")
                 .content("Are you sure you want to Exit?")
-                .positiveText("Exit")
+                /*.positiveText("Logout")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        TokenRepository tokenRepository = new TokenRepository(activity);
+                        tokenRepository.deleteById(1);
+                        Intent startMain = new Intent(Intent.ACTION_MAIN);
+                        startMain.addCategory(Intent.CATEGORY_HOME);
+                        startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(startMain);
+                        finish();
+                    }
+                })*/.positiveText("Exit")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {

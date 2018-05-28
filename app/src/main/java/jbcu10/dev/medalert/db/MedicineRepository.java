@@ -75,6 +75,8 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
                     medicine.setTotal(cursor.getInt(9));
                     medicine.setEnabled(cursor.getInt(10)>0);
                     medicine.setDosage(cursor.getString(11));
+                    medicine.setStock(cursor.getInt(12));
+                    medicine.setImageUri(cursor.getString(13));
 
                     medicines.add(medicine);
                     cursor.moveToNext();
@@ -111,7 +113,8 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
                     medicine.setTotal(cursor.getInt(9));
                     medicine.setEnabled(cursor.getInt(10)>0);
                     medicine.setDosage(cursor.getString(11));
-
+                    medicine.setStock(cursor.getInt(12));
+                    medicine.setImageUri(cursor.getString(13));
                     medicines.add(medicine);
                     cursor.moveToNext();
                 }
@@ -147,6 +150,8 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
                 medicine.setTotal(cursor.getInt(9));
                 medicine.setEnabled(cursor.getInt(10)>0);
                 medicine.setDosage(cursor.getString(11));
+                medicine.setStock(cursor.getInt(12));
+                medicine.setImageUri(cursor.getString(13));
 
             }
             cursor.close();
@@ -183,7 +188,8 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
                 medicine.setTotal(cursor.getInt(9));
                 medicine.setEnabled(cursor.getInt(10)>0);
                 medicine.setDosage(cursor.getString(11));
-
+                medicine.setStock(cursor.getInt(12));
+                medicine.setImageUri(cursor.getString(13));
             }
             cursor.close();
             db.close();
@@ -217,6 +223,8 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
             values.put(KEY_DOSAGE, medicine.getDosage());
             values.put(KEY_TOTAL, medicine.getTotal());
             values.put(KEY_ENABLED, medicine.isEnabled()?1:0);
+            values.put(KEY_STOCK, medicine.getStock());
+            values.put(KEY_IMAGE_URI, medicine.getImageUri());
 
             long id = db.insert(TABLE_MEDICINE, null, values);
             db.close();
@@ -245,9 +253,11 @@ public class MedicineRepository extends SQLiteBaseHandler implements CrudReposit
             values.put(KEY_EXPIRATION, medicine.getExpiration());
             values.put(KEY_TYPE, medicine.getType());
             values.put(KEY_DOSAGE, medicine.getDosage());
+            values.put(KEY_STOCK, medicine.getStock());
 
             values.put(KEY_TOTAL, medicine.getTotal());
             values.put(KEY_ENABLED, medicine.isEnabled()?1:0);
+            values.put(KEY_IMAGE_URI, medicine.getImageUri());
             long id = db.update(TABLE_MEDICINE, values, KEY_ID + "= '" + medicine.getId() + "'", null);
             db.close();
             Log.d(TAG, " MEDICINE IS UPDATED WITH AN ID: " + id);

@@ -13,6 +13,8 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -54,17 +56,41 @@ public class MedicineAdapter extends ArrayAdapter<Medicine> {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         final Medicine medicine = getItem(position);
-        if (medicine.getType() != null && medicine.getType().equals("Tablet")) {
-            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_lozenge));
+
+        try {
+
+            Log.d("set", medicine.getImageUri());
+            if (!medicine.getImageUri().equals("")) {
+                // Uri uri = Uri.parse(patient.getImageUri());
+                Glide.with(getContext()).load(medicine.getImageUri()).into(viewHolder.image_type);
+
+            }
+            if (medicine.getImageUri().equals("")) {
+                if (medicine.getType() != null && medicine.getType().equals("Tablet")) {
+                    viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_lozenge));
+                }
+                if (medicine.getType() != null && medicine.getType().equals("Injectible")) {
+                    viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_syringe));
+                }
+                if (medicine.getType() != null && medicine.getType().equals("Capsule")) {
+                    viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pill));
+                }if (medicine.getType() != null && medicine.getType().equals("Ointment")) {
+                    viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_ointment));
+                }            }
+        } catch (Exception e) {
+            if (medicine.getType() != null && medicine.getType().equals("Tablet")) {
+                viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_lozenge));
+            }
+            if (medicine.getType() != null && medicine.getType().equals("Injectible")) {
+                viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_syringe));
+            }
+            if (medicine.getType() != null && medicine.getType().equals("Capsule")) {
+                viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pill));
+            }if (medicine.getType() != null && medicine.getType().equals("Ointment")) {
+                viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_ointment));
+            }
         }
-        if (medicine.getType() != null && medicine.getType().equals("Injectible")) {
-            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_syringe));
-        }
-        if (medicine.getType() != null && medicine.getType().equals("Capsule")) {
-            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_pill));
-        }if (medicine.getType() != null && medicine.getType().equals("Ointment")) {
-            viewHolder.image_type.setImageDrawable(getContext().getResources().getDrawable(R.drawable.ic_ointment));
-        }
+
         viewHolder.txt_name.setText(medicine.getName());
         viewHolder.txt_diagnosis.setText(medicine.getDiagnosis());
         viewHolder.txt_generic_name.setText(medicine.getGenericName());
